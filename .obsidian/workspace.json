@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "GIt/GIt.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "GIt"
+              "title": "README"
             }
           }
         ]
@@ -184,10 +184,16 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "afc48363165cc596",
+  "active": "6f677077d21bfb5d",
   "lastOpenFiles": [
-    "GIt/Untitled.md",
+    "Perfiles/Web.code-profile",
+    "Perfiles/Python.code-profile",
+    "Perfiles/Markdown.code-profile",
+    "Perfiles/Java.code-profile",
+    "Perfiles",
     "GIt/GIt.md",
+    "README.md",
+    "GIt/Untitled.md",
     "DuocUC/quinto semestre/Asignaturas.md",
     "Bienvenido.md",
     "ERS FuenteCreadora.md",
@@ -220,17 +226,11 @@
     "DuocUC",
     "Mentoria/Introducción a los ALGORITMOS y la PROGRAMACIÓN/1.QUÉ ES PROGRAMAR.md",
     "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/Finalización del Módulo 2 - QUIZ DEL MÓDULO.md",
-    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/adjuntos",
     "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.13 CUESTIONARIO DE SECCIÓN.md",
     "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.12 RESUMEN DE SECCIÓN.md",
     "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.11   LAB   Operadores y expresiones – 2.md",
     "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.10   LAB   Operadores y expresiones.md",
     "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.9   LAB   Entradas y salidas simples.md",
-    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.8 Conversiones de tipos una vez más.md",
-    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.7 Operadores cadena.md",
-    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.6 Más sobre input() y conversión de tipo.md",
-    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario",
-    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.5 Sección 5 – Comentarios",
-    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.4 Sección 4 – Variables"
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.8 Conversiones de tipos una vez más.md"
   ]
 }
