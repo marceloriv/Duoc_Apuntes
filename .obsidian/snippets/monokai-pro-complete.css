@@ -1,0 +1,427 @@
+/*
+ * MONOKAI PRO SPECTRUM - COMPLETO
+ * Syntax highlighting + Colores de interfaz personalizados
+ * Funciona en MODO OSCURO y MODO CLARO
+ */
+
+/* ========================================
+   MODO OSCURO (theme-dark)
+   ======================================== */
+
+.theme-dark {
+  /* --- PALETA DE COLORES MONOKAI PRO --- */
+  --monokai-background-primary: #222222;      /* Fondo principal (área de texto) */
+  --monokai-background-sidebar: #191919;      /* Barras laterales */
+  --monokai-background-secondary: #2a272d;    /* Fondo de código */
+  --monokai-comment: #75715e;                 /* Comentarios (Gris cálido) */
+  --monokai-string: #fc9867;                  /* Strings (Naranja/Amarillo) */
+  --monokai-function: #a6e22e;                /* Funciones (Verde Lima) */
+  --monokai-keyword: #ff6188;                 /* Palabras clave (Magenta) */
+  --monokai-type: #78dce8;                    /* Tipos, Variables (Cian/Aqua) */
+  --monokai-number: #ab9df2;                  /* Números, Booleanos (Púrpura/Violeta) */
+
+  /* --- 1. AJUSTES DE FONDOS DE INTERFAZ --- */
+  
+  /* Fondo principal del editor (rgb(34, 34, 34) = #222222) */
+  --background-primary: var(--monokai-background-primary);
+  --background-primary-alt: #27252a;
+  
+  /* Barras laterales (rgb(25, 25, 25) = #191919) */
+  --background-secondary: var(--monokai-background-sidebar);
+  --background-secondary-alt: var(--monokai-background-sidebar);
+  
+  /* Bloques de código */
+  --background-code-block: var(--monokai-background-secondary);
+  --inline-code-background: var(--monokai-background-secondary);
+
+  /* Textos */
+  --text-normal: #f8f8f2;
+  --text-muted: var(--monokai-comment);
+  --text-faint: #5b595c;
+
+  /* Acento (color destacado) */
+  --interactive-accent: var(--monokai-keyword);
+  --interactive-accent-hover: #ff7fa3;
+
+  /* Iconos */
+  --icon-color: #78dce8;
+  --icon-color-hover: #a6e22e;
+  --icon-color-active: #ff6188;
+
+  /* Bordes y divisores */
+  --background-modifier-border: #403e41;
+  --background-modifier-border-hover: #5b595c;
+
+  /* --- 2. APLICACIÓN FORZADA DE FONDOS --- */
+  
+  /* Barras laterales izquierda y derecha */
+  .workspace-split.mod-left-split,
+  .workspace-split.mod-right-split {
+    background-color: var(--monokai-background-sidebar) !important;
+  }
+
+  /* Área central de edición */
+  .workspace-split.mod-root {
+    background-color: var(--monokai-background-primary) !important;
+  }
+
+  /* Editor markdown */
+  .markdown-source-view,
+  .markdown-preview-view {
+    background-color: var(--monokai-background-primary);
+  }
+
+  /* Tabs en las barras laterales */
+  .workspace-tab-header-container {
+    background-color: var(--monokai-background-sidebar);
+  }
+
+  /* --- 3. RESALTADO DE SINTAXIS (CODE MIRROR / EDITOR) --- */
+
+  /* Comentarios */
+  .cm-s-obsidian .cm-comment {
+    color: var(--monokai-comment) !important;
+  }
+
+  /* Strings y Cadenas de texto */
+  .cm-s-obsidian .cm-string,
+  .cm-s-obsidian .cm-string-2,
+  .cm-s-obsidian .cm-attribute {
+    color: var(--monokai-string) !important;
+  }
+
+  /* Funciones, Métodos, Nombres de Propiedades */
+  .cm-s-obsidian .cm-variable,
+  .cm-s-obsidian .cm-property,
+  .cm-s-obsidian .cm-tag-2 {
+    color: var(--monokai-function) !important;
+  }
+
+  /* Palabras Clave, Operadores, Puntuación (if, for, =), Definiciones */
+  .cm-s-obsidian .cm-keyword,
+  .cm-s-obsidian .cm-operator,
+  .cm-s-obsidian .cm-punctuation,
+  .cm-s-obsidian .cm-def {
+    color: var(--monokai-keyword) !important;
+  }
+
+  /* Tipos, Variables, Clases, Tags HTML */
+  .cm-s-obsidian .cm-type,
+  .cm-s-obsidian .cm-variable-2,
+  .cm-s-obsidian .cm-variable-3,
+  .cm-s-obsidian .cm-tag {
+    color: var(--monokai-type) !important;
+  }
+
+  /* Números, Constantes, Booleanos */
+  .cm-s-obsidian .cm-number,
+  .cm-s-obsidian .cm-atom {
+    color: var(--monokai-number) !important;
+  }
+
+  /* Metadatos (Frontmatter, YAML) */
+  .cm-s-obsidian .cm-meta {
+    color: var(--monokai-type) !important;
+  }
+
+  /* --- 4. RESALTADO EN VISTA DE LECTURA (MARKDOWN) --- */
+
+  /* Texto entre comillas (Blockquotes) */
+  blockquote {
+    border-left-color: var(--monokai-keyword);
+  }
+
+  /* Enlaces */
+  .markdown-rendered a {
+    color: var(--monokai-type);
+  }
+
+  /* Enfásis */
+  em {
+    color: var(--monokai-string);
+  }
+
+  /* Bold */
+  strong {
+    color: var(--monokai-keyword);
+  }
+
+  /* Headers (Encabezados) - Jerarquía visual diferenciada */
+  .markdown-rendered h1 {
+    color: var(--monokai-keyword);    /* Magenta para H1 */
+  }
+
+  .markdown-rendered h2 {
+    color: var(--monokai-type);       /* Cian para H2 */
+  }
+
+  .markdown-rendered h3 {
+    color: var(--monokai-function);   /* Verde Lima para H3 */
+  }
+
+  .markdown-rendered h4 {
+    color: var(--monokai-string);     /* Naranja para H4 */
+  }
+
+  .markdown-rendered h5 {
+    color: var(--monokai-number);     /* Púrpura para H5 */
+  }
+
+  .markdown-rendered h6 {
+    color: var(--text-muted);         /* Gris para H6 */
+  }
+
+  /* Enlace Interno/Alias (WikiLinks) */
+  .internal-link {
+    color: var(--monokai-type);
+  }
+
+  /* --- 5. PALABRAS RESALTADAS (HIGHLIGHTS) --- */
+  
+  /* Palabras resaltadas con ==texto== en color cian #78dce8 */
+  .markdown-rendered mark {
+    color: #78dce8 !important;
+    background-color: rgba(120, 220, 232, 0.25) !important;
+  }
+  
+  .cm-s-obsidian span.cm-highlight {
+    color: #78dce8 !important;
+    background-color: rgba(120, 220, 232, 0.25) !important;
+  }
+
+  /* --- 6. LISTAS (BULLETS Y NUMERADAS) --- */
+  
+  /* SOLO los marcadores (bullets •, -, números) en color rosa #e14775 */
+  .markdown-rendered ul > li::marker,
+  .markdown-rendered ol > li::marker {
+    color: #e14775 !important;
+  }
+
+  /* Marcadores en modo edición - SOLO el símbolo, no el texto */
+  .cm-s-obsidian span.cm-formatting-list {
+    color: #e14775 !important;
+  }
+  
+  /* Asegurar que el texto de las listas mantenga el color normal */
+  .markdown-rendered ul > li,
+  .markdown-rendered ol > li {
+    color: var(--text-normal);
+  }
+  
+  .cm-s-obsidian .cm-list-1,
+  .cm-s-obsidian .cm-list-2,
+  .cm-s-obsidian .cm-list-3 {
+    color: var(--text-normal) !important;
+  }
+}
+
+/* ========================================
+   MODO CLARO (theme-light)
+   ======================================== */
+
+.theme-light {
+  /* --- PALETA DE COLORES MONOKAI PRO (Adaptada para modo claro) --- */
+  --monokai-background-primary-light: #fafafa;      /* Fondo principal claro */
+  --monokai-background-sidebar-light: #f0f0f0;      /* Barras laterales claras */
+  --monokai-background-secondary-light: #e8e8e8;    /* Fondo de código claro */
+  --monokai-comment-light: #75715e;                 /* Comentarios */
+  --monokai-string-light: #ff6d00;                  /* Strings (Naranja más oscuro) */
+  --monokai-function-light: #5f9e1f;                /* Funciones (Verde más oscuro) */
+  --monokai-keyword-light: #e01a61;                 /* Keywords (Magenta más oscuro) */
+  --monokai-type-light: #0094b8;                    /* Tipos (Cian más oscuro) */
+  --monokai-number-light: #7c5fc7;                  /* Números (Púrpura más oscuro) */
+
+  /* --- 1. AJUSTES DE FONDOS DE INTERFAZ --- */
+  
+  /* Fondo principal del editor */
+  --background-primary: var(--monokai-background-primary-light);
+  --background-primary-alt: #f5f5f5;
+  
+  /* Barras laterales */
+  --background-secondary: var(--monokai-background-sidebar-light);
+  --background-secondary-alt: var(--monokai-background-sidebar-light);
+  
+  /* Bloques de código */
+  --background-code-block: var(--monokai-background-secondary-light);
+  --inline-code-background: var(--monokai-background-secondary-light);
+
+  /* Textos */
+  --text-normal: #2e2e2e;
+  --text-muted: var(--monokai-comment-light);
+  --text-faint: #9e9e9e;
+
+  /* Acento (color destacado) */
+  --interactive-accent: var(--monokai-keyword-light);
+  --interactive-accent-hover: #ff4081;
+
+  /* Iconos */
+  --icon-color: #0094b8;
+  --icon-color-hover: #5f9e1f;
+  --icon-color-active: #e01a61;
+
+  /* Bordes y divisores */
+  --background-modifier-border: #d0d0d0;
+  --background-modifier-border-hover: #b0b0b0;
+
+  /* --- 2. APLICACIÓN FORZADA DE FONDOS --- */
+  
+  /* Barras laterales izquierda y derecha */
+  .workspace-split.mod-left-split,
+  .workspace-split.mod-right-split {
+    background-color: var(--monokai-background-sidebar-light) !important;
+  }
+
+  /* Área central de edición */
+  .workspace-split.mod-root {
+    background-color: var(--monokai-background-primary-light) !important;
+  }
+
+  /* Editor markdown */
+  .markdown-source-view,
+  .markdown-preview-view {
+    background-color: var(--monokai-background-primary-light);
+  }
+
+  /* Tabs en las barras laterales */
+  .workspace-tab-header-container {
+    background-color: var(--monokai-background-sidebar-light);
+  }
+
+  /* --- 3. RESALTADO DE SINTAXIS (CODE MIRROR / EDITOR) --- */
+
+  /* Comentarios */
+  .cm-s-obsidian .cm-comment {
+    color: var(--monokai-comment-light) !important;
+  }
+
+  /* Strings y Cadenas de texto */
+  .cm-s-obsidian .cm-string,
+  .cm-s-obsidian .cm-string-2,
+  .cm-s-obsidian .cm-attribute {
+    color: var(--monokai-string-light) !important;
+  }
+
+  /* Funciones, Métodos, Nombres de Propiedades */
+  .cm-s-obsidian .cm-variable,
+  .cm-s-obsidian .cm-property,
+  .cm-s-obsidian .cm-tag-2 {
+    color: var(--monokai-function-light) !important;
+  }
+
+  /* Palabras Clave, Operadores, Puntuación (if, for, =), Definiciones */
+  .cm-s-obsidian .cm-keyword,
+  .cm-s-obsidian .cm-operator,
+  .cm-s-obsidian .cm-punctuation,
+  .cm-s-obsidian .cm-def {
+    color: var(--monokai-keyword-light) !important;
+  }
+
+  /* Tipos, Variables, Clases, Tags HTML */
+  .cm-s-obsidian .cm-type,
+  .cm-s-obsidian .cm-variable-2,
+  .cm-s-obsidian .cm-variable-3,
+  .cm-s-obsidian .cm-tag {
+    color: var(--monokai-type-light) !important;
+  }
+
+  /* Números, Constantes, Booleanos */
+  .cm-s-obsidian .cm-number,
+  .cm-s-obsidian .cm-atom {
+    color: var(--monokai-number-light) !important;
+  }
+
+  /* Metadatos (Frontmatter, YAML) */
+  .cm-s-obsidian .cm-meta {
+    color: var(--monokai-type-light) !important;
+  }
+
+  /* --- 4. RESALTADO EN VISTA DE LECTURA (MARKDOWN) --- */
+
+  /* Texto entre comillas (Blockquotes) */
+  blockquote {
+    border-left-color: var(--monokai-keyword-light);
+  }
+
+  /* Enlaces */
+  .markdown-rendered a {
+    color: var(--monokai-type-light);
+  }
+
+  /* Enfásis */
+  em {
+    color: var(--monokai-string-light);
+  }
+
+  /* Bold */
+  strong {
+    color: var(--monokai-keyword-light);
+  }
+
+  /* Headers (Encabezados) - Jerarquía visual diferenciada */
+  .markdown-rendered h1 {
+    color: var(--monokai-keyword-light);    /* Magenta para H1 */
+  }
+
+  .markdown-rendered h2 {
+    color: var(--monokai-type-light);       /* Cian para H2 */
+  }
+
+  .markdown-rendered h3 {
+    color: var(--monokai-function-light);   /* Verde para H3 */
+  }
+
+  .markdown-rendered h4 {
+    color: var(--monokai-string-light);     /* Naranja para H4 */
+  }
+
+  .markdown-rendered h5 {
+    color: var(--monokai-number-light);     /* Púrpura para H5 */
+  }
+
+  .markdown-rendered h6 {
+    color: var(--text-muted);               /* Gris para H6 */
+  }
+
+  /* Enlace Interno/Alias (WikiLinks) */
+  .internal-link {
+    color: var(--monokai-type-light);
+  }
+
+  /* --- 5. PALABRAS RESALTADAS (HIGHLIGHTS) --- */
+  
+  /* Palabras resaltadas con ==texto== en color cian adaptado para modo claro */
+  .markdown-rendered mark {
+    color: #0094b8 !important;
+    background-color: rgba(120, 220, 232, 0.35) !important;
+  }
+  
+  .cm-s-obsidian span.cm-highlight {
+    color: #0094b8 !important;
+    background-color: rgba(120, 220, 232, 0.35) !important;
+  }
+
+  /* --- 6. LISTAS (BULLETS Y NUMERADAS) --- */
+  
+  /* SOLO los marcadores (bullets •, -, números) en color rosa #e14775 */
+  .markdown-rendered ul > li::marker,
+  .markdown-rendered ol > li::marker {
+    color: #e14775 !important;
+  }
+
+  /* Marcadores en modo edición - SOLO el símbolo, no el texto */
+  .cm-s-obsidian span.cm-formatting-list {
+    color: #e14775 !important;
+  }
+  
+  /* Asegurar que el texto de las listas mantenga el color normal */
+  .markdown-rendered ul > li,
+  .markdown-rendered ol > li {
+    color: var(--text-normal);
+  }
+  
+  .cm-s-obsidian .cm-list-1,
+  .cm-s-obsidian .cm-list-2,
+  .cm-s-obsidian .cm-list-3 {
+    color: var(--text-normal) !important;
+  }
+}

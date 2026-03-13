@@ -1,0 +1,13 @@
+{
+  "promptDelete": false,
+  "pdfExportSettings": {
+    "pageSize": "A3",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 73
+  },
+  "alwaysUpdateLinks": true,
+  "attachmentFolderPath": "./adjuntos",
+  "newFileLocation": "current",
+  "showUnsupportedFiles": true
+}

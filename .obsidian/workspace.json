@@ -1,0 +1,236 @@
+{
+  "main": {
+    "id": "b6fe575baa262fe0",
+    "type": "split",
+    "children": [
+      {
+        "id": "877f9898ad609226",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "afc48363165cc596",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "GIt/GIt.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "GIt"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2a42428c9ee91846",
+    "type": "split",
+    "children": [
+      {
+        "id": "a7e9e09bf7bd02c1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6f677077d21bfb5d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de archivos"
+            }
+          },
+          {
+            "id": "df006a24ac4d2e41",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:#misc",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Buscar"
+            }
+          },
+          {
+            "id": "d66b077b926f0bc3",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 369.5
+  },
+  "right": {
+    "id": "0757b477791b4b81",
+    "type": "split",
+    "children": [
+      {
+        "id": "62ff36abdcaed1ae",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9df28724c7a58725",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Bienvenido.md",
+                "collapseAll": true,
+                "extraContext": true,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Enlaces entrantes de Bienvenido"
+            }
+          },
+          {
+            "id": "a4e1f6c1fc22b823",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.2 Sección 2 – Literales de Python/2.2 Sección 2 – Literales de Python.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Enlaces salientes de 2.2 Sección 2 – Literales de Python"
+            }
+          },
+          {
+            "id": "68b31ff3a2b0c207",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "alphabetical",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "0a0454150a791aef",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas las propiedades"
+            }
+          },
+          {
+            "id": "4942d513d3ebd013",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Mentoria/Introducción a los ALGORITMOS y la PROGRAMACIÓN/3.Variables.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Esquema de 3.Variables"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir selector rápido": false,
+      "graph:Abrir vista gráfica": false,
+      "canvas:Crear nuevo lienzo": false,
+      "daily-notes:Abrir la nota de hoy": false,
+      "templates:Insertar plantilla": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Crear nueva base": false
+    }
+  },
+  "active": "afc48363165cc596",
+  "lastOpenFiles": [
+    "GIt/Untitled.md",
+    "GIt/GIt.md",
+    "DuocUC/quinto semestre/Asignaturas.md",
+    "Bienvenido.md",
+    "ERS FuenteCreadora.md",
+    "Web/CSS/Propiedades de fuente y texto.md",
+    "Web/CSS/Fuentes externas.md",
+    "Web/CSS/BoxModel.md",
+    "Mentoria/Introducción a los ALGORITMOS y la PROGRAMACIÓN/2.TIPOS DE DATOS.md",
+    "Mentoria/Introducción a los ALGORITMOS y la PROGRAMACIÓN/Test.md",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/3.1.4 Operadores.md",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/3.1.3 Ejercicios.md",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/3.1.2 Comparación operador de igualdad.md",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/3.1.1 Preguntas y Respuestas.md",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/3.1.5 Haciendo uso de las respuestas.md",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304201915.png",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304201759.png",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/tablaPrioridades.jpg",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/tablaPrioridades (Large).png",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200505.png",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200316.png",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200253.png",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200227.png",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200220.png",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200205.png",
+    "Vault.md",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python",
+    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit",
+    "Sin nombre 1",
+    "DuocUC/quinto semestre",
+    "DuocUC",
+    "Mentoria/Introducción a los ALGORITMOS y la PROGRAMACIÓN/1.QUÉ ES PROGRAMAR.md",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/Finalización del Módulo 2 - QUIZ DEL MÓDULO.md",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/adjuntos",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.13 CUESTIONARIO DE SECCIÓN.md",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.12 RESUMEN DE SECCIÓN.md",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.11   LAB   Operadores y expresiones – 2.md",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.10   LAB   Operadores y expresiones.md",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.9   LAB   Entradas y salidas simples.md",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.8 Conversiones de tipos una vez más.md",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.7 Operadores cadena.md",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario/2.6.6 Más sobre input() y conversión de tipo.md",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.6 Sección 6 – Interacción con el usuario",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.5 Sección 5 – Comentarios",
+    "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.4 Sección 4 – Variables"
+  ]
+}
