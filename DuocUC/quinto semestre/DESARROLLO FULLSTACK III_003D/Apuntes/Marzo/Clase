@@ -1,0 +1,80 @@
+# Clase del día Miércoles 11-03
+
+- persistencia de datos
+- base de datos
+  - relacional
+  - no relacional
+  - quinta forma normal
+
+---
+
+## Cosas que se hacen en la minuta semanal
+
+- se habla con cliente de las cosas que hemos hecho(Profesor)
+  - El cliente debe estar representado en la minuta
+- Se tiene que definir un líder del equipo para que reciba las peticiones del cliente
+- la minuta solo es un chelista de las tareas que hemos definido en la semana
+- Se hace un cheklist de quienes asisten a la reunión
+- Que es lo que se hablo durante la minuta
+- Que temas se encontraron que van a proponer para las siguientes reuniones
+  - si hay promesas, se tiene que cumplir con plazo hasta final de semestre
+  - podemos justificar los cambios hechos por el cliente con las minutas semanales que están firmadas, por lo cual es importante tomar en cuenta todo lo que dice el cliente
+
+- Es importante tener promesas en cada minuta
+
+---
+
+no se piden:
+
+- roles
+- sprint
+- no es necesario indicar plazos
+
+Las minutas se mandan en base a GitHub, se crea un repositorio(lider) se agregan a todos los integrantes y al profesor
+
+- Cuando se sube la minuta, se tiene que hacer un pullrequest y el cliente(Profesor) lo acepta, es decir, cuando se acepte es que se firma y los cambios estan aceptados.
+- Se pueden crear todas ramas que se quieran
+- En todos los repositorios se une el profesor y los crea el líder.
+  - Frontend
+  - microservicios(cada uno tiene su repositorio)
+- El líder se encarga/asegurarse de que el git/merge tiene sentido
+  - Cada merge tiene que tener su propia pullrequest
+
+## Diagramas
+
+-clases
+-entidad relación
+-package
+
+>[!danger] no se hace casos de uso
+
+## Plazos
+
+la primera semana de abril es un entregable tipo informe en donde va:
+
+- toda la tecnología que se va a usar
+- los diagramas, las reglas de negocios
+- los patrones de arquictura,
+
+## cosas a tener en cuenta
+
+### la mantención de los datos
+
+#### Base de datos
+
+- como se mantienen los datos en la bd, para mantener la consistencia de los datos  como a la hora de crear un inventario de manera individual.
+
+>[!question] ¿Qué pasa si se borra la cuenta?
+>se elimina la cuenta, se elimina los datos, el usuario solo tiene una columna >de manera que marca el estado del usuario para que mantener el usuario para >poder mantenerlo en la bd.
+
+##### colas de espera
+
+como se maneja el sistema antes de una catástrofe(informatico)
+
+- como ataques ddos
+- como fugas de datos
+- como se maneja ante de las promesas(eventos) que hay en los microservicios
+- se tiene que investigar el uso de la resiliencia proactiva
+
+normalización de las base de datos(1-5)
+<https://www.datacamp.com/es/tutorial/normalization-in-**sql>**
