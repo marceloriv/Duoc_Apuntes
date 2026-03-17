@@ -42,9 +42,9 @@ Las minutas se mandan en base a GitHub, se crea un repositorio(lider) se agregan
 
 ## Diagramas
 
--clases
--entidad relación
--package
+- clases
+- entidad relación
+- package
 
 >[!danger] no se hace casos de uso
 

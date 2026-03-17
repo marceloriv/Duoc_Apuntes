@@ -2,13 +2,16 @@
 
 1. Microservicios
    1. Inventario
-   2. Pedidos
-   3. Envios
+   2. Envias(sistema de mensajeria | correo)
+   3. Pedidos (Ticket)
+   4. carrito de compras
+   5. Eventos
+   6. Donaciones
+   7. Usuario
 2. Digramas
    1. Diagrama de microservicios
-   2. Diagrama de Clases
-   3. Diagrama de
-   4. Diagrama de microservicios
+   2. Diagrama de Arquitectura
+   3. Diagrama de base de entidad
 3. Patrones de diseño
    1. Repository Pattern: persistencia de datos
    2. Factory Method: Creacion de instancias
