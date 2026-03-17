@@ -1,3 +1,9 @@
 {
-  "conventionalCommits.scopes": ["README", "perfiles", "workspace", "FullStack"]
+  "conventionalCommits.scopes": [
+    "README",
+    "perfiles",
+    "workspace",
+    "FullStack",
+    "EvaluacionProyecto"
+  ]
 }
