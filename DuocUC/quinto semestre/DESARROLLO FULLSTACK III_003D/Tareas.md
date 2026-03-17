@@ -42,3 +42,8 @@
    3. Descripcion de la Arquitectura finales
    4. Detellaes de las pruebas unitarias
       1. Mediante las pruebas unitarias, hacer saber que fallos nos dio y como esto no permitio mejorar el codigo
+9. Contenedores
+   1. Mantener la implementacion y portabilidad
+   2. Docker
+   3. Kubernetes
+   4. Nube
