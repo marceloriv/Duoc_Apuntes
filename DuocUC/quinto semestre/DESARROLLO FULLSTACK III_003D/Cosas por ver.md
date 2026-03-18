@@ -1,13 +1,13 @@
 # Cosas por ver
 
 1. Microservicios
-   1. Inventario
-   2. Envias(sistema de mensajeria | correo)
-   3. Pedidos (Ticket)
-   4. carrito de compras
-   5. Eventos
-   6. Donaciones
-   7. Usuario
+   1. Usuario
+   2. Inventario
+   3. Envias(sistema de mensajeria | correo)
+   4. Pedidos (Ticket)
+   5. carrito de compras
+   6. Eventos
+   7. Donaciones
 2. Digramas
    1. Diagrama de microservicios
    2. Diagrama de Arquitectura
