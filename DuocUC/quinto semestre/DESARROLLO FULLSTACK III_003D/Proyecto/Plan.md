@@ -18,6 +18,8 @@
 >- Ticket
 >- Pago
 
+Cada Microservicio Tiene su fallback
+
 ### Envios
 
 Es un sistema de mensajeria, del tipo que cuando se compra un producto le llega un correo, mensaje...entre otros. Igualmente que hay un sistema de devolución
