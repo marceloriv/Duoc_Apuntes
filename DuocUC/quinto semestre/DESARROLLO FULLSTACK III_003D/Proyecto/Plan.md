@@ -1,5 +1,9 @@
 # Proyecto
 
+La plataforma será un espacio digital donde las personas puedan descubrir eventos, comprar entradas de forma sencilla y, al mismo tiempo, aportar a una causa social. Cada ticket vendido no solo genera ingresos para los organizadores, sino que también destina un porcentaje a organizaciones sin fines de lucro. Es una propuesta que combina tecnología moderna, cercanía con la comunidad y un impacto positivo, diferenciándose de las plataformas tradicionales que solo buscan rentabilidad.
+
+
+
 ## Microservicios
 
    1. Inventario
