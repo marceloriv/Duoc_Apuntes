@@ -1,8 +1,21 @@
 # Proyecto
 
 La plataforma será un espacio digital donde las personas puedan descubrir eventos, comprar entradas de forma sencilla y, al mismo tiempo, aportar a una causa social. Cada ticket vendido no solo genera ingresos para los organizadores, sino que también destina un porcentaje a organizaciones sin fines de lucro. Es una propuesta que combina tecnología moderna, cercanía con la comunidad y un impacto positivo, diferenciándose de las plataformas tradicionales que solo buscan rentabilidad.
+Darle visibilida a los eventos pequeños, donde el cliente decide a traves de la compra de ticket a que sociedad sin fines de lucro darle esa donacion,esta donacion esta dentro del precio.
 
+## Nombres
 
+Posibles nombres del sistema
+>[!question] ¿El cliente define el nombre del sistema?
+>
+>Podemos nosotros definiar un posible nombre del sistema basandonos en marketing o estudio del mercado
+>Posibles Nombres
+>
+> - nombre 1
+
+## Minutas
+
+Siempre preguntarle al cliente que quiere,  y esperar las respuestas del cliente.
 
 ## Microservicios
 
