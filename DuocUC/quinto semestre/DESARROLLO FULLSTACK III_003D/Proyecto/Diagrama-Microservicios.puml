@@ -1,16 +1,4 @@
 @startuml
-!theme plain
-left to right direction
-skinparam backgroundColor white
-skinparam componentStyle rectangle
-skinparam shadowing false
-skinparam packageStyle rectangle
-
-actor Cliente
-actor Administrador
-actor CreadorEventos as "Creador de Eventos"
-
-@startuml
 left to right direction
 skinparam backgroundColor #F5F5F7
 skinparam shadowing false
@@ -18,11 +6,11 @@ skinparam packageStyle rectangle
 skinparam classBackgroundColor #ECE8F6
 skinparam classBorderColor #7E74A8
 skinparam ArrowColor #646B75
-skinparam defaultFontName Segoe UI
+skinparam defaultFontName "Segoe UI"
 
-actor UsuarioWeb as "Usuario"
-actor Administrador
-actor CreadorEventos as "Creador Eventos"
+class UsuarioWeb as "Usuario" <<actor>>
+class Administrador <<actor>>
+class CreadorEventos as "Creador Eventos" <<actor>>
 
 package "Microservicio Usuario" as MSUsuario {
   class UsuarioController {
@@ -49,7 +37,7 @@ package "Microservicio Usuario" as MSUsuario {
     +updateRole(id, role)
   }
 
-  database UsuarioDB
+  class UsuarioDB <<database>>
 }
 
 package "Microservicio Eventos" as MSEventos {
@@ -81,7 +69,7 @@ package "Microservicio Eventos" as MSEventos {
     +update(id, evento)
   }
 
-  database EventoDB
+  class EventoDB <<database>>
 }
 
 package "Microservicio Inventario" as MSInventario {
@@ -109,7 +97,7 @@ package "Microservicio Inventario" as MSInventario {
     +updateStock(itemId, qty)
   }
 
-  database InventarioDB
+  class InventarioDB <<database>>
 }
 
 package "Microservicio Pedidos (Ticket)" as MSPedidos {
@@ -158,7 +146,7 @@ package "Microservicio Pedidos (Ticket)" as MSPedidos {
     +updateStatus(orderId, status)
   }
 
-  database PedidoDB
+  class PedidoDB <<database>>
 }
 
 package "Microservicio Carrito" as MSCarrito {
@@ -204,7 +192,7 @@ package "Microservicio Carrito" as MSCarrito {
     +clear(userId)
   }
 
-  database CarritoDB
+  class CarritoDB <<database>>
 }
 
 package "Microservicio Donaciones" as MSDonaciones {
@@ -259,7 +247,7 @@ package "Microservicio Donaciones" as MSDonaciones {
     +updateStatus(id, status)
   }
 
-  database DonacionDB
+  class DonacionDB <<database>>
 }
 
 package "Microservicio Envios" as MSEnvios {
@@ -304,13 +292,13 @@ package "Microservicio Envios" as MSEnvios {
     +findByRef(ref)
   }
 
-  database EnvioDB
+  class EnvioDB <<database>>
 }
 
-cloud "Canales Mensajeria" {
-  component Correo
-  component SMS
-  component Push
+package "Canales Mensajeria" {
+  class Correo <<channel>>
+  class SMS <<channel>>
+  class Push <<channel>>
 }
 
 ' Relacion interna por microservicio
