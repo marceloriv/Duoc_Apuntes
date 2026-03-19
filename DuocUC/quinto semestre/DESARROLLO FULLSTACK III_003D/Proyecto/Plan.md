@@ -53,6 +53,8 @@ Hay que pensar en que cosas enriquecen la expericia del usuario a la hora de cre
 >- Pago
 
 Cada Microservicio Tiene su fallback
+>[!NOTE]
+>Esto es una prueba
 
 ### Envios
 
