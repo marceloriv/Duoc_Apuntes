@@ -16,6 +16,23 @@ Posibles nombres del sistema
 ## Minutas
 
 Siempre preguntarle al cliente que quiere,  y esperar las respuestas del cliente.
+Hay que tener en cuenta que el cliente es un experto en el area por lo que cual siempre hay que preguntarle con respeto a la tecnolgia que se usara
+>**Por ejemplo:** Si nosotros le decimos el nombre del sistema acompañodo de los requisitos funcionales del sistema, el nos puede recomendar con respecto a los microservicios que se requiren
+
+## Experiencia del Usuario
+
+Hay que pensar en que cosas enriquecen la expericia del usuario a la hora de crear nuestro sistema
+
+- Como esta el tiempo en el lugar del evento
+- Busqueda por zona, area
+- Que a la hora de comprar un ticket se le otorgue una empecie de reconocimiento que lo haga parte del evento
+- Que si el usuario compra ticket en relacion a eventos de bienestar, se le recomienden eventos de bienestar, ya sea dentro de su misma area o cercanas
+- Pensar que en involucra un evento, que no solo es el ticket:
+  - comida
+  - hospedaje
+  - clima
+  - zona
+  - rutas de transporte
 
 ## Microservicios
 

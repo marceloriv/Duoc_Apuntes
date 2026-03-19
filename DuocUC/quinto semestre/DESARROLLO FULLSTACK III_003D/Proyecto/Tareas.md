@@ -2,6 +2,9 @@
 
 Aca van las tareas que se actualizaran poco a poco
 
+- Buscar platarfomas que sea similares:
+  - ticketmaster
+
 ## Informe
 
 - Definir el prosito del sistema
