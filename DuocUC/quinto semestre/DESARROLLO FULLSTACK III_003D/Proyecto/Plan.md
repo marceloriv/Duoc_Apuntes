@@ -36,7 +36,7 @@ Hay que pensar en que cosas enriquecen la expericia del usuario a la hora de cre
 
 ## Microservicios
 
-   1. Inventario
+   1. Inventario (Hay que pensar en como implementarlo)
    2. Envios(sistema de mensajeria | correo)
    3. Pedidos (Ticket)
    4. carrito de compras
