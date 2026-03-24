@@ -5,7 +5,13 @@
 Obsidian
 
 ```powershell
-winget install -e --id Obsidian.Obsidian
+winget install -e --id Obsidian.Obsidian --source winget
+```
+
+LocalSend
+
+```powershell
+winget install -e --id LocalSend.LocalSend --source winget
 ```
 
 ## Git
