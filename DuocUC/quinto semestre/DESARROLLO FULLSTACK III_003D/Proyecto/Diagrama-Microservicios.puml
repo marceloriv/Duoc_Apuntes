@@ -1,4 +1,4 @@
-@startuml
+@startuml DiagramaMicroservicios
 left to right direction
 skinparam backgroundColor #F5F5F7
 skinparam shadowing false
@@ -13,385 +13,437 @@ class Administrador <<actor>>
 class CreadorEventos as "Creador Eventos" <<actor>>
 
 package "Microservicio Usuario" as MSUsuario {
-  class UsuarioController {
-    +login(request)
-    +register(request)
-    +getById(id)
+  class ControladorUsuario {
+    +iniciarSesion(solicitud)
+    +registrar(solicitud)
+    +obtenerPorId(id)
   }
 
-  class UsuarioService {
-    +findById(id)
-    +register(data)
-    +updateRole(id, role)
+  class ServicioUsuario {
+    +buscarPorId(id)
+    +registrar(datos)
+    +actualizarRol(id, rol)
   }
 
-  interface UsuarioRepository {
-    +findById(id)
-    +save(usuario)
-    +updateRole(id, role)
+  class FabricaPerfilUsuario {
+    +crearPerfil(rol)
   }
 
-  class JpaUsuarioRepository {
-    +findById(id)
-    +save(usuario)
-    +updateRole(id, role)
+  interface RepositorioUsuario {
+    +buscarPorId(id)
+    +guardar(usuario)
+    +actualizarRol(id, rol)
   }
 
-  class UsuarioDB <<database>>
+  class RepositorioJpaUsuario {
+    +buscarPorId(id)
+    +guardar(usuario)
+    +actualizarRol(id, rol)
+  }
+
+  class BaseDatosUsuario <<database>>
 }
 
 package "Microservicio Eventos" as MSEventos {
-  class EventoController {
-    +getById(id)
-    +create(request)
-    +update(id, request)
+  class ControladorEvento {
+    +obtenerPorId(id)
+    +crear(solicitud)
+    +actualizar(id, solicitud)
   }
 
-  class EventoService {
-    +findById(id)
-    +create(data)
-    +publish(id)
+  class ServicioEvento {
+    +buscarPorId(id)
+    +crear(datos)
+    +publicar(id)
   }
 
-  class EventCategoryFactory {
-    +createCategory(tipo)
+  class FabricaCategoriaEvento {
+    +crearCategoria(tipo)
   }
 
-  interface EventoRepository {
-    +findById(id)
-    +save(evento)
-    +update(id, evento)
+  class PublicadorEvento {
+    +publicarEventoCreado(eventoId, capacidad)
   }
 
-  class JpaEventoRepository {
-    +findById(id)
-    +save(evento)
-    +update(id, evento)
+  interface RepositorioEvento {
+    +buscarPorId(id)
+    +guardar(evento)
+    +actualizar(id, evento)
   }
 
-  class EventoDB <<database>>
+  class RepositorioJpaEvento {
+    +buscarPorId(id)
+    +guardar(evento)
+    +actualizar(id, evento)
+  }
+
+  class BaseDatosEvento <<database>>
 }
 
 package "Microservicio Inventario" as MSInventario {
-  class InventarioController {
-    +getStock(itemId)
-    +checkStock(itemId, qty)
-    +reserveStock(itemId, qty)
+  class ControladorInventario {
+    +obtenerStock(itemId)
+    +verificarStock(itemId, cantidad)
+    +reservarStock(itemId, cantidad)
   }
 
-  class InventarioService {
-    +findByItem(itemId)
-    +checkStock(itemId, qty)
-    +updateStock(itemId, qty)
+  class ServicioInventario {
+    +buscarPorItem(itemId)
+    +verificarStock(itemId, cantidad)
+    +actualizarStock(itemId, cantidad)
+    +inicializarStock(eventoId, capacidad)
   }
 
-  interface InventarioRepository {
-    +findByItem(itemId)
-    +save(stock)
-    +updateStock(itemId, qty)
+  class OyenteInicializacionStock {
+    +alRecibirEventoCreado(evento)
   }
 
-  class JpaInventarioRepository {
-    +findByItem(itemId)
-    +save(stock)
-    +updateStock(itemId, qty)
+  interface RepositorioInventario {
+    +buscarPorItem(itemId)
+    +guardar(stock)
+    +actualizarStock(itemId, cantidad)
   }
 
-  class InventarioDB <<database>>
+  class RepositorioJpaInventario {
+    +buscarPorItem(itemId)
+    +guardar(stock)
+    +actualizarStock(itemId, cantidad)
+  }
+
+  class BaseDatosInventario <<database>>
 }
 
 package "Microservicio Pedidos (Ticket)" as MSPedidos {
-  class PedidoController {
-    +createOrder(request)
-    +getById(id)
+  class ControladorPedido {
+    +crearPedido(solicitud)
+    +obtenerPorId(id)
   }
 
-  class PedidoService {
-    +createOrder(request)
-    +validateOrder(request)
-    +confirmOrder(orderId)
+  class ServicioPedido {
+    +crearPedido(solicitud)
+    +validarPedido(solicitud)
+    +confirmarPedido(pedidoId)
   }
 
-  class InventarioClientPedido {
-    +checkStock(itemId, qty)
+  class FabricaTicket {
+    +crearTicket(tipo)
   }
 
-  class UsuarioClientPedido {
-    +validateUser(userId)
+  class ClienteInventarioPedido {
+    +verificarStock(itemId, cantidad)
   }
 
-  class EnvioClientPedido {
-    +notifyOrder(payload)
+  class ClienteUsuarioPedido {
+    +validarUsuario(usuarioId)
   }
 
-  class PedidoCircuitBreaker {
-    +executeRemote(request)
-    +fallback(request, ex)
+  class ClienteNotificacionPedido {
+    +notificarPedido(carga)
   }
 
-  class FallbackHandlerPedido {
-    +queueOrderRetry(request)
-    +markAsPending(orderId)
+  class InterruptorCircuitoPedido {
+    +ejecutarRemoto(solicitud)
+    +respaldo(solicitud, ex)
   }
 
-  interface PedidoRepository {
-    +findById(id)
-    +save(order)
-    +updateStatus(orderId, status)
+  class ManejadorRespaldoPedido {
+    +encolarReintentoPedido(solicitud)
+    +marcarComoPendiente(pedidoId)
   }
 
-  class JpaPedidoRepository {
-    +findById(id)
-    +save(order)
-    +updateStatus(orderId, status)
+  interface RepositorioPedido {
+    +buscarPorId(id)
+    +guardar(pedido)
+    +actualizarEstado(pedidoId, estado)
   }
 
-  class PedidoDB <<database>>
+  class RepositorioJpaPedido {
+    +buscarPorId(id)
+    +guardar(pedido)
+    +actualizarEstado(pedidoId, estado)
+  }
+
+  class BaseDatosPedido <<database>>
 }
 
 package "Microservicio Carrito" as MSCarrito {
-  class CarritoController {
-    +addItem(request)
-    +getCart(userId)
-    +checkout(request)
+  class ControladorCarrito {
+    +agregarElemento(solicitud)
+    +obtenerCarrito(usuarioId)
+    +finalizarCompra(solicitud)
   }
 
-  class CarritoService {
-    +addItem(request)
-    +checkInventory(request)
-    +checkout(request)
+  class ServicioCarrito {
+    +agregarElemento(solicitud)
+    +verificarInventario(solicitud)
+    +finalizarCompra(solicitud)
   }
 
-  class InventarioClientCarrito {
-    +checkStock(itemId, qty)
+  class ClienteInventarioCarrito {
+    +verificarStock(itemId, cantidad)
   }
 
-  class PedidoClientCarrito {
-    +createOrder(request)
+  class ClientePedidoCarrito {
+    +crearPedido(solicitud)
   }
 
-  class CarritoCircuitBreaker {
-    +executeStockCheck(itemId, qty)
-    +fallbackStock(itemId, qty, ex)
+  class InterruptorCircuitoCarrito {
+    +ejecutarVerificacionStock(itemId, cantidad)
+    +respaldoStock(itemId, cantidad, ex)
   }
 
-  class FallbackHandlerCarrito {
-    +cacheUnavailableStock()
-    +markCartPending(userId)
+  class ManejadorRespaldoCarrito {
+    +almacenarStockNoDisponible()
+    +marcarCarritoPendiente(usuarioId)
   }
 
-  interface CarritoRepository {
-    +findByUser(userId)
-    +save(cart)
-    +clear(userId)
+  interface RepositorioCarrito {
+    +buscarPorUsuario(usuarioId)
+    +guardar(carrito)
+    +limpiar(usuarioId)
   }
 
-  class JpaCarritoRepository {
-    +findByUser(userId)
-    +save(cart)
-    +clear(userId)
+  class RepositorioJpaCarrito {
+    +buscarPorUsuario(usuarioId)
+    +guardar(carrito)
+    +limpiar(usuarioId)
   }
 
-  class CarritoDB <<database>>
+  class BaseDatosCarrito <<database>>
 }
 
 package "Microservicio Donaciones" as MSDonaciones {
-  class DonacionController {
-    +donate(request)
-    +getById(id)
+  class ControladorDonacion {
+    +donar(solicitud)
+    +obtenerPorId(id)
   }
 
-  class DonacionService {
-    +registerDonation(request)
-    +processPayment(request)
-    +confirmDonation(id)
+  class ServicioDonacion {
+    +registrarDonacion(solicitud)
+    +procesarPago(solicitud)
+    +confirmarDonacion(id)
   }
 
-  class EventoClientDonacion {
-    +validateEvent(eventId)
+  class ClienteEventoDonacion {
+    +validarEvento(eventoId)
   }
 
-  class EnvioClientDonacion {
-    +sendReceipt(payload)
+  class ClienteNotificacionDonacion {
+    +enviarComprobante(carga)
   }
 
-  class PaymentProcessorFactory {
-    +createProcessor(method)
+  class InterruptorCircuitoDonacion {
+    +ejecutarRemoto(solicitud)
+    +respaldo(solicitud, ex)
   }
 
-  interface PaymentProcessor {
-    +process(amount)
+  class ManejadorRespaldoDonacion {
+    +encolarReintentoDonacion(solicitud)
+    +marcarDonacionPendiente(donacionId)
   }
 
-  class CreditCardProcessor {
-    +process(amount)
+  class FabricaProcesadorPago {
+    +crearProcesador(metodo)
   }
 
-  class DebitCardProcessor {
-    +process(amount)
+  interface ProcesadorPago {
+    +procesar(monto)
   }
 
-  class TransferProcessor {
-    +process(amount)
+  class ProcesadorTarjetaCredito {
+    +procesar(monto)
   }
 
-  interface DonacionRepository {
-    +findById(id)
-    +save(donation)
-    +updateStatus(id, status)
+  class ProcesadorTarjetaDebito {
+    +procesar(monto)
   }
 
-  class JpaDonacionRepository {
-    +findById(id)
-    +save(donation)
-    +updateStatus(id, status)
+  class ProcesadorTransferencia {
+    +procesar(monto)
   }
 
-  class DonacionDB <<database>>
+  interface RepositorioDonacion {
+    +buscarPorId(id)
+    +guardar(donacion)
+    +actualizarEstado(id, estado)
+  }
+
+  class RepositorioJpaDonacion {
+    +buscarPorId(id)
+    +guardar(donacion)
+    +actualizarEstado(id, estado)
+  }
+
+  class BaseDatosDonacion <<database>>
 }
 
-package "Microservicio Envios" as MSEnvios {
-  class EnvioController {
-    +sendOrderNotification(request)
-    +sendDonationReceipt(request)
+package "Microservicio Notificaciones" as MSNotificaciones {
+  class ControladorNotificacion {
+    +enviarNotificacionPedido(solicitud)
+    +enviarComprobanteDonacion(solicitud)
   }
 
-  class EnvioService {
-    +sendEmail(payload)
-    +sendSms(payload)
-    +sendPush(payload)
+  class ServicioNotificacion {
+    +enviarCorreo(carga)
+    +enviarSms(carga)
+    +enviarNotificacionMovil(carga)
   }
 
-  class NotificationFactory {
-    +createNotifier(channel)
+  class FabricaNotificador {
+    +crearNotificador(canal)
   }
 
-  interface Notifier {
-    +send(payload)
+  interface Notificador {
+    +enviar(carga)
   }
 
-  class EmailNotifier {
-    +send(payload)
+  class NotificadorCorreo {
+    +enviar(carga)
   }
 
-  class SmsNotifier {
-    +send(payload)
+  class NotificadorSms {
+    +enviar(carga)
   }
 
-  class PushNotifier {
-    +send(payload)
+  class NotificadorMovil {
+    +enviar(carga)
   }
 
-  interface EnvioRepository {
-    +saveLog(log)
-    +findByRef(ref)
+  interface RepositorioNotificacion {
+    +guardarRegistro(registro)
+    +buscarPorReferencia(referencia)
   }
 
-  class JpaEnvioRepository {
-    +saveLog(log)
-    +findByRef(ref)
+  class RepositorioJpaNotificacion {
+    +guardarRegistro(registro)
+    +buscarPorReferencia(referencia)
   }
 
-  class EnvioDB <<database>>
+  class BaseDatosNotificacion <<database>>
+}
+
+package "Bus de Eventos" as BusEventos {
+  class GestorMensajes <<queue>>
+  class EventoCreado <<event>>
 }
 
 package "Canales Mensajeria" {
   class Correo <<channel>>
   class SMS <<channel>>
-  class Push <<channel>>
+  class AplicacionMovil <<channel>>
 }
 
 ' Relacion interna por microservicio
-UsuarioController --> UsuarioService
-UsuarioService --> UsuarioRepository
-UsuarioRepository <|.. JpaUsuarioRepository
-JpaUsuarioRepository --> UsuarioDB
+ControladorUsuario --> ServicioUsuario
+ServicioUsuario --> FabricaPerfilUsuario : metodo fabrica
+ServicioUsuario --> RepositorioUsuario
+RepositorioUsuario <|.. RepositorioJpaUsuario
+RepositorioJpaUsuario --> BaseDatosUsuario
 
-EventoController --> EventoService
-EventoService --> EventCategoryFactory
-EventoService --> EventoRepository
-EventoRepository <|.. JpaEventoRepository
-JpaEventoRepository --> EventoDB
+ControladorEvento --> ServicioEvento
+ServicioEvento --> FabricaCategoriaEvento
+ServicioEvento --> PublicadorEvento : publica evento de dominio
+ServicioEvento --> RepositorioEvento
+RepositorioEvento <|.. RepositorioJpaEvento
+RepositorioJpaEvento --> BaseDatosEvento
+PublicadorEvento --> GestorMensajes : publica EventoCreado
+GestorMensajes --> EventoCreado
 
-InventarioController --> InventarioService
-InventarioService --> InventarioRepository
-InventarioRepository <|.. JpaInventarioRepository
-JpaInventarioRepository --> InventarioDB
+ControladorInventario --> ServicioInventario
+OyenteInicializacionStock --> ServicioInventario : inicializa stock al crear evento
+GestorMensajes --> OyenteInicializacionStock : consume EventoCreado
+ServicioInventario --> RepositorioInventario
+RepositorioInventario <|.. RepositorioJpaInventario
+RepositorioJpaInventario --> BaseDatosInventario
 
-PedidoController --> PedidoService
-PedidoService --> PedidoCircuitBreaker : protege consultas remotas
-PedidoCircuitBreaker --> InventarioClientPedido
-PedidoCircuitBreaker --> UsuarioClientPedido
-PedidoCircuitBreaker --> EnvioClientPedido
-PedidoCircuitBreaker --> FallbackHandlerPedido : si falla
-PedidoService --> PedidoRepository
-PedidoRepository <|.. JpaPedidoRepository
-JpaPedidoRepository --> PedidoDB
+ControladorPedido --> ServicioPedido
+ServicioPedido --> FabricaTicket : metodo fabrica
+ServicioPedido --> InterruptorCircuitoPedido : protege consultas remotas
+InterruptorCircuitoPedido --> ClienteInventarioPedido
+InterruptorCircuitoPedido --> ClienteUsuarioPedido
+InterruptorCircuitoPedido --> ClienteNotificacionPedido
+InterruptorCircuitoPedido --> ManejadorRespaldoPedido : si falla
+ServicioPedido --> RepositorioPedido
+RepositorioPedido <|.. RepositorioJpaPedido
+RepositorioJpaPedido --> BaseDatosPedido
 
-CarritoController --> CarritoService
-CarritoService --> CarritoCircuitBreaker : protege consulta remota
-CarritoCircuitBreaker --> InventarioClientCarrito
-CarritoCircuitBreaker --> FallbackHandlerCarrito : si falla
-CarritoService --> PedidoClientCarrito
-CarritoService --> CarritoRepository
-CarritoRepository <|.. JpaCarritoRepository
-JpaCarritoRepository --> CarritoDB
+ControladorCarrito --> ServicioCarrito
+ServicioCarrito --> InterruptorCircuitoCarrito : protege consulta remota
+InterruptorCircuitoCarrito --> ClienteInventarioCarrito
+InterruptorCircuitoCarrito --> ManejadorRespaldoCarrito : si falla
+ServicioCarrito --> ClientePedidoCarrito
+ServicioCarrito --> RepositorioCarrito
+RepositorioCarrito <|.. RepositorioJpaCarrito
+RepositorioJpaCarrito --> BaseDatosCarrito
 
-DonacionController --> DonacionService
-DonacionService --> EventoClientDonacion
-DonacionService --> EnvioClientDonacion
-DonacionService --> PaymentProcessorFactory : factory method
-PaymentProcessorFactory --> PaymentProcessor
-PaymentProcessor <|.. CreditCardProcessor
-PaymentProcessor <|.. DebitCardProcessor
-PaymentProcessor <|.. TransferProcessor
-DonacionService --> DonacionRepository
-DonacionRepository <|.. JpaDonacionRepository
-JpaDonacionRepository --> DonacionDB
+ControladorDonacion --> ServicioDonacion
+ServicioDonacion --> InterruptorCircuitoDonacion : protege consultas remotas
+InterruptorCircuitoDonacion --> ClienteEventoDonacion
+InterruptorCircuitoDonacion --> ClienteNotificacionDonacion
+InterruptorCircuitoDonacion --> ManejadorRespaldoDonacion : si falla
+ServicioDonacion --> FabricaProcesadorPago : metodo fabrica
+FabricaProcesadorPago --> ProcesadorPago
+ProcesadorPago <|.. ProcesadorTarjetaCredito
+ProcesadorPago <|.. ProcesadorTarjetaDebito
+ProcesadorPago <|.. ProcesadorTransferencia
+ServicioDonacion --> RepositorioDonacion
+RepositorioDonacion <|.. RepositorioJpaDonacion
+RepositorioJpaDonacion --> BaseDatosDonacion
 
-EnvioController --> EnvioService
-EnvioService --> NotificationFactory : factory method
-NotificationFactory --> Notifier
-Notifier <|.. EmailNotifier
-Notifier <|.. SmsNotifier
-Notifier <|.. PushNotifier
-EnvioService --> EnvioRepository
-EnvioRepository <|.. JpaEnvioRepository
-JpaEnvioRepository --> EnvioDB
-EmailNotifier --> Correo
-SmsNotifier --> SMS
-PushNotifier --> Push
+ControladorNotificacion --> ServicioNotificacion
+ServicioNotificacion --> FabricaNotificador : metodo fabrica
+FabricaNotificador --> Notificador
+Notificador <|.. NotificadorCorreo
+Notificador <|.. NotificadorSms
+Notificador <|.. NotificadorMovil
+ServicioNotificacion --> RepositorioNotificacion
+RepositorioNotificacion <|.. RepositorioJpaNotificacion
+RepositorioJpaNotificacion --> BaseDatosNotificacion
+NotificadorCorreo --> Correo
+NotificadorSms --> SMS
+NotificadorMovil --> AplicacionMovil
 
 ' Consumo entre microservicios
-InventarioClientCarrito ..> InventarioController : consume microservicio
-PedidoClientCarrito ..> PedidoController : consume microservicio
-InventarioClientPedido ..> InventarioController : consume microservicio
-UsuarioClientPedido ..> UsuarioController : consume microservicio
-EnvioClientPedido ..> EnvioController : consume microservicio
-EventoClientDonacion ..> EventoController : consume microservicio
-EnvioClientDonacion ..> EnvioController : consume microservicio
+ClienteInventarioCarrito ..> ControladorInventario : consume microservicio
+ClientePedidoCarrito ..> ControladorPedido : consume microservicio
+ClienteInventarioPedido ..> ControladorInventario : consume microservicio
+ClienteUsuarioPedido ..> ControladorUsuario : consume microservicio
+ClienteNotificacionPedido ..> ControladorNotificacion : consume microservicio
+ClienteEventoDonacion ..> ControladorEvento : consume microservicio
+ClienteNotificacionDonacion ..> ControladorNotificacion : consume microservicio
 
 ' Actores del sistema
-UsuarioWeb --> UsuarioController : login/registro
-UsuarioWeb --> EventoController : ver eventos
-UsuarioWeb --> CarritoController : agregar/checkout
-UsuarioWeb --> DonacionController : donar
-Administrador --> UsuarioController : gestion usuarios
-Administrador --> EventoController : moderar eventos
-CreadorEventos --> EventoController : CRUD eventos
+UsuarioWeb --> ControladorUsuario : iniciar sesion/registro
+UsuarioWeb --> ControladorEvento : ver eventos
+UsuarioWeb --> ControladorCarrito : agregar/finalizar compra
+UsuarioWeb --> ControladorDonacion : donar
+Administrador --> ControladorUsuario : gestion usuarios
+Administrador --> ControladorEvento : moderar eventos
+CreadorEventos --> ControladorEvento : CRUD eventos
 
-note bottom of PedidoService
+note bottom of ServicioPedido
 Patrones:
-- Factory Method
-- Repository Pattern
-- Circuit Breaker
+- Metodo Fabrica
+- Patron Repositorio
+- Interruptor de Circuito
 end note
 
-note bottom of DonacionService
+note bottom of ServicioDonacion
 Patrones:
-- Factory Method
-- Repository Pattern
-- Circuit Breaker
+- Metodo Fabrica (pagos)
+- Patron Repositorio
+- Interruptor de Circuito (eventos/notificaciones)
+end note
+
+note bottom of MSInventario
+Inicializacion de stock definida:
+- MSEventos publica EventoCreado
+- MSInventario consume el evento y crea cupos
+end note
+
+note bottom of MSNotificaciones
+Renombrado desde "Envios" para evitar
+confusion con logistica fisica.
 end note
 
 @enduml
