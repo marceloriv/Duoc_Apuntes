@@ -1,5 +1,11 @@
 # Duoc Apuntes
 
+## Estructura rapida
+
+- Comandos: ./Comandos/
+- Semestre actual: ./DuocUC/quinto semestre/
+- Perfiles VS Code: ./Perfiles/
+
 ## Programas
 
 Obsidian
