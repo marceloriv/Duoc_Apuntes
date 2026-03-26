@@ -24,5 +24,7 @@ todo lo que presentamos esta en una de las cuentas del equipo
 no hay que hacer pdf en la presentación, no es necesario hacer presentación
  Miércoles 8 de abril de 2026
 
+configurar 3 grupos de seguridad
+
 >[!danger]
 >no configurar la nat gateway, ya que no es necesario
