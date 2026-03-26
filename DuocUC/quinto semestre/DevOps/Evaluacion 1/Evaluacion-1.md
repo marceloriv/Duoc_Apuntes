@@ -26,5 +26,6 @@ no hay que hacer pdf en la presentación, no es necesario hacer presentación
 
 configurar 3 grupos de seguridad
 
+cada uno tiene un grupo de seguridad, para no permitir las conexiones de otras redes
 >[!danger]
 >no configurar la nat gateway, ya que no es necesario
