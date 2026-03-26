@@ -59,7 +59,7 @@ Durante el curso verán varias áreas:
 - Monitoreo
 - Respuesta a incidentes
 
-### Cyber Threat Intelligence
+### Cyber Threat Intelligence(CTI)
 
 - Entender quién ataca
 - Por qué atacan
@@ -73,7 +73,8 @@ Durante el curso verán varias áreas:
 - Examen final integrador
 
 ## 5. Qué es realmente la ciberseguridad
-
+>
+>[!info]
 > "La ciberseguridad es la disciplina que busca proteger sistemas, redes, datos y servicios digitales contra ataques o accesos no autorizados."
 
 Pero la realidad es más amplia. La ciberseguridad protege:
