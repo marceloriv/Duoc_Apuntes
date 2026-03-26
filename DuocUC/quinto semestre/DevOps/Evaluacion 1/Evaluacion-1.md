@@ -24,4 +24,5 @@ todo lo que presentamos esta en una de las cuentas del equipo
 no hay que hacer pdf en la presentación, no es necesario hacer presentación
  Miércoles 8 de abril de 2026
 
- no configurar la nat gateway
+>[!danger]
+>no configurar la nat gateway, ya que no es necesario
