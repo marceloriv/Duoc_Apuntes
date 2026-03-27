@@ -8,37 +8,26 @@ skinparam classBorderColor #7E74A8
 skinparam ArrowColor #646B75
 skinparam defaultFontName "Segoe UI"
 
-class UsuarioWeb as "Usuario" <<actor>>
-class Administrador <<actor>>
-class CreadorEventos as "Creador Eventos" <<actor>>
+class Usuario as "Usuario" <<actor>>
+class Comprador <<actor>>
+class Organizador <<actor>>
+
+Comprador --|> Usuario
+Organizador --|> Usuario
 
 package "Microservicio Usuario" as MSUsuario {
   class ControladorUsuario {
-    +iniciarSesion(solicitud)
-    +registrar(solicitud)
-    +obtenerPorId(id)
+    +registrar(datos)
+    +login(credenciales)
+    +asignarRol(usuarioId, rol)
+    +aceptarTerminos(usuarioId, rol)
   }
 
   class ServicioUsuario {
-    +buscarPorId(id)
-    +registrar(datos)
-    +actualizarRol(id, rol)
-  }
-
-  class FabricaPerfilUsuario {
-    +crearPerfil(rol)
-  }
-
-  interface RepositorioUsuario {
-    +buscarPorId(id)
-    +guardar(usuario)
-    +actualizarRol(id, rol)
-  }
-
-  class RepositorioJpaUsuario {
-    +buscarPorId(id)
-    +guardar(usuario)
-    +actualizarRol(id, rol)
+    +crearCuenta(datos)
+    +autenticar(credenciales)
+    +actualizarRol(usuarioId, rol)
+    +registrarAceptacionTerminos(usuarioId, rol)
   }
 
   class BaseDatosUsuario <<database>>
@@ -46,167 +35,36 @@ package "Microservicio Usuario" as MSUsuario {
 
 package "Microservicio Eventos" as MSEventos {
   class ControladorEvento {
-    +obtenerPorId(id)
-    +crear(solicitud)
-    +actualizar(id, solicitud)
+    +listarEventos()
+    +obtenerDetalle(eventoId)
+    +crearEvento(solicitud)
   }
 
   class ServicioEvento {
-    +buscarPorId(id)
-    +crear(datos)
-    +publicar(id)
-  }
-
-  class FabricaCategoriaEvento {
-    +crearCategoria(tipo)
-  }
-
-  class PublicadorEvento {
-    +publicarEventoCreado(eventoId, capacidad)
-  }
-
-  interface RepositorioEvento {
-    +buscarPorId(id)
-    +guardar(evento)
-    +actualizar(id, evento)
-  }
-
-  class RepositorioJpaEvento {
-    +buscarPorId(id)
-    +guardar(evento)
-    +actualizar(id, evento)
+    +gestionarDetalles(evento)
+    +asignarCategorias(evento, categorias)
+    +definirLocacion(evento, locacion)
+    +definirCapacidad(evento, capacidad)
   }
 
   class BaseDatosEvento <<database>>
 }
 
-package "Microservicio Inventario" as MSInventario {
-  class ControladorInventario {
-    +obtenerStock(itemId)
-    +verificarStock(itemId, cantidad)
-    +reservarStock(itemId, cantidad)
-  }
-
-  class ServicioInventario {
-    +buscarPorItem(itemId)
-    +verificarStock(itemId, cantidad)
-    +actualizarStock(itemId, cantidad)
-    +inicializarStock(eventoId, capacidad)
-  }
-
-  class OyenteInicializacionStock {
-    +alRecibirEventoCreado(evento)
-  }
-
-  interface RepositorioInventario {
-    +buscarPorItem(itemId)
-    +guardar(stock)
-    +actualizarStock(itemId, cantidad)
-  }
-
-  class RepositorioJpaInventario {
-    +buscarPorItem(itemId)
-    +guardar(stock)
-    +actualizarStock(itemId, cantidad)
-  }
-
-  class BaseDatosInventario <<database>>
-}
-
-package "Microservicio Pedidos (Ticket)" as MSPedidos {
-  class ControladorPedido {
-    +crearPedido(solicitud)
-    +obtenerPorId(id)
-  }
-
-  class ServicioPedido {
-    +crearPedido(solicitud)
-    +validarPedido(solicitud)
-    +confirmarPedido(pedidoId)
-  }
-
-  class FabricaTicket {
-    +crearTicket(tipo)
-  }
-
-  class ClienteInventarioPedido {
-    +verificarStock(itemId, cantidad)
-  }
-
-  class ClienteUsuarioPedido {
-    +validarUsuario(usuarioId)
-  }
-
-  class ClienteNotificacionPedido {
-    +notificarPedido(carga)
-  }
-
-  class InterruptorCircuitoPedido {
-    +ejecutarRemoto(solicitud)
-    +respaldo(solicitud, ex)
-  }
-
-  class ManejadorRespaldoPedido {
-    +encolarReintentoPedido(solicitud)
-    +marcarComoPendiente(pedidoId)
-  }
-
-  interface RepositorioPedido {
-    +buscarPorId(id)
-    +guardar(pedido)
-    +actualizarEstado(pedidoId, estado)
-  }
-
-  class RepositorioJpaPedido {
-    +buscarPorId(id)
-    +guardar(pedido)
-    +actualizarEstado(pedidoId, estado)
-  }
-
-  class BaseDatosPedido <<database>>
-}
-
-package "Microservicio Carrito" as MSCarrito {
+package "Microservicio Carrito de Compras" as MSCarrito {
   class ControladorCarrito {
-    +agregarElemento(solicitud)
+    +seleccionarEntrada(usuarioId, eventoId, cantidad)
     +obtenerCarrito(usuarioId)
-    +finalizarCompra(solicitud)
+    +confirmarCompra(usuarioId)
   }
 
   class ServicioCarrito {
-    +agregarElemento(solicitud)
-    +verificarInventario(solicitud)
-    +finalizarCompra(solicitud)
+    +validarLimiteEntradas(cantidad)
+    +calcularTotal(carrito)
+    +integrarDonacion(carrito, causa)
   }
 
-  class ClienteInventarioCarrito {
-    +verificarStock(itemId, cantidad)
-  }
-
-  class ClientePedidoCarrito {
-    +crearPedido(solicitud)
-  }
-
-  class InterruptorCircuitoCarrito {
-    +ejecutarVerificacionStock(itemId, cantidad)
-    +respaldoStock(itemId, cantidad, ex)
-  }
-
-  class ManejadorRespaldoCarrito {
-    +almacenarStockNoDisponible()
-    +marcarCarritoPendiente(usuarioId)
-  }
-
-  interface RepositorioCarrito {
-    +buscarPorUsuario(usuarioId)
-    +guardar(carrito)
-    +limpiar(usuarioId)
-  }
-
-  class RepositorioJpaCarrito {
-    +buscarPorUsuario(usuarioId)
-    +guardar(carrito)
-    +limpiar(usuarioId)
+  class ReglaLimiteEntradas {
+    +maximoEntradasPorCompra(): 4
   }
 
   class BaseDatosCarrito <<database>>
@@ -214,236 +72,104 @@ package "Microservicio Carrito" as MSCarrito {
 
 package "Microservicio Donaciones" as MSDonaciones {
   class ControladorDonacion {
-    +donar(solicitud)
-    +obtenerPorId(id)
+    +calcularDonacion(totalCompra)
+    +asociarCausa(causaId)
+    +registrarDonacion(transaccionId)
   }
 
   class ServicioDonacion {
-    +registrarDonacion(solicitud)
-    +procesarPago(solicitud)
-    +confirmarDonacion(id)
-  }
-
-  class ClienteEventoDonacion {
-    +validarEvento(eventoId)
-  }
-
-  class ClienteNotificacionDonacion {
-    +enviarComprobante(carga)
-  }
-
-  class InterruptorCircuitoDonacion {
-    +ejecutarRemoto(solicitud)
-    +respaldo(solicitud, ex)
-  }
-
-  class ManejadorRespaldoDonacion {
-    +encolarReintentoDonacion(solicitud)
-    +marcarDonacionPendiente(donacionId)
-  }
-
-  class FabricaProcesadorPago {
-    +crearProcesador(metodo)
-  }
-
-  interface ProcesadorPago {
-    +procesar(monto)
-  }
-
-  class ProcesadorTarjetaCredito {
-    +procesar(monto)
-  }
-
-  class ProcesadorTarjetaDebito {
-    +procesar(monto)
-  }
-
-  class ProcesadorTransferencia {
-    +procesar(monto)
-  }
-
-  interface RepositorioDonacion {
-    +buscarPorId(id)
-    +guardar(donacion)
-    +actualizarEstado(id, estado)
-  }
-
-  class RepositorioJpaDonacion {
-    +buscarPorId(id)
-    +guardar(donacion)
-    +actualizarEstado(id, estado)
+    +obtenerPorcentajeDonacion(): 10
+    +calcularMonto(totalCompra)
+    +persistirDonacion(transaccionId, causa, monto)
   }
 
   class BaseDatosDonacion <<database>>
 }
 
-package "Microservicio Notificaciones" as MSNotificaciones {
-  class ControladorNotificacion {
-    +enviarNotificacionPedido(solicitud)
-    +enviarComprobanteDonacion(solicitud)
+package "Microservicio Mensajeria" as MSMensajeria {
+  class ControladorMensajeria {
+    +enviarQR(compraId)
+    +enviarConfirmacion(compraId)
+    +enviarNotificacionDevolucion(compraId)
+    +enviarRecomendacionesOpcionales(usuarioId)
   }
 
-  class ServicioNotificacion {
-    +enviarCorreo(carga)
-    +enviarSms(carga)
-    +enviarNotificacionMovil(carga)
+  class ServicioMensajeria {
+    +generarQR(compra)
+    +construirMensajeConfirmacion(compra)
+    +construirMensajeDevolucion(compra)
+    +construirRecomendaciones(usuario)
   }
 
-  class FabricaNotificador {
-    +crearNotificador(canal)
-  }
-
-  interface Notificador {
-    +enviar(carga)
-  }
-
-  class NotificadorCorreo {
-    +enviar(carga)
-  }
-
-  class NotificadorSms {
-    +enviar(carga)
-  }
-
-  class NotificadorMovil {
-    +enviar(carga)
-  }
-
-  interface RepositorioNotificacion {
-    +guardarRegistro(registro)
-    +buscarPorReferencia(referencia)
-  }
-
-  class RepositorioJpaNotificacion {
-    +guardarRegistro(registro)
-    +buscarPorReferencia(referencia)
-  }
-
-  class BaseDatosNotificacion <<database>>
+  class BaseDatosMensajeria <<database>>
 }
 
-package "Bus de Eventos" as BusEventos {
-  class GestorMensajes <<queue>>
-  class EventoCreado <<event>>
-}
-
-package "Canales Mensajeria" {
-  class Correo <<channel>>
-  class SMS <<channel>>
-  class AplicacionMovil <<channel>>
-}
-
-' Relacion interna por microservicio
+' Relaciones internas
 ControladorUsuario --> ServicioUsuario
-ServicioUsuario --> FabricaPerfilUsuario : metodo fabrica
-ServicioUsuario --> RepositorioUsuario
-RepositorioUsuario <|.. RepositorioJpaUsuario
-RepositorioJpaUsuario --> BaseDatosUsuario
+ServicioUsuario --> BaseDatosUsuario
 
 ControladorEvento --> ServicioEvento
-ServicioEvento --> FabricaCategoriaEvento
-ServicioEvento --> PublicadorEvento : publica evento de dominio
-ServicioEvento --> RepositorioEvento
-RepositorioEvento <|.. RepositorioJpaEvento
-RepositorioJpaEvento --> BaseDatosEvento
-PublicadorEvento --> GestorMensajes : publica EventoCreado
-GestorMensajes --> EventoCreado
-
-ControladorInventario --> ServicioInventario
-OyenteInicializacionStock --> ServicioInventario : inicializa stock al crear evento
-GestorMensajes --> OyenteInicializacionStock : consume EventoCreado
-ServicioInventario --> RepositorioInventario
-RepositorioInventario <|.. RepositorioJpaInventario
-RepositorioJpaInventario --> BaseDatosInventario
-
-ControladorPedido --> ServicioPedido
-ServicioPedido --> FabricaTicket : metodo fabrica
-ServicioPedido --> InterruptorCircuitoPedido : protege consultas remotas
-InterruptorCircuitoPedido --> ClienteInventarioPedido
-InterruptorCircuitoPedido --> ClienteUsuarioPedido
-InterruptorCircuitoPedido --> ClienteNotificacionPedido
-InterruptorCircuitoPedido --> ManejadorRespaldoPedido : si falla
-ServicioPedido --> RepositorioPedido
-RepositorioPedido <|.. RepositorioJpaPedido
-RepositorioJpaPedido --> BaseDatosPedido
+ServicioEvento --> BaseDatosEvento
 
 ControladorCarrito --> ServicioCarrito
-ServicioCarrito --> InterruptorCircuitoCarrito : protege consulta remota
-InterruptorCircuitoCarrito --> ClienteInventarioCarrito
-InterruptorCircuitoCarrito --> ManejadorRespaldoCarrito : si falla
-ServicioCarrito --> ClientePedidoCarrito
-ServicioCarrito --> RepositorioCarrito
-RepositorioCarrito <|.. RepositorioJpaCarrito
-RepositorioJpaCarrito --> BaseDatosCarrito
+ServicioCarrito --> ReglaLimiteEntradas
+ServicioCarrito --> BaseDatosCarrito
 
 ControladorDonacion --> ServicioDonacion
-ServicioDonacion --> InterruptorCircuitoDonacion : protege consultas remotas
-InterruptorCircuitoDonacion --> ClienteEventoDonacion
-InterruptorCircuitoDonacion --> ClienteNotificacionDonacion
-InterruptorCircuitoDonacion --> ManejadorRespaldoDonacion : si falla
-ServicioDonacion --> FabricaProcesadorPago : metodo fabrica
-FabricaProcesadorPago --> ProcesadorPago
-ProcesadorPago <|.. ProcesadorTarjetaCredito
-ProcesadorPago <|.. ProcesadorTarjetaDebito
-ProcesadorPago <|.. ProcesadorTransferencia
-ServicioDonacion --> RepositorioDonacion
-RepositorioDonacion <|.. RepositorioJpaDonacion
-RepositorioJpaDonacion --> BaseDatosDonacion
+ServicioDonacion --> BaseDatosDonacion
 
-ControladorNotificacion --> ServicioNotificacion
-ServicioNotificacion --> FabricaNotificador : metodo fabrica
-FabricaNotificador --> Notificador
-Notificador <|.. NotificadorCorreo
-Notificador <|.. NotificadorSms
-Notificador <|.. NotificadorMovil
-ServicioNotificacion --> RepositorioNotificacion
-RepositorioNotificacion <|.. RepositorioJpaNotificacion
-RepositorioJpaNotificacion --> BaseDatosNotificacion
-NotificadorCorreo --> Correo
-NotificadorSms --> SMS
-NotificadorMovil --> AplicacionMovil
+ControladorMensajeria --> ServicioMensajeria
+ServicioMensajeria --> BaseDatosMensajeria
 
-' Consumo entre microservicios
-ClienteInventarioCarrito ..> ControladorInventario : consume microservicio
-ClientePedidoCarrito ..> ControladorPedido : consume microservicio
-ClienteInventarioPedido ..> ControladorInventario : consume microservicio
-ClienteUsuarioPedido ..> ControladorUsuario : consume microservicio
-ClienteNotificacionPedido ..> ControladorNotificacion : consume microservicio
-ClienteEventoDonacion ..> ControladorEvento : consume microservicio
-ClienteNotificacionDonacion ..> ControladorNotificacion : consume microservicio
+' Integraciones entre microservicios
+ServicioCarrito ..> ServicioEvento : consulta disponibilidad/capacidad
+ServicioCarrito ..> ServicioDonacion : integra donacion (10%)
+ServicioCarrito ..> ServicioMensajeria : solicita QR y confirmacion
+ServicioDonacion ..> ServicioMensajeria : confirma donacion/causa
 
-' Actores del sistema
-UsuarioWeb --> ControladorUsuario : iniciar sesion/registro
-UsuarioWeb --> ControladorEvento : ver eventos
-UsuarioWeb --> ControladorCarrito : agregar/finalizar compra
-UsuarioWeb --> ControladorDonacion : donar
-Administrador --> ControladorUsuario : gestion usuarios
-Administrador --> ControladorEvento : moderar eventos
-CreadorEventos --> ControladorEvento : CRUD eventos
+' Actores
+Usuario --> ControladorUsuario : registro/login
+Comprador --> ControladorUsuario : acepta terminos (rol comprador)
+Organizador --> ControladorUsuario : acepta terminos (rol organizador)
+Usuario --> ControladorEvento : ver detalles de eventos
+Comprador --> ControladorCarrito : seleccionar entradas (max 4)
 
-note bottom of ServicioPedido
-Patrones:
-- Metodo Fabrica
-- Patron Repositorio
-- Interruptor de Circuito
+note bottom of MSUsuario
+Incluye:
+- registro
+- login
+- gestion de roles
+- aceptacion de terminos por rol
+  (comprador y organizador)
 end note
 
-note bottom of ServicioDonacion
-Patrones:
-- Metodo Fabrica (pagos)
-- Patron Repositorio
-- Interruptor de Circuito (eventos/notificaciones)
+note bottom of MSEventos
+Gestiona:
+- detalles
+- categorias
+- locacion
+- capacidad
 end note
 
-note bottom of MSInventario
-Inicializacion de stock definida:
-- MSEventos publica EventoCreado
-- MSInventario consume el evento y crea cupos
+note bottom of MSCarrito
+Reglas:
+- seleccion de entradas
+- limite de 4 entradas por compra
+- integracion con donaciones
 end note
 
-note bottom of MSNotificaciones
-Renombrado desde "Envios" para evitar
-confusion con logistica fisica.
+note bottom of MSDonaciones
+Regla de negocio:
+- 10% de la compra total se destina
+  a la causa seleccionada.
+end note
+
+note bottom of MSMensajeria
+Mensajes:
+- envio de QR
+- confirmaciones
+- devoluciones
+- recomendaciones opcionales
 end note
 
 @enduml

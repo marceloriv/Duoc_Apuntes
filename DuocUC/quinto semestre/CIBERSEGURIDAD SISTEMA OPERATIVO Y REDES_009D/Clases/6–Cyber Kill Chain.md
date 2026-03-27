@@ -1,5 +1,6 @@
 # Clase 6 - Cyber Kill Chain
 
+>[!info]
 > Esta clase conecta el ataque completo de principio a fin, con enfoque realista para Red Team, Blue Team y CTI.
 
 **Objetivo de la clase:**
