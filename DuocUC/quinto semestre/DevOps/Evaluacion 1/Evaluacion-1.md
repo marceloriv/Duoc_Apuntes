@@ -1,31 +1,89 @@
-# Evaluacion 1
+# Evaluación 1 - DevOPS
 
-back: java, Python, Maven
-Front: Docker y node.js
-Data: instalar base de MySQL y PostgreSQL
+> **Asignatura:** DevOPS  
+> **Fecha:** 30 de marzo de 2026  
+> **Estado:** En progreso
 
-Informe:
-1 archivo
-nombres
-diagrama
-fotos de los ping
+---
 
-integración de Docker no va en el diagrama
-pero se ve en la instancia
+## Tabla de Contenidos
 
-la disponibilidad se refiera a todas las herramientas ya instaladas
+- [Objetivos](#objetivos)
+- [Contenido](#contenido)
+- [Resultados](#resultados)
+- [Conclusiones](#conclusiones)
 
-pantallazo al ping que le hacemos a la instancia de aws
+---
 
-Presentación:
+## Objetivos
 
-todo lo que presentamos esta en una de las cuentas del equipo
+- Implementar una arquitectura de microservicios en AWS
+- Configurar los componentes necesarios para el stack completo
+- Documentar y presentar la solución
 
-no hay que hacer pdf en la presentación, no es necesario hacer presentación
- Miércoles 8 de abril de 2026
+---
 
-configurar 3 grupos de seguridad
+## Contenido
 
-cada uno tiene un grupo de seguridad, para no permitir las conexiones de otras redes
+### Arquitectura del Proyecto
+
+#### Backend
+
+- **Lenguajes:** Java, Python
+- **Herramientas:** Maven
+
+#### Frontend
+
+- **Tecnología:** Docker y Node.js
+
+#### Base de Datos
+
+- MySQL
+- PostgreSQL
+
+---
+
+## Informe
+
+### Requisitos del Informe
+
+- [ ] 1 archivo de documentación
+- [ ] Nombres de integrantes
+- [ ] Diagrama de arquitectura
+- [ ] Fotos de pruebas de ping
+
+### Notas Importantes
+
+- La integración de Docker **no va en el diagrama**, pero se visualiza en la instancia
+- La disponibilidad se refiere a todas las herramientas ya instaladas
+- Incluir pantallazo del ping a la instancia de AWS
+
+---
+
+## Presentación
+
+- **Fechas límite:** Miércoles 8 de abril de 2026
+- **Formato:** No es necesario hacer presentación en PDF
+- **Almacenamiento:** Todo el material está en una de las cuentas del equipo
+
+---
+
+## Configuración AWS
+
+### Grupos de Seguridad
+
+- Configurar **3 grupos de seguridad**
+- Cada grupo tiene restricciones para no permitir conexiones de otras redes
+
+### Advertencias
+>
 >[!danger]
->no configurar la nat gateway, ya que no es necesario
+> **NO configurar NAT Gateway** — No es necesario para este proyecto
+
+---
+
+## Cronograma
+
+| Hito | Fecha |
+|------|-------|
+| Presentación | Miércoles 8 de abril de 2026 |
