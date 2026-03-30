@@ -1,24 +1,24 @@
 {
   "main": {
-    "id": "b6fe575baa262fe0",
+    "id": "7a4fb4801a9fae97",
     "type": "split",
     "children": [
       {
-        "id": "877f9898ad609226",
+        "id": "88053a402b124c5c",
         "type": "tabs",
         "children": [
           {
-            "id": "afc48363165cc596",
+            "id": "8e919ed364885def",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/6–Cyber Kill Chain.md",
-                "mode": "source",
+                "file": "README.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "6–Cyber Kill Chain"
+              "title": "README"
             }
           }
         ]
@@ -27,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "2a42428c9ee91846",
+    "id": "5e66b8f0295edad5",
     "type": "split",
     "children": [
       {
-        "id": "a7e9e09bf7bd02c1",
+        "id": "6dc0de1c0804d7cc",
         "type": "tabs",
         "children": [
           {
-            "id": "6f677077d21bfb5d",
+            "id": "65ce6827fd15f1aa",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -48,12 +48,12 @@
             }
           },
           {
-            "id": "df006a24ac4d2e41",
+            "id": "34ce1a550b53d2d5",
             "type": "leaf",
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#misc",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -65,7 +65,7 @@
             }
           },
           {
-            "id": "d66b077b926f0bc3",
+            "id": "f42eac0727ad8851",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -78,25 +78,24 @@
       }
     ],
     "direction": "horizontal",
-    "width": 369.5
+    "width": 300
   },
   "right": {
-    "id": "0757b477791b4b81",
+    "id": "5deb0fcda007d784",
     "type": "split",
     "children": [
       {
-        "id": "62ff36abdcaed1ae",
+        "id": "c53c3a3442a214a7",
         "type": "tabs",
         "children": [
           {
-            "id": "9df28724c7a58725",
+            "id": "dc9d29c8f4de7164",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Bienvenido.md",
-                "collapseAll": true,
-                "extraContext": true,
+                "collapseAll": false,
+                "extraContext": false,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
@@ -104,30 +103,29 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Enlaces entrantes de Bienvenido"
+              "title": "Enlaces entrantes"
             }
           },
           {
-            "id": "a4e1f6c1fc22b823",
+            "id": "5df1158a88eebff3",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Mentoria/Fundamentos de Python/Modulo 2 Tipos de Datos-Variables-Operaciones Básicas de Entrada y Salida-Operadores Básicos/2.2 Sección 2 – Literales de Python/2.2 Sección 2 – Literales de Python.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Enlaces salientes de 2.2 Sección 2 – Literales de Python"
+              "title": "Enlaces salientes"
             }
           },
           {
-            "id": "68b31ff3a2b0c207",
+            "id": "3b5a57883bb18b41",
             "type": "leaf",
             "state": {
               "type": "tag",
               "state": {
-                "sortOrder": "alphabetical",
+                "sortOrder": "frequency",
                 "useHierarchy": true,
                 "showSearch": false,
                 "searchQuery": ""
@@ -137,7 +135,7 @@
             }
           },
           {
-            "id": "0a0454150a791aef",
+            "id": "cdfaa1385f329677",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -151,22 +149,20 @@
             }
           },
           {
-            "id": "4942d513d3ebd013",
+            "id": "be3e975c36c74e49",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "Mentoria/Introducción a los ALGORITMOS y la PROGRAMACIÓN/3.Variables.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Esquema de 3.Variables"
+              "title": "Esquema"
             }
           }
-        ],
-        "currentTab": 4
+        ]
       }
     ],
     "direction": "horizontal",
@@ -184,53 +180,6 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "afc48363165cc596",
-  "lastOpenFiles": [
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Cosas por ver.md",
-    "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/5-Gobierno y Políticas de Seguridad.md",
-    "DuocUC/quinto semestre/EVALUACION DE PROYECTOS DE SOFTWARE_003D/Apuntes/Proyecto/Informe 1.md",
-    "DuocUC/quinto semestre/DevOPS/Clases/Dia 19-03.md",
-    "DuocUC/quinto semestre/DevOPS/Clases",
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Tareas.md",
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Plan.md",
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Diagrama-Microservicios.puml",
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto",
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Apuntes/Marzo/Clase del Miercoles 18-03.md",
-    "DuocUC/quinto semestre/EVALUACION DE PROYECTOS DE SOFTWARE_003D/Apuntes/Clase del dia martes 17-03.md",
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Apuntes/Marzo/Clase del día Mircoles 11-03.md",
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Apuntes/Marzo/clase del dia martes 17-03 .md",
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Tareas.md",
-    "README.md",
-    "Perfiles/Web.code-profile",
-    "Perfiles/Python.code-profile",
-    "Perfiles/Markdown.code-profile",
-    "Perfiles/Java.code-profile",
-    "Perfiles",
-    "Comandos/Git/README.md",
-    "Comandos/Git/Conventional-Commits.md",
-    "DuocUC/quinto semestre/Asignaturas.md",
-    "Bienvenido.md",
-    "ERS FuenteCreadora.md",
-    "Web/CSS/Propiedades de fuente y texto.md",
-    "Web/CSS/Fuentes externas.md",
-    "Web/CSS/BoxModel.md",
-    "Mentoria/Introducción a los ALGORITMOS y la PROGRAMACIÓN/2.TIPOS DE DATOS.md",
-    "Mentoria/Introducción a los ALGORITMOS y la PROGRAMACIÓN/Test.md",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/3.1.4 Operadores.md",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/3.1.3 Ejercicios.md",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/3.1.2 Comparación operador de igualdad.md",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/3.1.1 Preguntas y Respuestas.md",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304201915.png",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304201759.png",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/tablaPrioridades.jpg",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/tablaPrioridades (Large).png",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200505.png",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200316.png",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200253.png",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200227.png",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200220.png",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python/adjuntos/Pasted image 20260304200205.png",
-    "Mentoria/Fundamentos de Python/Módulo 3. Valores Booleanos, Ejecución Condicional, Bucles, Listas y su procesamiento, Operaciones Lógicas y de Bit a Bit/3.1. Sección 1 – Cómo tomar decisiones en Python"
-  ]
+  "active": "8e919ed364885def",
+  "lastOpenFiles": []
 }

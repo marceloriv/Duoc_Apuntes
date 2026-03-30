@@ -1,15 +1,6 @@
 {
-  "cssTheme": "AnuPpuccin",
-  "interfaceFontFamily": "Hack Nerd Font",
-  "textFontFamily": "Hack Nerd Font",
-  "monospaceFontFamily": "Hack Nerd Font Mono",
   "enabledCssSnippets": [
-    "monokai-pro-complete (1)",
-    "monokai-pro"
+    "monokai-pro-complete"
   ],
-  "nativeMenus": false,
-  "theme": "obsidian",
-  "accentColor": "#5cf5f2",
-  "baseFontSizeAction": false,
-  "baseFontSize": 19
+  "cssTheme": "AnuPpuccin"
 }
