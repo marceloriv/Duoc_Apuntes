@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
-                "mode": "preview",
+                "file": "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/ERS-Ticketti-v1.4.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "ERS-Ticketti-v1.4"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "5deb0fcda007d784",
@@ -181,5 +182,11 @@
     }
   },
   "active": "8e919ed364885def",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Tareas.md",
+    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Plan.md",
+    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/ERS-Ticketti-v1.4.md",
+    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Arquitectura_SmartLogix.md",
+    "README.md"
+  ]
 }
