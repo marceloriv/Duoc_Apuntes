@@ -1,8 +1,8 @@
 # Especificación de Requisitos de Software
 
 **Proyecto:** Ticketti  
-**Versión:** 1.10.5  
-**Fecha:** 30/03/2026  
+**Versión:** 1.11.1  
+**Fecha:** 31/03/2026  
 **Estándar:** IEEE 830
 
 **Integrantes:**
@@ -59,6 +59,7 @@
       - [C. Microservicio de Carrito de Compras (MSCarrito)](#c-microservicio-de-carrito-de-compras-mscarrito)
       - [D. Microservicio de Donaciones (MSDonaciones)](#d-microservicio-de-donaciones-msdonaciones)
       - [E. Microservicio de Mensajería (MSMensajeria)](#e-microservicio-de-mensajería-msmensajeria)
+      - [F. Capa BFF (Backend For Frontend)](#f-capa-bff-backend-for-frontend)
     - [4.4 Diagramas de arquitectura de solución](#44-diagramas-de-arquitectura-de-solución)
       - [Diagrama de Package](#diagrama-de-package)
       - [Diagrama de Microservicios](#diagrama-de-microservicios)
@@ -106,6 +107,8 @@
 | 30/03/2026    | 1.10.3   | Equipo Ticketti              | Cierre de brechas de formato: separación de frentes frontend, BFF por frente, descripción técnica de componentes (4.4) y flujo de eventos detallado por fases (4.5).                                    |
 | 30/03/2026    | 1.10.4   | Equipo Ticketti              | Estandarización del stack frontend con React Bootstrap para portales por rol y librería visual compartida.                                                                                               |
 | 30/03/2026    | 1.10.5   | Equipo Ticketti              | Cierre de brechas de profundidad y consistencia: numeración correlativa del flujo 4.5, stack/runtime explícito en frontend y BFF, Swagger reubicado como artefacto API, CI/CD detallado por herramientas, matriz técnica ampliada y evaluación ética desarrollada en prosa. |
+| 31/03/2026    | 1.11     | Equipo Ticketti              | Coherencia integral de arquitectura: migración Vite + React Router, clarificación de responsabilidades de pago (Transbank), completado mapeo RF↔endpoints en 4.3, Saga de compensación documentada, eventos de dominio completos, sección 6 ética refactorizada, BFF explícitamente documentada en 4.3.F. |
+| 31/03/2026    | 1.11.1   | Equipo Ticketti              | Coherencia RF-Funciones-Endpoints: adición de función "Seguridad de pagos y sesiones" a tabla 2.2 (RF-6), adición de endpoint PUT /consentimientos/{id} a MSUsuarios (RF-1.5), revisión integral de documento completado exitosamente. |
 
 ---
 
@@ -161,6 +164,7 @@ Ticketti es un sistema independiente de gestión de venta de entradas a eventos 
 | Filtros y categoría                      | Permite buscar eventos según filtros y categorías, ubicación o fecha.                                                                                  | RF-2        |
 | Visualización de estadísticas de compras | Permite visualizar el historial y estado de compras del usuario comprador.                                                                             | RF-3        |
 | Apoyo a causas sociales                  | Permite al usuario comprador seleccionar durante la compra una organización sin fines de lucro a la cual se destinará un porcentaje de su transacción. | RF-4        |
+| Seguridad de pagos y sesiones           | Gestión de tokenización, idempotencia, validación de webhooks y protección de datos sensibles; delegación de seguridad de tarjeta a pasarela de pago externa. | RF-6        |
 
 > Regla de concordancia: toda función definida en 2.2 debe mapear al menos a un RF de 3.2.
 
@@ -421,7 +425,7 @@ Dado que cada microservicio mantiene su propia base de datos, Ticketti no utiliz
 - **Patrón Outbox en productor:** el cambio de estado y el evento de dominio se persisten en la misma transacción local antes de publicar al broker.
 - **Patrón Inbox/idempotencia en consumidor:** cada consumidor registra `eventId` o `idempotencyKey` para evitar procesamiento duplicado.
 - **Reintentos y DLQ:** todo evento fallido sigue política de retry exponencial y deriva a Dead Letter Queue cuando no es recuperable automáticamente.
-- **Compensaciones Saga:** si falla un paso crítico posterior, se ejecutan acciones compensatorias (por ejemplo, liberar reserva de stock o revertir estado de compra) para mantener integridad de negocio.
+- **Compensaciones Saga:** si falla un paso crítico posterior, se ejecutan acciones compensatorias en orden inverso (por ejemplo, si falla MSDonaciones tras confirmar stock, MSCarrito revierte el estado de compra y libera reserva). Las compensaciones se orquestan desde MSCarrito como lider de transacción crítica.
 - **Reconciliación operacional:** procesos programados validan divergencias entre dominios (compra-stock-donación) y generan correcciones auditables.
 - **SLO de convergencia:** la propagación de estados entre servicios debe cumplir RNF15 con monitoreo de lag por cola y alarmas de incumplimiento.
 
@@ -437,6 +441,7 @@ Convención de nomenclatura: los nombres de eventos y colas del dominio se defin
 | `pago.rechazado.v1` | MSCarrito | MSEventos, MSMensajeria | `idPago` | 5 reintentos exponenciales (2s, 4s, 8s, 16s, 32s) | `dlq.pago.rechazado` |
 | `stock.confirmado.v1` | MSEventos | MSCarrito, MSMensajeria | `idReserva` | 3 reintentos exponenciales (2s, 4s, 8s) | `dlq.stock.confirmado` |
 | `donacion.registrada.v1` | MSDonaciones | MSCarrito, MSMensajeria | `idDonacion` | 3 reintentos exponenciales (2s, 4s, 8s) | `dlq.donacion.registrada` |
+| `recomendacion.enviada.v1` | MSMensajeria | MSCarrito | `idRecomendacion` | 3 reintentos exponenciales (2s, 4s, 8s) | `dlq.recomendacion.enviada` |
 | `entrada.qr.generada.v1` | MSMensajeria | MSCarrito | `idEntrada` | 3 reintentos exponenciales (2s, 4s, 8s) | `dlq.entrada.qr.generada` |
 | `reembolso.solicitado.v1` | MSCarrito | MSEventos | `idReembolso` | 3 reintentos exponenciales (2s, 4s, 8s) | `dlq.reembolso.solicitado` |
 | `reembolso.aprobado.v1` | MSCarrito | MSMensajeria, MSDonaciones | `idReembolso` | 5 reintentos exponenciales (2s, 4s, 8s, 16s, 32s) | `dlq.reembolso.aprobado` |
@@ -454,9 +459,12 @@ Regla obligatoria: cada consumidor debe persistir la clave idempotente en su Inb
 | Método | Endpoint | Descripción |
 | ------- | ---------- | ----------- |
 | POST | `/registro` | Registro y creación de nuevos perfiles (Asistentes u Organizadores). |
+| POST | `/login` | Autenticación por correo/contraseña con bloqueo tras 3 fallos. Retorna JWT. |
+| GET | `/exportar` | Genera enlace de descarga de datos personales en JSON/PDF (válido 1 hora). |
 | GET | `/lista` | Consulta de listado global de usuarios (Solo Administrador). |
 | GET | `/{id}` | Obtención de información de perfil y permisos de un usuario. |
 | PUT | `/actualizar` | Actualización de datos personales y configuración de cuenta. |
+| PUT | `/consentimientos/{id}` | Modifica consentimientos del usuario: revocar/activar notificaciones, recomendaciones o terminos. Retorna estado actual de consentimientos (RF-1.5). |
 | DELETE | `/{id}` | Inicio de proceso de eliminación por fases (bloqueo inmediato, retención temporal, purga final). |
 
 ---
@@ -471,6 +479,7 @@ Regla obligatoria: cada consumidor debe persistir la clave idempotente en su Inb
 | ------- | ---------- | ----------- |
 | POST | `/crearEvento` | Creación de un nuevo evento con sus atributos (nombre, fecha, locación, capacidad, categoría). |
 | GET | `/lista` | Listar todos los eventos disponibles. |
+| GET | `/buscar` | Búsqueda y filtrado de eventos por nombre, categoría, ubicación, fecha con ranking auditable. |
 | GET | `/{id}` | Ver detalle de un evento específico (locación, capacidad y fechas). |
 | PUT | `/{id}` | Actualiza los datos de un evento existente. |
 | PATCH | `/{id}/estado` | Cambia estado del evento (borrador, publicado, cancelado). Cancelación solo administrador con motivo obligatorio. |
@@ -494,9 +503,9 @@ El carrito se implementa como microservicio con persistencia propia para garanti
 | GET | `/ventas/{id}` | Obtiene una venta específica por id. |
 | DELETE | `/vaciarCarrito/{id}` | Elimina por completo la venta de entrada del usuario, por id. |
 | PUT | `/actualizarVentaCarrito/{id}` | Actualiza cantidad y tipo de entradas del carrito, respetando máximo 4 entradas por compra y vigencia de reserva. |
-| POST | `/checkout/{id}` | Inicia orquestación Saga de compra y procesa pago con idempotencia (genera `idempotencyKey` y lo envía a Transbank). |
-| POST | `/webhooks/pago` | Recibe callback de confirmación de Transbank, valida firma HMAC-SHA256 y actualiza estado de compra/stock. |
-| POST | `/devoluciones/{id}` | Solicita devolución de entradas según política vigente. |
+| POST | `/checkout/{id}` | Inicia orquestación Saga de compra con selección de causa social (RF-4.2), procesa pago con idempotencia (genera `idempotencyKey` y lo envía a Transbank). |
+| POST | `/webhooks/pago` | Recibe callback de confirmación de Transbank, valida firma HMAC-SHA256 y actualiza estado de compra/stock. MSCarrito es el único consumidor de webhooks externos. |
+| POST | `/devoluciones/{id}` | Solicita devolución de entradas según política vigente. Orquesta Saga de compensación (libera stock, registra reembolso de donación). |
 
 > **Nota de integración:** MSCarrito consume MSEventos para validar disponibilidad de stock antes de confirmar la compra. Ante una compra exitosa, dispara eventos asincrónicos hacia MSDonaciones y MSMensajeria.
 
@@ -511,6 +520,7 @@ El carrito se implementa como microservicio con persistencia propia para garanti
 | Método | Endpoint | Descripción |
 | ------- | ---------- | ----------- |
 | POST | `/registrar` | Persiste la donación vinculada al ID de transacción, causa y monto. |
+| POST | `/revertir/{idDonacion}` | Revierte una donación en caso de reembolso aprobado (Saga de compensación). |
 | GET | `/causas` | Lista las causas sociales activas disponibles. |
 | GET | `/historial/{userId}` | Consulta el historial de donaciones de un usuario. |
 | POST | `/causas` | Crea una nueva causa social (Administrador). |
@@ -522,15 +532,49 @@ El carrito se implementa como microservicio con persistencia propia para garanti
 
 **Responsabilidad:** Gestión de la comunicación saliente de forma asíncrona hacia los usuarios finales.
 
-**Base URL:** `/api/v2/mensajeria`
+**Base URL:** `/api/v1/Mensajeria`
 
 | Método | Endpoint | Descripción |
 | ------- | ---------- | ----------- |
 | POST | `/enviar-ticket` | Envía el correo con el QR tras confirmar la compra. |
+| POST | `/enviar-recomendacion` | Envía recomendaciones personalizadas solo si el usuario tiene consentimiento explícito. |
+| POST | `/enviar-devolucion/{idDevolución}` | Envía notificación de devolución aprobada/rechazada con monto y plazo de acreditación (RF-5.3). |
 | POST | `/notificar` | Envía alertas push o avisos generales al celular. |
 | GET | `/historial/{id}` | Revisa qué correos se han enviado a un usuario. |
 | POST | `/recordatorio` | Envía el aviso de "tu evento es mañana". |
 | DELETE | `/cancelar/{id}` | Detiene un envío si el evento se suspende. |
+
+---
+
+#### F. Capa BFF (Backend For Frontend)
+
+**Responsabilidad:** Orquestación de llamadas a microservicios adaptadas por rol del cliente. Cada BFF expone contratos optimizados sin exponer detalles de microservicios internos.
+
+**BFF-Comprador** (`/api/bff/comprador/v1`):
+
+| Método | Endpoint | Descripción |
+| ------- | ---------- | ----------- |
+| GET | `/eventos/buscar` | Busca y filtra eventos por nombre, categoría, ubicación, fecha. Integra MSEventos + ranking auditable. |
+| POST | `/compra/checkout` | Orquesta flujo de checkout: valida stock (MSEventos), selecciona causa (MSDonaciones), procesa pago (MSCarrito). |
+| GET | `/compra/historial` | Recupera todas las compras y donaciones del usuario desde MSCarrito + MSDonaciones. |
+
+**BFF-Organizador** (`/api/bff/organizador/v1`):
+
+| Método | Endpoint | Descripción |
+| ------- | ---------- | ----------- |
+| POST | `/evento/crear` | Crea evento: llama MSEventos para persistencia y auditoria. |
+| GET | `/evento/metricas` | Retorna métricas de ventas, stock disponible y donaciones recaudadas por evento (integra MSEventos + MSDonaciones). |
+| PUT | `/evento/{id}/actualizar` | Actualiza evento (solo borrador) coordinando MSEventos. |
+
+**BFF-Admin** (`/api/bff/admin/v1`):
+
+| Método | Endpoint | Descripción |
+| ------- | ---------- | ----------- |
+| GET | `/usuarios/listar` | Lista todos los usuarios desde MSUsuarios (solo Admin). |
+| POST | `/causas/crear` | Crea causa social desde MSDonaciones (solo Admin). |
+| POST | `/evento/{id}/cancelar` | Cancela evento publicado desde MSEventos + orquesta reembolsos en MSCarrito (solo Admin). |
+
+**Nota de integración:** Los BFF orquestan, adaptan y cacheán respuestas de microservicios. No implementan lógica de negocio crítica, que reside en los microservicios.
 
 ---
 
