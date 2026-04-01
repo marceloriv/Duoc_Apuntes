@@ -167,7 +167,7 @@ Ticketti es un sistema independiente de gestión de venta de entradas a eventos 
 ### 2.3 Características de los Usuarios
 
 | Nombre del Usuario | Habilidades Digitales | Experiencia Técnica |
-|--------------------|----------------------|---------------------|
+| -------------------- | ---------------------- | -------------------- |
 | Administrador | Experiencia media | Computación Alta |
 | Comprador | Experiencia mínima | Computación Básica |
 | Organizador | Experiencia media | Computación Media |
@@ -176,7 +176,7 @@ Ticketti es un sistema independiente de gestión de venta de entradas a eventos 
 ### 2.4 Restricciones
 
 - El sistema será desarrollado utilizando tecnologías web modernas del ecosistema Java y Javascript, según las decisiones técnicas adoptadas por el equipo de desarrollo al inicio del proyecto.
-- El procesamiento de pagos no será implementado de forma nativa; el sistema delegará esta responsabilidad a una pasarela de pago externa certificada (Transbank/Webpay).
+- El procesamiento de pagos y seguridad de datos de tarjeta no son responsabilidad de Ticketti; se delega completamente a la pasarela de pago externa certificada (Transbank/Webpay). Ticketti solo maneja tokens de pago e idempotencia.
 
 ### 2.5 Suposiciones y Dependencias
 
@@ -274,13 +274,15 @@ El sistema será desplegado en servidores con sistema operativo Linux, haciendo 
 
 #### RF-6: Seguridad de pagos, datos sensibles y sesiones (Transversal)
 
-● **RF-6.1 Tokenización de pago:** El sistema no debe almacenar números completos de tarjeta; debe usar tokenización de pasarela externa.
+> **Nota:** Ticketti delega seguridad de tarjeta, PCI-DSS e idempotencia a Transbank. Solo maneja tokens de pago.
 
-● **RF-6.2 Idempotencia:** Toda operación de cobro debe incluir clave de idempotencia única por transacción con vigencia mínima de 24 horas.
+● **RF-6.1 Tokenización de pago:** El sistema no almacena números completos de tarjeta ni credenciales. Ticketti delega completamente el procesamiento de pago a la pasarela externa (Transbank/Webpay), operando solo con tokens de pago retornados por la pasarela.
 
-● **RF-6.3 Validación de webhook:** Todo callback de confirmación de pago debe validar firma HMAC-SHA256. Eventos inválidos se rechazan.
+● **RF-6.2 Idempotencia:** MSCarrito genera una clave de idempotencia única (`idempotencyKey`) por transacción y la envía a Transbank. Transbank es responsable de validar y gestionar la vigencia (mínimo 24 horas). Si Transbank retorna el mismo `idempotencyKey`, responde con el resultado previo sin recargar.
 
-● **RF-6.4 HTTPS/TLS:** Toda operación de autenticación, compra y descarga de datos personales debe operar sobre HTTPS.
+● **RF-6.3 Validación de webhook:** Todo webhook de confirmación de pago recibido de Transbank debe validar firma HMAC-SHA256. Webhooks inválidos se rechazan sin mutar estado.
+
+● **RF-6.4 HTTPS/TLS:** Toda operación de autenticación, compra y descarga de datos personales debe operar sobre HTTPS/TLS 1.3.
 
 ● **RF-6.5 Timeout en pasarela:** Las llamadas a pasarela de pago tienen timeout máximo de 10 segundos con política de retry exponencial.
 
@@ -297,7 +299,7 @@ El sistema será desplegado en servidores con sistema operativo Linux, haciendo 
 Atributos de Calidad según ISO 25010 (16 unidades):
 
 | Id. | Nombre Corto | Descripción | Atributo de Calidad |
-|-----|-------------|-------------|---------------------|
+| --- | ----------- | ----------- | ------------------- |
 | RNF01 | Concurrencia mínima | El sistema debe soportar al menos 300 usuarios concurrentes en flujo de compra y 1.000 usuarios concurrentes en navegación de catálogo, manteniendo estabilidad funcional. | Rendimiento |
 | RNF02 | Latencia de respuesta | El tiempo de respuesta del flujo crítico (búsqueda de eventos y resumen de compra) debe ser <= 2 segundos en el percentil 95. | Rendimiento |
 | RNF03 | Compatibilidad web | El sistema debe operar correctamente en las dos últimas versiones estables de Chrome, Edge y Firefox. | Compatibilidad |
@@ -331,7 +333,7 @@ Atributos de Calidad según ISO 25010 (16 unidades):
 La siguiente matriz define criterios verificables en formato Given/When/Then para asegurar pruebas funcionales reproducibles.
 
 | RF | Given | When | Then |
-|----|-------|------|------|
+| --- | ------- | ------ | ------ |
 | RF-1.1 | Un usuario nuevo inicia registro por rol | Acepta términos requeridos y envía formulario | Se crea la cuenta y se registra evidencia auditable de consentimiento (idUsuario, versión aceptada, timestamp, IP y acción), además del estado vigente de consentimiento |
 | RF-1.2 | Una cuenta existente intenta autenticarse | Ocurren 3 fallos consecutivos por cuenta | La cuenta queda bloqueada por 15 minutos y se aplica rate limiting por IP/dispositivo |
 | RF-1.3 | Un usuario autenticado solicita eliminación | Confirma reautenticación | La cuenta se bloquea de inmediato, se inicia retención técnica y se agenda purga irreversible a 30 días |
@@ -357,9 +359,9 @@ La siguiente matriz define criterios verificables en formato Given/When/Then par
 | RF-5.2 | Compra y donación confirmadas | Se construye mensaje de confirmación | El comprador recibe detalle de entradas, evento, monto total y causa beneficiada |
 | RF-5.3 | Existe una devolución resuelta | Se gatilla notificación | El comprador recibe resultado, monto reembolsado y plazo estimado de acreditación |
 | RF-5.4 | Usuario sin consentimiento de recomendaciones | Se intenta envío de recomendación | El envío se bloquea automáticamente |
-| RF-6.1 | Se inicia una transacción de pago | El sistema prepara payload de cobro | Solo se transmite token de pago, sin almacenar PAN completo |
-| RF-6.2 | Se reintenta un cobro con misma clave | El payload es idéntico o distinto | Con payload idéntico retorna resultado previo; con payload distinto responde conflicto auditado |
-| RF-6.3 | La pasarela envía webhook de confirmación | Firma HMAC, timestamp o nonce son inválidos | El evento se rechaza, no muta estado y se registra intento |
+| RF-6.1 | Se inicia una transacción de pago | El sistema prepara payload para Transbank | MSCarrito transmite token de pago (no PAN completo) y nunca almacena credenciales; Transbank procesa toda seguridad de tarjeta |
+| RF-6.2 | MSCarrito inicia checkout | Genera `idempotencyKey` y la envía a Transbank | Transbank recibe clave, valida duplicados en sus registros y retorna resultado (previo si ya procesó o nuevo si es primera ejecución); MSCarrito registra la clave para auditoría |
+| RF-6.3 | Transbank envía webhook de confirmación de pago | Firma HMAC-SHA256, timestamp o nonce son inválidos | MSCarrito rechaza el webhook, no muta estado de compra/stock y registra el intento de validación fallida
 | RF-6.4 | Un usuario opera autenticación o compra | La comunicación ocurre entre cliente y servicios | Todo el tránsito usa HTTPS/TLS |
 | RF-6.5 | Una llamada a pasarela supera SLA | Se agota timeout o retry exponencial | El flujo aplica fallback controlado y registra incidente |
 | RF-6.6 | Existe refresh token en navegador | Se solicita renovación de sesión | Solo se acepta cookie HttpOnly/Secure/SameSite con validación CSRF |
@@ -379,7 +381,7 @@ Cada microservicio debe operar con el principio **Database per Service** (esquem
 Para este proyecto se han diseñado interfaces especializadas según el rol y el contexto de uso.
 
 | Componente | Tecnología | Función / Propósito |
-|------------|-----------|---------------------|
+| ------------ | ----------- | --------------------- |
 | Portal Comprador | Vite + React Router (React) + React Bootstrap + Node.js 20 LTS | Interfaz pública para explorar eventos, comprar entradas y gestionar historial personal. |
 | Portal Organizador | Vite + React Router (React) + React Bootstrap + Node.js 20 LTS | Interfaz de operación para crear, publicar y administrar eventos. |
 | Panel Administrador | Vite + React Router (React) + React Bootstrap + Node.js 20 LTS | Interfaz de gobierno para usuarios, causas sociales, cancelaciones y métricas de plataforma. |
@@ -428,7 +430,7 @@ Dado que cada microservicio mantiene su propia base de datos, Ticketti no utiliz
 Convención de nomenclatura: los nombres de eventos y colas del dominio se definen en español.
 
 | Nombre del evento | Productor | Consumidor(es) | Clave idempotente | Política de retry | DLQ |
-|-------------------|-----------|----------------|-------------------|-------------------|-----|
+| ------------------- | ----------- | -------------- | ------------------- | ------------------- | ----- |
 | `compra.checkout.solicitado.v1` | MSCarrito | MSEventos | `idTransaccion` | 3 reintentos exponenciales (2s, 4s, 8s) | `dlq.compra.checkout.solicitado` |
 | `stock.reservado.v1` | MSEventos | MSCarrito | `idReserva` | 3 reintentos exponenciales (2s, 4s, 8s) | `dlq.stock.reservado` |
 | `pago.aprobado.v1` | MSCarrito | MSEventos, MSDonaciones, MSMensajeria | `idPago` | 5 reintentos exponenciales (2s, 4s, 8s, 16s, 32s) | `dlq.pago.aprobado` |
@@ -450,7 +452,7 @@ Regla obligatoria: cada consumidor debe persistir la clave idempotente en su Inb
 **Base URL:** `/api/v1/Usuario`
 
 | Método | Endpoint | Descripción |
-|--------|----------|-------------|
+| ------- | ---------- | ----------- |
 | POST | `/registro` | Registro y creación de nuevos perfiles (Asistentes u Organizadores). |
 | GET | `/lista` | Consulta de listado global de usuarios (Solo Administrador). |
 | GET | `/{id}` | Obtención de información de perfil y permisos de un usuario. |
@@ -466,7 +468,7 @@ Regla obligatoria: cada consumidor debe persistir la clave idempotente en su Inb
 **Base URL:** `/api/v1/Evento`
 
 | Método | Endpoint | Descripción |
-|--------|----------|-------------|
+| ------- | ---------- | ----------- |
 | POST | `/crearEvento` | Creación de un nuevo evento con sus atributos (nombre, fecha, locación, capacidad, categoría). |
 | GET | `/lista` | Listar todos los eventos disponibles. |
 | GET | `/{id}` | Ver detalle de un evento específico (locación, capacidad y fechas). |
@@ -486,13 +488,14 @@ El carrito se implementa como microservicio con persistencia propia para garanti
 **Base URL:** `/api/v1/Carrito`
 
 | Método | Endpoint | Descripción |
-|--------|----------|-------------|
+| ------- | ---------- | ----------- |
 | POST | `/crearVentaCarrito` | Realiza una compra de entrada(s). |
 | GET | `/listarVentasCarrito` | Muestra el registro de todas las ventas efectuadas. |
 | GET | `/ventas/{id}` | Obtiene una venta específica por id. |
 | DELETE | `/vaciarCarrito/{id}` | Elimina por completo la venta de entrada del usuario, por id. |
 | PUT | `/actualizarVentaCarrito/{id}` | Actualiza cantidad y tipo de entradas del carrito, respetando máximo 4 entradas por compra y vigencia de reserva. |
-| POST | `/checkout/{id}` | Inicia orquestación Saga de compra y procesa pago con idempotencia. |
+| POST | `/checkout/{id}` | Inicia orquestación Saga de compra y procesa pago con idempotencia (genera `idempotencyKey` y lo envía a Transbank). |
+| POST | `/webhooks/pago` | Recibe callback de confirmación de Transbank, valida firma HMAC-SHA256 y actualiza estado de compra/stock. |
 | POST | `/devoluciones/{id}` | Solicita devolución de entradas según política vigente. |
 
 > **Nota de integración:** MSCarrito consume MSEventos para validar disponibilidad de stock antes de confirmar la compra. Ante una compra exitosa, dispara eventos asincrónicos hacia MSDonaciones y MSMensajeria.
@@ -506,7 +509,7 @@ El carrito se implementa como microservicio con persistencia propia para garanti
 **Base URL:** `/api/v1/Donacion`
 
 | Método | Endpoint | Descripción |
-|--------|----------|-------------|
+| ------- | ---------- | ----------- |
 | POST | `/registrar` | Persiste la donación vinculada al ID de transacción, causa y monto. |
 | GET | `/causas` | Lista las causas sociales activas disponibles. |
 | GET | `/historial/{userId}` | Consulta el historial de donaciones de un usuario. |
@@ -522,7 +525,7 @@ El carrito se implementa como microservicio con persistencia propia para garanti
 **Base URL:** `/api/v2/mensajeria`
 
 | Método | Endpoint | Descripción |
-|--------|----------|-------------|
+| ------- | ---------- | ----------- |
 | POST | `/enviar-ticket` | Envía el correo con el QR tras confirmar la compra. |
 | POST | `/notificar` | Envía alertas push o avisos generales al celular. |
 | GET | `/historial/{id}` | Revisa qué correos se han enviado a un usuario. |
@@ -598,7 +601,7 @@ El pipeline asegura calidad, trazabilidad y despliegue continuo sin degradar est
 ### 5.1 Infraestructura y Orquestación
 
 | Herramienta | Rol en la solución | Justificación técnica |
-|-------------|--------------------|-----------------------|
+| ------------- | -------------------- | ----------------------- |
 | Docker | Contenedores de servicios | Docker permite empaquetar cada microservicio con sus dependencias exactas, eliminando diferencias entre desarrollo, pruebas y producción. Este aislamiento facilita despliegues repetibles, acelera rollback y reduce incidentes causados por deriva de entorno. |
 | Kubernetes | Orquestación de microservicios | Kubernetes habilita escalamiento horizontal por demanda, autorecuperación de pods y despliegues progresivos sin interrupción relevante. Su modelo declarativo permite controlar alta disponibilidad, distribución por zonas y políticas de resiliencia coherentes con los RNF de continuidad. |
 | API Gateway/BFF | Punto de entrada y agregación | La capa Gateway+BFF centraliza autenticación/autorización, observabilidad y control de tráfico, mientras adapta contratos por tipo de cliente para reducir acoplamiento. Esto mejora seguridad y rendimiento al disminuir llamadas innecesarias desde frontend hacia múltiples dominios backend. |
@@ -606,7 +609,7 @@ El pipeline asegura calidad, trazabilidad y despliegue continuo sin degradar est
 ### 5.2 Desarrollo y Lenguajes
 
 | Herramienta | Rol en la solución | Justificación técnica |
-|-------------|--------------------|-----------------------|
+| ------------- | -------------------- | ----------------------- |
 | Java/JavaScript | Backend y frontend | La combinación Java/JavaScript ofrece un ecosistema robusto, con amplio soporte en librerías, frameworks y tooling para sistemas distribuidos. Permite separar responsabilidades por dominio sin perder interoperabilidad entre capas y equipos de desarrollo. |
 | React | Interfaz web | React favorece una arquitectura de UI basada en componentes reutilizables, facilitando mantenibilidad, pruebas y evolución incremental de funcionalidades. Su adopción transversal reduce curva de aprendizaje y habilita una base común para los tres frentes de Ticketti. |
 | React Bootstrap | Sistema de componentes visuales | React Bootstrap entrega componentes accesibles y responsivos listos para producción, alineados con patrones UI consistentes en todos los portales. Esto reduce esfuerzo de implementación visual, baja riesgo de inconsistencias y acelera entregas de frontend. |
@@ -617,7 +620,7 @@ El pipeline asegura calidad, trazabilidad y despliegue continuo sin degradar est
 ### 5.3 Comunicación y Persistencia
 
 | Herramienta | Rol en la solución | Justificación técnica |
-|-------------|--------------------|-----------------------|
+| ------------- | -------------------- | ----------------------- |
 | MySQL (por servicio) | Persistencia transaccional | MySQL por dominio permite mantener consistencia fuerte local y autonomía evolutiva entre microservicios, evitando dependencias rígidas a nivel de esquema. Este enfoque se alinea con Database per Service y reduce impacto de cambios de modelo en dominios no relacionados. |
 | RabbitMQ | Mensajería asíncrona | RabbitMQ habilita desacoplamiento temporal entre servicios, absorbe picos de carga y soporta patrones de retry/DLQ requeridos por procesos críticos de compra, stock y donación. Su modelo de enrutamiento por exchanges y colas facilita trazabilidad operativa de eventos de negocio. |
 | Redis (opcional) | Cache/sesión | Redis permite optimizar tiempos de respuesta en lecturas frecuentes y gestionar estados efímeros de sesión o rate limiting con baja latencia. Su uso controlado mejora experiencia de usuario sin comprometer la fuente de verdad transaccional de cada dominio. |
@@ -625,7 +628,7 @@ El pipeline asegura calidad, trazabilidad y despliegue continuo sin degradar est
 ### 5.4 Calidad y Observabilidad
 
 | Herramienta | Rol en la solución | Justificación técnica |
-|-------------|--------------------|-----------------------|
+| ------------- | -------------------- | ----------------------- |
 | SonarQube | Calidad de código | SonarQube impone puertas de calidad sobre mantenibilidad, cobertura, deuda técnica y vulnerabilidades, evitando que código de riesgo avance a producción. Esto fortalece gobernanza técnica y estandariza criterios objetivos en revisiones de merge y releases. |
 | Prometheus/Grafana | Monitoreo y métricas | Prometheus recolecta métricas técnicas y de negocio, mientras Grafana habilita tableros y alertas accionables para operación diaria y gestión de SLO. Esta visibilidad permite detectar degradaciones tempranas y responder incidentes con evidencia cuantitativa. |
 | Trazas distribuidas | Diagnóstico extremo a extremo | La trazabilidad distribuida conecta una solicitud desde frontend hasta microservicios y broker, reduciendo el tiempo para identificar cuellos de botella y fallos de integración. Es clave para depurar operaciones complejas como checkout y convergencia de estados interdominio. |
@@ -645,13 +648,13 @@ El diseño basado en Kubernetes y dimensionamiento dinámico permite una gestió
 
 ### 6.2 Privacidad y Protección de Datos (Privacy by Design)
 
-Dado que gestionamos datos sensibles de compradores (tarjetas de crédito, direcciones) y de organizadores (información bancaria, datos de contacto):
+Ticketti gestiona datos sensibles de compradores (correo, teléfono, direcciones de entrega) y organizadores (teléfono, correo, datos de contacto). **La responsabilidad de datos de tarjetas de crédito e información bancaria es delegada completamente a la pasarela de pago externa certificada (Transbank/Webpay)**, conforme a PCI-DSS.
 
-● **Cifrado de PII:** Implementamos cifrado de Información de Identificación Personal (PII) mediante AES-256 en reposo y TLS 1.3 en tránsito, asegurándonos de que credenciales y datos de pago viajan encriptados.
+● **Cifrado de PII:** Implementamos cifrado de Información de Identificación Personal (PII) mediante AES-256 en reposo y TLS 1.3 en tránsito para datos de perfil, correos de contacto y direcciones de entrega que almacenamos. Nunca almacenamos números completos de tarjeta ni datos bancarios; usamos tokenización de pasarela externa.
 
-● **Aislamiento de Dominios:** Al usar el patrón Database per Service, limitamos el radio de impacto. Si el servicio de catálogo se ve comprometido, los datos de transacciones financieras del servicio de pago permanecen aislados y seguros.
+● **Aislamiento de Dominios:** Al usar el patrón Database per Service, limitamos el radio de impacto. Si el servicio de usuarios se ve comprometido, los datos de otros dominios (eventos, carrito, donaciones) permanecen aislados y seguros gracias a acceso exclusivo por API o eventos.
 
-● **Tokenización (JWT):** Evitamos viajar con credenciales de usuario (passwords) en cada petición, utilizando tokens de sesión con tiempo de expiración limitado y alcance específico (scopes para Comprador, Organizador o Admin).
+● **Tokenización (JWT) y Sesiones:** Evitamos viajar con passwords en cada petición, utilizando tokens de sesión JWT con tiempo de expiración limitado y alcance específico (scopes para Comprador, Organizador o Admin). Los refresh tokens se protegen con cookies HttpOnly/Secure/SameSite.
 
 ### 6.3 Equidad y Transparencia Algorítmica
 
