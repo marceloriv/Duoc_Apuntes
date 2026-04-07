@@ -1,0 +1,333 @@
+@startuml Ticketti_SQL_Developer_Model
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam classFontColor #0066CC
+skinparam classBorderColor #0066CC
+skinparam classBackgroundColor #ADD8E6
+skinparam classArrowColor #0066CC
+skinparam packageBackgroundColor #E6F2FF
+skinparam packageBorderColor #0066CC
+skinparam packageFontColor #0066CC
+skinparam roundCorners 20
+skinparam linetype ortho
+
+' ============================================================
+' AUTENTICACIÓN Y USUARIOS
+' ============================================================
+
+package "Usuario" as PkgUsuario {
+  class USUARIO {
+    --
+    id_usuario: INT [PK]
+    correo: VARCHAR(255)
+    contrasena_hash: VARCHAR(255)
+    nombre: VARCHAR(100)
+    apellido: VARCHAR(100)
+    estado: ENUM
+    fecha_registro: DATETIME
+    fecha_ultimo_acceso: DATETIME
+  }
+
+  package "RolUsuario" as PkgRolUsuario {
+    class ADMINISTRADOR {
+      id_usuario: INT [PK, FK]
+      nivel_permiso: ENUM
+      fecha_asignacion_rol: DATETIME
+    }
+
+    class COMPRADOR {
+      id_usuario: INT [PK, FK]
+      documentacion_valida: BOOLEAN
+      fecha_ultima_compra: DATETIME
+      total_gastado: DECIMAL
+      numero_compras: INT
+    }
+
+    class ORGANIZADOR {
+      id_usuario: INT [PK, FK]
+      nombre_organizacion: VARCHAR(255)
+      rut_organizacion: VARCHAR(20)
+      cuenta_bancaria_validada: BOOLEAN
+      fecha_validacion_cuenta: DATETIME
+      total_eventos_creados: INT
+    }
+  }
+
+  ADMINISTRADOR --|> USUARIO
+  COMPRADOR --|> USUARIO
+  ORGANIZADOR --|> USUARIO
+}
+
+package "Seguridad" as PkgSeguridad {
+  class CONSENTIMIENTO {
+    id_consentimiento: INT [PK]
+    id_usuario: INT [FK]
+    version_politicas_aceptada: VARCHAR(20)
+    fecha_hora_aceptacion: DATETIME
+    tipo_consentimiento: ENUM
+    vigente: BOOLEAN
+    fecha_ultima_actualizacion: DATETIME
+    ip_origen: VARCHAR(45)
+  }
+
+  class INTENTO_AUTENTICACION {
+    id_intento: INT [PK]
+    id_usuario: INT [FK]
+    correo: VARCHAR(255)
+    ip_origen: VARCHAR(45)
+    fecha_intento: DATETIME
+    resultado: ENUM
+    contador_fallos_cuenta: INT
+    contador_fallos_ip: INT
+  }
+
+  class SESION {
+    id_sesion: INT [PK]
+    id_usuario: INT [FK]
+    refresh_token_hash: VARCHAR(255)
+    device_fingerprint: VARCHAR(255)
+    ip_sesion: VARCHAR(45)
+    fecha_creacion: DATETIME
+    fecha_expiracion: DATETIME
+    fecha_ultimo_uso: DATETIME
+    activa: BOOLEAN
+    user_agent: TEXT
+  }
+
+  class AUDITORIA_CONSENTIMIENTO {
+    id_auditoria_consentimiento: INT [PK]
+    id_consentimiento: INT [FK]
+    id_usuario: INT [FK]
+    valor_anterior: BOOLEAN
+    valor_nuevo: BOOLEAN
+    tipo_cambio: ENUM
+    fecha_cambio: DATETIME
+    razon_cambio: VARCHAR(255)
+    ip_cambio: VARCHAR(45)
+  }
+
+  class ELIMINACION_USUARIO {
+    id_eliminacion: INT [PK]
+    id_usuario: INT [FK]
+    fase: ENUM
+    fecha_inicio_bloqueo: DATETIME
+    fecha_inicio_retencion: DATETIME
+    fecha_prevista_purga: DATETIME
+    estado_purga: ENUM
+    razon_eliminacion: VARCHAR(255)
+  }
+
+  class EXPORTACION_DATOS {
+    id_exportacion: INT [PK]
+    id_usuario: INT [FK]
+    token_enlace: VARCHAR(255)
+    formato: ENUM
+    fecha_creacion: DATETIME
+    fecha_expiracion: DATETIME
+    fecha_descarga: DATETIME
+    ip_descarga: VARCHAR(45)
+    estado: ENUM
+  }
+}
+
+' ============================================================
+' ENTRADA Y CATEGORIZACIÓN
+' ============================================================
+
+package "Entrada" as PkgEntrada {
+  class CATEGORIA {
+    id_categoria: INT [PK]
+    nombre: VARCHAR(100)
+    descripcion: TEXT
+    estado: ENUM
+  }
+
+  package "TipoDeEntrada" as PkgTipoEntrada {
+    class TIPO_ENTRADA {
+      id_tipo: INT [PK]
+      id_evento: INT [FK]
+      nombre: VARCHAR(100)
+      precio: DECIMAL(10,2)
+      capacidad_total: INT
+      capacidad_disponible: INT
+      capacidad_reservada: INT
+      fecha_creacion: DATETIME
+    }
+
+    class RESERVA {
+      id_reserva: INT [PK]
+      id_tipo_entrada: INT [FK]
+      id_usuario: INT [FK]
+      cantidad: INT
+      expira_en: DATETIME
+      estado: ENUM
+      fecha_creacion: DATETIME
+    }
+  }
+}
+
+' ============================================================
+' EVENTO Y GESTIÓN
+' ============================================================
+
+package "Evento" as PkgEvento {
+  class EVENTO {
+    id_evento: INT [PK]
+    id_organizador: INT [FK]
+    id_categoria: INT [FK]
+    nombre: VARCHAR(255)
+    descripcion: TEXT
+    fecha_inicio: DATE
+    fecha_fin: DATE
+    hora_inicio: TIME
+    hora_fin: TIME
+    locacion: VARCHAR(255)
+    estado: ENUM
+    motivo_cancelacion: VARCHAR(255)
+    fecha_creacion: DATETIME
+  }
+
+  package "TipoEvento" as PkgTipoEvento {
+    ' Entidades derivadas del evento
+  }
+}
+
+' ============================================================
+' COMPRA Y TRANSACCIONES
+' ============================================================
+
+package "Compra" as PkgCompra {
+  class PEDIDO {
+    id_pedido: INT [PK]
+    id_usuario: INT [FK]
+    total: DECIMAL(10,2)
+    monto_donacion: DECIMAL(10,2)
+    monto_pagado: DECIMAL(10,2)
+    estado: ENUM
+    fecha_compra: DATETIME
+    idempotency_key: VARCHAR(255)
+    fecha_confirmacion_pago: DATETIME
+  }
+
+  class ITEM_PEDIDO {
+    id_item: INT [PK]
+    id_pedido: INT [FK]
+    id_tipo_entrada: INT [FK]
+    cantidad: INT
+    precio_unitario: DECIMAL(10,2)
+    subtotal: DECIMAL(10,2)
+  }
+
+  class ENTRADA {
+    id_entrada: INT [PK]
+    id_pedido: INT [FK]
+    id_tipo_entrada: INT [FK]
+    codigo_qr: VARCHAR(255)
+    codigo_qr_anterior: VARCHAR(255)
+    estado: ENUM
+    fecha_emision: DATETIME
+    fecha_revocacion: DATETIME
+    timestamp_uso: DATETIME
+    ip_validacion: VARCHAR(45)
+    numero_reemision: INT
+  }
+}
+
+' ============================================================
+' DONACIÓN Y CAUSAS SOCIALES
+' ============================================================
+
+package "Donación" as PkgDonacion {
+  class DONACION {
+    id_donacion: INT [PK]
+    id_pedido: INT [FK]
+    id_causa: INT [FK]
+    monto: DECIMAL(10,2)
+    porcentaje: INT
+    estado_conciliacion: ENUM
+    fecha: DATETIME
+    timestamp_confirmacion: DATETIME
+    fecha_acreditacion: DATETIME
+  }
+
+  package "CausaSocial" as PkgCausaSocial {
+    class CAUSA_SOCIAL {
+      id_causa: INT [PK]
+      nombre: VARCHAR(100)
+      descripcion: TEXT
+      estado: ENUM
+      fecha_creacion: DATETIME
+      fecha_desactivacion: DATETIME
+    }
+  }
+}
+
+' ============================================================
+' MENSAJERÍA Y NOTIFICACIONES
+' ============================================================
+
+package "Mensajería" as PkgMensajeria {
+  class NOTIFICACION {
+    id_notificacion: INT [PK]
+    id_usuario: INT [FK]
+    id_pedido: INT [FK]
+    tipo: ENUM
+    canal: ENUM
+    contenido: TEXT
+    estado: ENUM
+    fecha_envio: DATETIME
+    event_id_idempotente: VARCHAR(255)
+    fecha_intento_envio: DATETIME
+    numero_reintentos: INT
+  }
+}
+
+package "Concentimiento" as PkgConcentimiento {
+  class WEBHOOK_PAGO {
+    id_webhook: INT [PK]
+    id_pedido: INT [FK]
+    firma_hmac: VARCHAR(255)
+    id_clave_firma: VARCHAR(255)
+    nonce: VARCHAR(255)
+    timestamp_evento: DATETIME
+    timestamp_procesamiento_local: DATETIME
+    estado: ENUM
+    payload_raw: LONGTEXT
+    duplicado_detectado: BOOLEAN
+  }
+}
+
+' ============================================================
+' RELACIONES PRINCIPALES
+' ============================================================
+
+USUARIO "1" --> "*" CONSENTIMIENTO
+USUARIO "1" --> "*" INTENTO_AUTENTICACION
+USUARIO "1" --> "*" SESION
+USUARIO "1" --> "0..1" ELIMINACION_USUARIO
+USUARIO "1" --> "*" EXPORTACION_DATOS
+
+CONSENTIMIENTO "1" --> "*" AUDITORIA_CONSENTIMIENTO
+
+CATEGORIA "1" --> "*" EVENTO
+EVENTO "1" --> "*" TIPO_ENTRADA
+ORGANIZADOR "1" --> "*" EVENTO
+
+TIPO_ENTRADA "1" --> "*" RESERVA
+RESERVA "*" --> "1" USUARIO
+
+PEDIDO "*" --> "1" USUARIO
+PEDIDO "1" --> "*" ITEM_PEDIDO
+ITEM_PEDIDO "*" --> "1" TIPO_ENTRADA
+PEDIDO "1" --> "*" ENTRADA
+ENTRADA "*" --> "1" TIPO_ENTRADA
+
+PEDIDO "1" --> "0..1" DONACION
+DONACION "*" --> "1" CAUSA_SOCIAL
+
+NOTIFICACION "*" --> "1" USUARIO
+NOTIFICACION "*" --> "0..1" PEDIDO
+
+WEBHOOK_PAGO "*" --> "1" PEDIDO
+
+@enduml

@@ -310,8 +310,8 @@ Para garantizar la alta disponibilidad y el desacoplamiento de SmartLogix, se ha
 | Herramienta | Rol en la Solución | Justificación Técnica |
 |-------------|-------------------|----------------------|
 | Java 17 + Spring Boot 3 | Backend Core | Ofrece un ecosistema maduro para sistemas transaccionales pesados (Pedidos, Inventario) con alta concurrencia y tipado fuerte para evitar errores en producción. |
-| Node.js (NestJS) | Capa BFF | Ideal para la capa de agregación (BFF) debido a su modelo de I/O no bloqueante, lo que permite manejar múltiples peticiones a microservicios de forma ultra rápida. |
-| Next.js / React | Ecosistema Front | Next.js para el portal público (SEO y carga rápida) y React para los paneles operativos por su manejo eficiente del estado de la interfaz. |
+| Node.js 20 LTS + NestJS | Runtime backend de la Capa BFF | Node.js funciona como runtime del lado servidor y NestJS estructura la lógica del BFF; esta combinación permite manejar múltiples peticiones a microservicios de forma eficiente y no bloqueante. |
+| Next.js / React | Ecosistema Front | Next.js actúa como framework del portal público y React como librería de UI para los paneles operativos, favoreciendo SEO, carga rápida y manejo eficiente del estado de la interfaz. |
 | Maven | Gestión de Dependencias | Automatiza la construcción del proyecto y asegura que todas las librerías de los microservicios estén estandarizadas y actualizadas. |
 
 ### 4.3 Comunicación y Persistencia

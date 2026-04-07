@@ -1,0 +1,76 @@
+@startuml DiagramaMicroserviciosBFF
+left to right direction
+skinparam backgroundColor #F5F5F7
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam packageStyle rectangle
+
+actor "Portal Comprador\n(React)" as FrontComprador
+actor "Portal Organizador\n(React)" as FrontOrganizador
+actor "Panel Administrador\n(React)" as FrontAdmin
+
+rectangle "Capa de Acceso" {
+  component "API Gateway" as APIGW
+
+  component "BFF-Comprador\n(Node.js 20 + NestJS)" as BFFComprador
+  component "BFF-Organizador\n(Node.js 20 + NestJS)" as BFFOrganizador
+  component "BFF-Admin\n(Node.js 20 + NestJS)" as BFFAdmin
+}
+
+rectangle "Capa de Dominios (Microservicios)" {
+  component "MSUsuarios" as MSUsuarios
+  component "MSEventos" as MSEventos
+  component "MSCarrito" as MSCarrito
+  component "MSDonaciones" as MSDonaciones
+  component "MSMensajeria" as MSMensajeria
+}
+
+queue "RabbitMQ" as Rabbit
+database "MySQL\n(Database per Service)" as DB
+
+FrontComprador --> APIGW : HTTPS + JWT
+FrontOrganizador --> APIGW : HTTPS + JWT
+FrontAdmin --> APIGW : HTTPS + JWT
+
+APIGW --> BFFComprador : Enrutamiento por rol
+APIGW --> BFFOrganizador : Enrutamiento por rol
+APIGW --> BFFAdmin : Enrutamiento por rol
+
+BFFComprador --> MSEventos : Catalogo/Filtros
+BFFComprador --> MSCarrito : Checkout/Historial
+BFFComprador --> MSDonaciones : Causas/Donaciones
+
+BFFOrganizador --> MSEventos : CRUD evento
+BFFOrganizador --> MSDonaciones : Metricas de donacion
+
+BFFAdmin --> MSUsuarios : Gobierno usuarios
+BFFAdmin --> MSEventos : Cancelacion/Admin
+BFFAdmin --> MSCarrito : Orquesta reembolsos
+
+MSCarrito --> Rabbit : pago.aprobado.v1
+Rabbit --> MSEventos : stock.confirmado.v1
+Rabbit --> MSDonaciones : donacion.registrada.v1
+Rabbit --> MSMensajeria : notificaciones/QR
+
+MSUsuarios --> DB
+MSEventos --> DB
+MSCarrito --> DB
+MSDonaciones --> DB
+MSMensajeria --> DB
+
+note right of APIGW
+Responsabilidades:
+- AuthN/AuthZ (JWT)
+- Rate limiting
+- Trazabilidad
+- Enrutamiento a BFF
+end note
+
+note right of BFFComprador
+Responsabilidades BFF:
+- Orquestacion
+- Agregacion de datos
+- Adaptacion de contratos
+end note
+
+@enduml

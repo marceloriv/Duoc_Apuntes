@@ -590,12 +590,6 @@ El diagrama ofrece una visión general de la arquitectura del sistema, mostrando
 
 > _[Insertar imagen: diagrama de microservicios]_
 
-Referencia de fuente editable: `Proyecto/Diagramas/Diagrama-Microservicios-BFF.puml`.
-
-El diagrama de microservicios debe evidenciar explícitamente la cadena de acceso:
-
-`Frontend por rol -> API Gateway -> BFF por rol -> Microservicios de dominio`.
-
 #### Descripción de Componentes
 
 1. Capa de clientes (portales por rol): Portal Comprador, Portal Organizador y Panel Administrador consumen una UI-Lib común para mantener consistencia.
