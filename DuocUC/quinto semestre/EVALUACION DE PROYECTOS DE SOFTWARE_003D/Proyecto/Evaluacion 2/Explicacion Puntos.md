@@ -25,3 +25,17 @@ Actualizar el plan de contingencia y plan de mitigación que se tienen implement
 >Tener diferentes respaldados con respecto a si tenemos instancias con el proveedor.
 
 Todos los riesgos que tenemos en la matriz de riegos es básicamente que todos tienen que estar relacionados con los aspectos económicos. Técnicamente tener que  mejorar la matriz que tenemos ahora mismo en el informe de evaluación de proyecto 1.
+
+---
+
+Se tiene que evaluar el analisis tecnico con respecto al tema econmico.
+
+Ahora tenemos que hacer un precio fijo a una entidad, ya que tenemos un enfoque privado por ejemplo que costo;
+
+- Que precio le ponemos:
+  - clinicas
+  - hospitales
+  - consultorios
+  
+>[!note]
+>No es necesario colocarle precio a todo, ya que se puede enfocar en una sola entidad.
