@@ -1,4 +1,4 @@
-La estructura de un mensaje de commit siguiendo la especificación sería la siguiente:
+# La estructura de un mensaje de commit siguiendo la especificación sería la siguiente
 
 ```shell
 <tipo>[scope opcional]: <descripción del commit>
@@ -9,7 +9,7 @@ La estructura de un mensaje de commit siguiendo la especificación sería la sig
 
 ```
 
-### Tipos de commits
+## Tipos de commits
 
 Los tipos de commits son los siguientes:
 
