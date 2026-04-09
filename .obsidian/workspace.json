@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/Resumen Evaluacion 1.md",
+                "file": "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/Glosario.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Resumen Evaluacion 1"
+              "title": "Glosario"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "5deb0fcda007d784",
@@ -94,7 +95,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/Resumen Evaluacion 1.md",
+                "file": "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/Glosario.md",
                 "collapseAll": false,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -104,7 +105,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Enlaces entrantes de Resumen Evaluacion 1"
+              "title": "Enlaces entrantes de Glosario"
             }
           },
           {
@@ -155,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/Resumen Evaluacion 1.md",
+                "file": "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Actividades/Evaluacion-1-AgroAndes-Analisis-Ciberseguridad.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Esquema de Resumen Evaluacion 1"
+              "title": "Esquema de Evaluacion-1-AgroAndes-Analisis-Ciberseguridad"
             }
           }
         ],
@@ -169,7 +170,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -184,15 +186,19 @@
   },
   "active": "8e919ed364885def",
   "lastOpenFiles": [
-    "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/2-Base Redes.md",
+    "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Actividades/Evaluacion-1-AgroAndes-Analisis-Ciberseguridad.md",
     "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/Resumen Evaluacion 1.md",
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Resumen Evaluacion 1.md",
     "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/Glosario.md",
+    "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/2-Base Redes.md",
     "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/1-Introduccion.md",
+    "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Actividades/2-Actividad-Cyber-Kill-Chain.md",
     "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/6–Cyber Kill Chain.md",
-    "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/5-Gobierno y Políticas de Seguridad.md",
+    "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/Controles de Seguridad.md",
+    "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Actividades/1-Actividad.md",
     "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/4-Fundamentos de Seguridad de la Información.md",
+    "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/5-Gobierno y Políticas de Seguridad.md",
     "DuocUC/quinto semestre/CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES_009D/Clases/3-Fundamentos OS.md",
+    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Resumen Evaluacion 1.md",
     "DuocUC/quinto semestre/EVALUACION DE PROYECTOS DE SOFTWARE_003D/Proyecto/Evaluacion 2/Explicacion Puntos.md",
     "DuocUC/quinto semestre/EVALUACION DE PROYECTOS DE SOFTWARE_003D/Proyecto/Evaluacion 1/Informe 1.md",
     "DuocUC/quinto semestre/EVALUACION DE PROYECTOS DE SOFTWARE_003D/Proyecto/Evaluacion 2",
@@ -212,7 +218,6 @@
     "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/ERS-Ticketti-v1.4.md",
     "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Tareas.md",
     "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Plan.md",
-    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Arquitectura_SmartLogix.md",
-    "README.md"
+    "DuocUC/quinto semestre/DESARROLLO FULLSTACK III_003D/Proyecto/Arquitectura_SmartLogix.md"
   ]
 }
