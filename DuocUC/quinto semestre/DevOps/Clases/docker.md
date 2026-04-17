@@ -1,6 +1,9 @@
 # Comandos docker
 
 El archivo docker enseñado en clases
+
+## dockerfile
+
 ´´´bash
 FROM maven:3.9.14-eclipse-temurin-17-alpine AS alpine
 
@@ -29,3 +32,22 @@ ENTRYPOINT [ "java","-jar","app.jar" ]
  docker -v  
  .\mvnw.cmd clean package
 docker build -t productos .\Dockerfile
+
+## docker-compose.yml
+
+´´´text
+services:
+  postgres:
+    image: postgres:15.3
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=mydb
+    ports:
+      - "5432:5432"
+    labels:
+      org.springframework.boot.jdbc.parameters: "ssl=true&sslmode=require"
+
+´´´
+>[!note]
+>se esta usando la base de datos postgres
