@@ -513,30 +513,28 @@ Read [](file:///c%3A/Users/Marcelo-HP/Desktop/Codigo/Proyectos/Ticketti/Microser
 
 Generating patch (28 lines) in [](file:///c%3A/Users/Marcelo-HP/Desktop/Codigo/Proyectos/Ticketti/Microservicios/infra/docker-compose.yml)
 
-
 ```
 
 ```
-
 
 Generating patch (38 lines) in [](file:///c%3A/Users/Marcelo-HP/Desktop/Codigo/Proyectos/Ticketti/Microservicios/BFF-Back-for-Frontend/docker-compose.yml)
 
-
 ```
 
 ```
-
 
 Se ha agregado una tarea pendiente
 
 He creado la opción B: un compose central de infraestructura y quité RabbitMQ del compose del BFF para evitar duplicados.
 
 Qué hice
+
 - Añadí docker-compose.yml (servicio `rabbitmq` + red `ticketti-network`).
 - Eliminé el bloque `rabbitmq` del docker-compose.yml y quité la dependencia `depends_on` (ahora el BFF asume que RabbitMQ está provisto por la infraestructura).
 - Mantengo la red `ticketti-network` declarada como `external: true` en los compose de las apps (ya existía o se creó antes).
 
 Contenido clave (resumido)
+
 - docker-compose.yml define:
   - service `rabbitmq` usando `rabbitmq:4-management`
   - expose puertos `5672` (AMQP) y `15672` (management)
@@ -544,6 +542,7 @@ Contenido clave (resumido)
 - Los otros services usan la red `ticketti-network` con `external: true`, por tanto deben arrancar después de que la red exista y RabbitMQ esté en ella.
 
 Cómo funciona (explicación breve)
+
 - El compose docker-compose.yml actúa como el “proveedor” de la infraestructura compartida:
   - Al ejecutar `docker compose -f docker-compose.yml up -d` se crea la red `ticketti-network` y el contenedor `rabbitmq`.
   - Las demás aplicaciones (ms-carrito, ms-donaciones, ms-mensajeria, BFF, etc.) usan `ticketti-network` como red externa: cuando las levantes con sus propios docker-compose.yml se unirán a esa red y podrán resolver el host `rabbitmq`.
@@ -553,32 +552,39 @@ Cómo funciona (explicación breve)
   - Facilita levantamientos parciales (infra por separado, apps por separado).
 - Recomendaciones operativas:
   1. Levantar primero la infraestructura:
+
      ```bash
      docker compose -f infra/docker-compose.yml up -d
      ```
+
   2. Luego, en cada servicio (ms-carrito, ms-donaciones, ms-mensajeria, BFF, etc.):
+
      ```bash
      cd ms-carrito
      docker compose up -d
      # o docker compose -f docker-compose.yml up -d
      ```
+
   3. Verificar que cada servicio resuelve RabbitMQ y que no hay conflictos de puertos en el host.
 
 Notas importantes y pasos siguientes
+
 - Conflicto de puertos: revisa docker-compose.yml, tiene `- "8081:8080"` (host 8081) y BFF también mapea host 8081; ajusta ms-usuarios a otro puerto si necesitas correr ambos localmente, por ejemplo `8082:8080`.
 - Consistencia de variables: estandariza env vars RabbitMQ a `SPRING_RABBITMQ_HOST/PORT/USERNAME/PASSWORD` o asegura que cada servicio lea las que defines en su compose.
 - Si quieres, puedo:
   - A) modificar docker-compose.yml para unirse a `ticketti-network` y cambiar su puerto host (p. ej. 8082), o
   - B) lanzar la infraestructura y luego levantar ms-carrito, ms-donaciones y ms-mensajeria para una prueba E2E.
 
-## Pasos 
+## Pasos
 
 Los siguientes pasos son estos:
 
 1. Levantar la infraestructura central:
+
    ```bash
    docker compose -f infra/docker-compose.yml up -d
    ```
+
    Esto deja arriba RabbitMQ compartido en la red `ticketti-network`.
 
 2. Levantar el orden base de servicios:
@@ -616,26 +622,28 @@ Los siguientes pasos son estos:
 
 Si quieres, el siguiente paso lo hago yo: levantar primero la infraestructura y después guiarte en la prueba E2E servicio por servicio.
 
-
 Voy a actualizar la lista de tareas con pasos E2E inmediatos (levantar infra, servicios y pruebas).
 
 Se ha agregado una tarea pendiente
 
-
 1) Crear/red comprobar (si no existe)
+
 ```bash
 docker network ls | findstr ticketti-network || docker network create ticketti-network
 ```
 
-2) Levantar infra (config-server trae RabbitMQ)
+1) Levantar infra (config-server trae RabbitMQ)
+
 ```powershell
 Set-Location 'c:\Users\Marcelo-HP\Desktop\Codigo\Proyectos\Ticketti\Microservicios\config-server'
 docker compose up -d
 docker compose ps
 ```
-- Espera a que `rabbitmq` esté healthy (healthcheck configurado). Abre http://localhost:15672 (usuario `guest` / `guest`) para ver queues.
 
-3) Levantar servicios core
+- Espera a que `rabbitmq` esté healthy (healthcheck configurado). Abre <http://localhost:15672> (usuario `guest` / `guest`) para ver queues.
+
+1) Levantar servicios core
+
 ```powershell
 Set-Location '..\discovery-server'; docker compose up -d; docker compose ps
 Set-Location '..\ms-usuarios';    docker compose up -d; docker compose ps
@@ -643,7 +651,8 @@ Set-Location '..\ms-eventos';     docker compose up -d; docker compose ps
 Set-Location '..\ms-carrito';     docker compose up -d; docker compose ps
 ```
 
-4) Levantar servicios auxiliares + gateway
+1) Levantar servicios auxiliares + gateway
+
 ```powershell
 Set-Location '..\ms-donaciones';  docker compose up -d; docker compose ps
 Set-Location '..\ms-mensajeria';  docker compose up -d; docker compose ps
@@ -651,38 +660,46 @@ Set-Location '..\BFF-Back-for-Frontend'; docker compose up -d; docker compose ps
 Set-Location '..\api-gateway';    docker compose up -d; docker compose ps
 ```
 
-5) Verificar logs y salud rápida (en cada carpeta)
+1) Verificar logs y salud rápida (en cada carpeta)
+
 ```powershell
 # Dentro de cada servicio usar:
 docker compose logs -f --tail=100
 # o para cerrar inmediatamente:
 docker compose logs --tail=50
 ```
+
 - Busca en ms-carrito logs del `OutboxRelayService` indicando "Outbox relay completado" o "publicado".
 - Busca en ms-donaciones y ms-mensajeria mensajes como "Evento recibido" o entradas de sus consumers.
 
-6) Ejecutar flujo de prueba (simular pago aprobado)
+1) Ejecutar flujo de prueba (simular pago aprobado)
+
 - Crea un carrito / agrega entradas usando la API (puedes usar api-gateway en `http://localhost:8222` o ms-carrito directo `http://localhost:8082`).
 - Simula webhook pago aprobado (ejemplo, ajusta `carritoId` y `timestamp`):
+
 ```bash
 curl -X POST http://localhost:8082/api/v1/Carrito/123/webhook \
   -H "Content-Type: application/json" \
   -d '{"estado":"aprobado","token":"tok-demo","timestamp":"2026-05-31T13:10:00","nonce":"abc123"}'
 ```
+
 - Alternativa: llamar al endpoint de checkout y luego el webhook desde el frontend o Postman.
 
-7) Verificar colas en RabbitMQ Management
-- En http://localhost:15672:
+1) Verificar colas en RabbitMQ Management
+
+- En <http://localhost:15672>:
   - Mira que existan `pago.aprobado` y `mensajeria.queue`.
   - Observa rates, mensajes en cola, y consumers conectados.
 
-8) Si algo falla: recopila evidencias
+1) Si algo falla: recopila evidencias
+
 ```powershell
 # Obtener últimos 200 logs de un servicio (ejemplo ms-carrito)
 Set-Location 'ms-carrito'
 docker compose logs --tail=200 > ../ms-carrito-logs.txt
 # Repetir para ms-donaciones y ms-mensajeria
 ```
+
 - Revisa excepciones Jackson, errores Feign o nulls en campos esperados.
 - Copia los mensajes de error y dímelos; yo te indico la corrección exacta.
 
@@ -699,8 +716,9 @@ Read [](file:///c%3A/Users/Marcelo-HP/AppData/Roaming/Code/User/workspaceStorage
 Compacted conversationEstoy tailing los logs; hay un error recurrente que impide que ms-mensajeria arranque: falta la propiedad `spring.mail.username` (BeanCreationException en `mailConfig`), por eso la app reinicia en bucle.
 
 Opciones rápidas para arreglarlo:
-- Añadir variables de mail al compose (`SPRING_MAIL_USERNAME`, `SPRING_MAIL_PASSWORD`, `SPRING_MAIL_HOST`, `SPRING_MAIL_PORT`) en docker-compose.yml.  
-- Hacer la configuración de mail tolerante a valores faltantes (usar `@Value("${spring.mail.username:}")` o condicionar el bean) en el código para ignorar mail en local.  
+
+- Añadir variables de mail al compose (`SPRING_MAIL_USERNAME`, `SPRING_MAIL_PASSWORD`, `SPRING_MAIL_HOST`, `SPRING_MAIL_PORT`) en docker-compose.yml.
+- Hacer la configuración de mail tolerante a valores faltantes (usar `@Value("${spring.mail.username:}")` o condicionar el bean) en el código para ignorar mail en local.
 - Desactivar la carga de `MailConfig` con un perfil o property (`spring.mail.enabled=false`) si no se usa ahora.
 
 Dime cuál prefieres y lo aplico (puedo parchear el compose y reiniciar containers, o editar el código y reconstruir).
