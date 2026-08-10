@@ -1,0 +1,516 @@
+@startuml Ticketti_ERDiagram_SQLEstandar
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam classFontColor #000066
+skinparam classBorderColor #0066CC
+skinparam classBackgroundColor #ADD8E6
+skinparam classArrowColor #0066CC
+skinparam linetype ortho
+
+' ============================================================
+' NOTA: Usando SQL ESTÁNDAR (sin ENUM)
+' ENUM reemplazado por VARCHAR + CHECK constraints
+' ============================================================
+
+' ============================================================
+' CORE - USUARIO (Supertipo)
+' ============================================================
+
+class USUARIO {
+  --
+  # id_usuario: INT [PK]
+  --
+  * correo: VARCHAR(255) [UNIQUE]
+  * contrasena_hash: VARCHAR(255)
+  * nombre: VARCHAR(100)
+  * apellido: VARCHAR(100)
+  * estado: VARCHAR(20)
+  {CHECK: activo, bloqueado, suspendido, eliminado}
+  o fecha_registro: DATETIME
+  o fecha_ultimo_acceso: DATETIME
+}
+
+' ============================================================
+' SUBTIPOS DE USUARIO
+' ============================================================
+
+class ADMINISTRADOR {
+  --
+  # id_usuario: INT [PK, FK]
+  --
+  * nivel_permiso: VARCHAR(20)
+  {CHECK: super_admin, admin_plataforma}
+  * fecha_asignacion_rol: DATETIME
+}
+
+class ORGANIZADOR {
+  --
+  # id_usuario: INT [PK, FK]
+  --
+  * nombre_organizacion: VARCHAR(255)
+  o rut_organizacion: VARCHAR(20)
+  * cuenta_bancaria_validada: BOOLEAN
+  o fecha_validacion_cuenta: DATETIME
+  o total_eventos_creados: INT
+}
+
+class COMPRADOR {
+  --
+  # id_usuario: INT [PK, FK]
+  --
+  * documentacion_valida: BOOLEAN
+  o fecha_ultima_compra: DATETIME
+  o total_gastado: DECIMAL(12,2)
+  o numero_compras: INT
+}
+
+ADMINISTRADOR --|> USUARIO
+ORGANIZADOR --|> USUARIO
+COMPRADOR --|> USUARIO
+
+' ============================================================
+' AUTENTICACIÓN Y SEGURIDAD
+' ============================================================
+
+class CONSENTIMIENTO {
+  --
+  # id_consentimiento: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * version_politicas_aceptada: VARCHAR(20)
+  * fecha_hora_aceptacion: DATETIME
+  * tipo_consentimiento: VARCHAR(30)
+  {CHECK: notificaciones, recomendaciones, marketing, analytics}
+  * vigente: BOOLEAN [DEFAULT: true]
+  * fecha_ultima_actualizacion: DATETIME
+  o ip_origen: VARCHAR(45)
+}
+
+class INTENTO_AUTENTICACION {
+  --
+  # id_intento: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * correo: VARCHAR(255)
+  * ip_origen: VARCHAR(45) [INDEXED]
+  * fecha_intento: DATETIME [INDEXED]
+  * resultado: VARCHAR(10)
+  {CHECK: exitoso, fallido}
+  o contador_fallos_cuenta: INT
+  o contador_fallos_ip: INT
+}
+
+class SESION {
+  --
+  # id_sesion: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * refresh_token_hash: VARCHAR(255) [UNIQUE]
+  * device_fingerprint: VARCHAR(255)
+  * ip_sesion: VARCHAR(45)
+  * fecha_creacion: DATETIME
+  * fecha_expiracion: DATETIME
+  o fecha_ultimo_uso: DATETIME
+  * activa: BOOLEAN [INDEXED, DEFAULT: true]
+  o user_agent: TEXT
+}
+
+class AUDITORIA_CONSENTIMIENTO {
+  --
+  # id_auditoria_consentimiento: INT [PK]
+  * id_consentimiento: INT [FK]
+  * id_usuario: INT [FK]
+  --
+  o valor_anterior: BOOLEAN
+  * valor_nuevo: BOOLEAN
+  * tipo_cambio: VARCHAR(20)
+  {CHECK: otorgamiento, revocacion, actualizacion}
+  * fecha_cambio: DATETIME [INDEXED]
+  o razon_cambio: VARCHAR(255)
+  o ip_cambio: VARCHAR(45)
+}
+
+class ELIMINACION_USUARIO {
+  --
+  # id_eliminacion: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * fase: VARCHAR(20)
+  {CHECK: bloqueado, retencion, purgado}
+  * fecha_inicio_bloqueo: DATETIME
+  o fecha_inicio_retencion: DATETIME
+  * fecha_prevista_purga: DATETIME
+  * estado_purga: VARCHAR(20)
+  {CHECK: pendiente, completada}
+  o razon_eliminacion: VARCHAR(255)
+}
+
+class EXPORTACION_DATOS {
+  --
+  # id_exportacion: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * token_enlace: VARCHAR(255) [UNIQUE]
+  * formato: VARCHAR(10)
+  {CHECK: json, pdf}
+  * fecha_creacion: DATETIME
+  * fecha_expiracion: DATETIME
+  o fecha_descarga: DATETIME
+  o ip_descarga: VARCHAR(45)
+  * estado: VARCHAR(20)
+  {CHECK: activo, descargado, expirado}
+}
+
+' ============================================================
+' TABLAS DE INTEGRIDAD (Nuevas)
+' ============================================================
+
+class INTENTO_PAGO {
+  --
+  # id_intento_pago: INT [PK]
+  * id_pedido: INT [FK]
+  --
+  * idempotency_key: VARCHAR(255) [UNIQUE]
+  * timestamp_intento: DATETIME
+  o timestamp_respuesta: DATETIME
+  * estado_respuesta: VARCHAR(20)
+  {CHECK: pendiente, exitoso, fallido}
+  * payload_respuesta: LONGTEXT
+  o numero_intento: INT [DEFAULT: 1]
+}
+
+class DEVOLUCCION {
+  --
+  # id_devoluccion: INT [PK]
+  * id_pedido: INT [FK, UNIQUE]
+  * id_usuario: INT [FK]
+  --
+  * monto_solicitado: DECIMAL(10,2)
+  o monto_reembolsado: DECIMAL(10,2)
+  * porcentaje_reembolso: INT [DEFAULT: 85, CHECK: 85]
+  * estado: VARCHAR(20) [INDEXED]
+  {CHECK: solicitada, aprobada, rechazada, procesada}
+  o motivo_rechazo: VARCHAR(255)
+  * fecha_solicitud: DATETIME
+  o fecha_aprobacion: DATETIME
+  o fecha_procesamiento: DATETIME
+}
+
+' ============================================================
+' EVENTOS E INVENTARIO
+' ============================================================
+
+class CATEGORIA {
+  --
+  # id_categoria: INT [PK]
+  --
+  * nombre: VARCHAR(100) [UNIQUE]
+  o descripcion: TEXT
+  * estado: VARCHAR(10)
+  {CHECK: activa, inactiva}
+}
+
+class EVENTO {
+  --
+  # id_evento: INT [PK]
+  * id_organizador: INT [FK]
+  * id_categoria: INT [FK]
+  --
+  * nombre: VARCHAR(255)
+  o descripcion: TEXT
+  * fecha_inicio: DATE [INDEXED]
+  * fecha_fin: DATE
+  * hora_inicio: TIME
+  * hora_fin: TIME
+  * locacion: VARCHAR(255)
+  * estado: VARCHAR(20)
+  {CHECK: borrador, publicado, cancelado}
+  o motivo_cancelacion: VARCHAR(255)
+  o fecha_creacion: DATETIME
+  o fecha_ultima_modificacion: DATETIME
+  o usuario_que_modifico: INT [FK]
+  o fecha_publicacion: DATETIME
+  o fecha_cancelacion: DATETIME
+}
+
+class TIPO_ENTRADA {
+  --
+  # id_tipo: INT [PK]
+  * id_evento: INT [FK]
+  --
+  * nombre: VARCHAR(100)
+  * precio: DECIMAL(10,2)
+  * capacidad_total: INT
+  * capacidad_disponible: INT [INDEXED]
+  * capacidad_reservada: INT
+  * version_capacidad: INT [DEFAULT: 1]
+  o fecha_creacion: DATETIME
+}
+
+class RESERVA {
+  --
+  # id_reserva: INT [PK]
+  * id_tipo_entrada: INT [FK]
+  * id_usuario: INT [FK]
+  --
+  * cantidad: INT
+  * expira_en: DATETIME [INDEXED]
+  * estado: VARCHAR(20) [INDEXED]
+  {CHECK: activa, expirada, convertida}
+  o fecha_creacion: DATETIME
+}
+
+' ============================================================
+' COMPRA Y TRANSACCIONES
+' ============================================================
+
+class PEDIDO {
+  --
+  # id_pedido: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * total: DECIMAL(10,2)
+  * monto_donacion: DECIMAL(10,2)
+  o monto_pagado: DECIMAL(10,2)
+  * estado: VARCHAR(20) [INDEXED]
+  {CHECK: pendiente, confirmado, pagado, cancelado, fallido}
+  * fecha_compra: DATETIME [INDEXED]
+  * idempotency_key: VARCHAR(255) [UNIQUE]
+  o fecha_confirmacion_pago: DATETIME
+  o ip_cliente: VARCHAR(45)
+  o user_agent: VARCHAR(500)
+}
+
+class ITEM_PEDIDO {
+  --
+  # id_item: INT [PK]
+  * id_pedido: INT [FK]
+  * id_tipo_entrada: INT [FK]
+  --
+  * cantidad: INT [CHECK: > 0]
+  * precio_unitario: DECIMAL(10,2)
+  * subtotal: DECIMAL(10,2)
+}
+
+class ENTRADA {
+  --
+  # id_entrada: INT [PK]
+  * id_pedido: INT [FK]
+  * id_tipo_entrada: INT [FK]
+  * id_usuario_propietario: INT [FK]
+  --
+  * codigo_qr: VARCHAR(255) [UNIQUE, INDEXED]
+  o codigo_qr_anterior: VARCHAR(255)
+  * estado: VARCHAR(20) [INDEXED]
+  {CHECK: emitida, usada, revocada, bloqueada}
+  * fecha_emision: DATETIME
+  o fecha_revocacion: DATETIME
+  o timestamp_uso: DATETIME
+  o ip_validacion: VARCHAR(45)
+  o numero_reemision: INT [DEFAULT: 0]
+}
+
+class AUDITORIA_QR {
+  --
+  # id_auditoria_qr: INT [PK]
+  * id_entrada: INT [FK]
+  --
+  o codigo_qr_anterior: VARCHAR(255)
+  * codigo_qr_nuevo: VARCHAR(255)
+  * secuencia: INT [INDEXED]
+  * motivo: VARCHAR(25)
+  {CHECK: emision_inicial, reemision, revocacion}
+  * timestamp_cambio: DATETIME
+  o id_usuario_cambio: INT [FK]
+}
+
+' ============================================================
+' DONACIONES Y CAUSAS SOCIALES
+' ============================================================
+
+class CAUSA_SOCIAL {
+  --
+  # id_causa: INT [PK]
+  --
+  * nombre: VARCHAR(100) [UNIQUE]
+  o descripcion: TEXT
+  * estado: VARCHAR(10)
+  {CHECK: activa, inactiva}
+  o fecha_creacion: DATETIME
+  o fecha_desactivacion: DATETIME
+}
+
+class DONACION {
+  --
+  # id_donacion: INT [PK]
+  * id_pedido: INT [FK]
+  * id_causa: INT [FK]
+  --
+  * monto: DECIMAL(10,2)
+  * porcentaje: INT [DEFAULT: 10, CHECK: 10]
+  * estado_conciliacion: VARCHAR(20) [INDEXED]
+  {CHECK: pendiente, confirmado, rechazado}
+  * fecha: DATETIME [INDEXED]
+  o timestamp_confirmacion: DATETIME
+  o fecha_acreditacion: DATETIME
+}
+
+' ============================================================
+' NOTIFICACIONES Y WEBHOOKS
+' ============================================================
+
+class NOTIFICACION {
+  --
+  # id_notificacion: INT [PK]
+  * id_usuario: INT [FK]
+  o id_pedido: INT [FK]
+  --
+  * tipo: VARCHAR(30)
+  {CHECK: confirmacion_compra, devoluccion, recomendacion, qr_generado, donacion}
+  * canal: VARCHAR(20)
+  {CHECK: email, sms, push, whatsapp}
+  * contenido: TEXT
+  * estado: VARCHAR(20) [INDEXED]
+  {CHECK: pendiente, enviada, entregada, fallida, rechazada}
+  * fecha_envio: DATETIME [INDEXED]
+  * event_id_idempotente: VARCHAR(255) [UNIQUE, INDEXED]
+  o fecha_intento_envio: DATETIME
+  o numero_reintentos: INT [DEFAULT: 0]
+}
+
+class NOTIFICACION_FALLIDA {
+  --
+  # id_notificacion_fallida: INT [PK]
+  * id_notificacion: INT [FK]
+  --
+  * codigo_error: VARCHAR(50)
+  * mensaje_error: TEXT
+  * timestamp_fallo: DATETIME [INDEXED]
+  o timestamp_ultimo_retry: DATETIME
+  o numero_retries: INT
+  * max_retries: INT [DEFAULT: 5]
+  * estado_dlq: VARCHAR(20) [INDEXED]
+  {CHECK: pendiente_retry, descartada, manual}
+}
+
+class WEBHOOK_PAGO {
+  --
+  # id_webhook: INT [PK]
+  * id_pedido: INT [FK]
+  --
+  * firma_hmac: VARCHAR(255)
+  * id_clave_firma: VARCHAR(255)
+  * nonce: VARCHAR(255) [UNIQUE, INDEXED]
+  * timestamp_evento: DATETIME [UNIQUE, INDEXED]
+  * timestamp_procesamiento_local: DATETIME
+  * estado: VARCHAR(20)
+  {CHECK: procesado, duplicado, rechazado, pendiente}
+  * payload_raw: LONGTEXT
+  * duplicado_detectado: BOOLEAN [DEFAULT: false]
+}
+
+' ============================================================
+' EVENT SOURCING
+' ============================================================
+
+class EVENTO_DOMINIO {
+  --
+  # id_evento_dominio: INT [PK]
+  --
+  * agregado_id: INT
+  * tipo_agregado: VARCHAR(30)
+  {CHECK: PEDIDO, USUARIO, ENTRADA, DONACION}
+  * tipo_evento: VARCHAR(30) [INDEXED]
+  {CHECK: PEDIDO_CREADO, PEDIDO_CONFIRMADO, PEDIDO_PAGADO, ENTRADA_EMITIDA, DONACION_REGISTRADA}
+  * payload: JSON
+  * version_eventos: INT
+  * timestamp_evento: DATETIME [INDEXED]
+  o timestamp_procesamiento: DATETIME
+  o id_consumidor_procesado: INT
+  * estado_procesamiento: VARCHAR(20) [INDEXED]
+  {CHECK: no_procesado, procesado, fallido, dlq}
+  o idempotency_key: VARCHAR(255) [UNIQUE]
+  o numero_retry: INT [DEFAULT: 0]
+}
+
+' ============================================================
+' CONCILIACIÓN (RNF15)
+' ============================================================
+
+class CONCILIACION_ESTADO_PEDIDO {
+  --
+  # id_conciliacion: INT [PK]
+  * id_pedido: INT [FK, INDEXED]
+  --
+  * timestamp_inicio: DATETIME [INDEXED]
+  * estado_ms_carrito: VARCHAR(20)
+  {CHECK: pendiente, confirmado, pagado, cancelado}
+  * estado_ms_donaciones: VARCHAR(20)
+  {CHECK: pendiente, registrado, acreditado}
+  * estado_ms_inventario: VARCHAR(20)
+  {CHECK: reservado, debitado, liberado}
+  * estado_coherente: BOOLEAN [GENERATED, INDEXED]
+  * lag_segundos: INT [GENERATED, INDEXED]
+  o timestamp_resolucion: DATETIME
+  o acciones_tomadas: JSON
+}
+
+' ============================================================
+' RELACIONES
+' ============================================================
+
+USUARIO "1" --> "*" CONSENTIMIENTO
+USUARIO "1" --> "*" INTENTO_AUTENTICACION
+USUARIO "1" --> "*" SESION
+USUARIO "1" --> "0..1" ELIMINACION_USUARIO
+USUARIO "1" --> "*" EXPORTACION_DATOS
+
+CONSENTIMIENTO "1" --> "*" AUDITORIA_CONSENTIMIENTO
+
+CATEGORIA "1" --> "*" EVENTO
+EVENTO "1" --> "*" TIPO_ENTRADA
+ORGANIZADOR "1" --> "*" EVENTO
+
+TIPO_ENTRADA "1" --> "*" RESERVA
+TIPO_ENTRADA "1" --> "*" ITEM_PEDIDO
+TIPO_ENTRADA "1" --> "*" ENTRADA
+
+PEDIDO "1" --> "*" ITEM_PEDIDO
+PEDIDO "1" --> "*" ENTRADA
+PEDIDO "1" --> "0..1" DONACION
+PEDIDO "1" --> "0..1" DEVOLUCCION
+PEDIDO "1" --> "*" NOTIFICACION
+PEDIDO "1" --> "*" WEBHOOK_PAGO
+PEDIDO "1" --> "*" INTENTO_PAGO
+
+COMPRADOR "1" --> "*" PEDIDO
+COMPRADOR "1" --> "*" ENTRADA : propietario
+
+DONACION "*" --> "1" CAUSA_SOCIAL
+
+NOTIFICACION "1" --> "*" NOTIFICACION_FALLIDA
+
+USUARIO "1" --> "*" AUDITORIA_QR
+ENTRADA "1" --> "*" AUDITORIA_QR
+
+WEBHOOK_PAGO "*" --> "1" PEDIDO
+
+note right of TIPO_ENTRADA
+  ⭐ Optimistic Locking
+  version_capacidad para evitar
+  race conditions (RNF01)
+end note
+
+note right of INTENTO_PAGO
+  ⭐ Idempotencia (RF-6.2)
+  Reintentos retornan misma
+  respuesta sin duplicar
+end note
+
+note right of WEBHOOK_PAGO
+  ⭐ Anti-Replay (RF-6.7)
+  UNIQUE(nonce, timestamp)
+  para detectar duplicados
+end note
+
+@enduml

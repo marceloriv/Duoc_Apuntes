@@ -1,0 +1,218 @@
+erDiagram
+  USUARIO {
+    int id_usuario PK
+    varchar correo
+    varchar contrasena_hash
+    varchar nombre
+    varchar apellido
+    enum rol
+    enum estado
+    datetime fecha_registro
+    datetime fecha_ultimo_acceso
+  }
+  CONSENTIMIENTO {
+    int id_consentimiento PK
+    int id_usuario FK
+    varchar version_politicas_aceptada
+    datetime fecha_hora_aceptacion
+    enum tipo_consentimiento
+    boolean vigente
+    datetime fecha_ultima_actualizacion
+    varchar ip_origen
+  }
+  INTENTO_AUTENTICACION {
+    int id_intento PK
+    int id_usuario FK
+    varchar correo
+    varchar ip_origen
+    datetime fecha_intento
+    enum resultado
+    int contador_fallos_cuenta
+    int contador_fallos_ip
+  }
+  SESION {
+    int id_sesion PK
+    int id_usuario FK
+    varchar refresh_token_hash
+    varchar device_fingerprint
+    varchar ip_sesion
+    datetime fecha_creacion
+    datetime fecha_expiracion
+    datetime fecha_ultimo_uso
+    boolean activa
+    varchar user_agent
+  }
+  AUDITORIA_CONSENTIMIENTO {
+    int id_auditoria_consentimiento PK
+    int id_consentimiento FK
+    int id_usuario FK
+    boolean valor_anterior
+    boolean valor_nuevo
+    enum tipo_cambio
+    datetime fecha_cambio
+    varchar razon_cambio
+    varchar ip_cambio
+  }
+  ELIMINACION_USUARIO {
+    int id_eliminacion PK
+    int id_usuario FK
+    enum fase
+    datetime fecha_inicio_bloqueo
+    datetime fecha_inicio_retencion
+    datetime fecha_prevista_purga
+    enum estado_purga
+    varchar razon_eliminacion
+  }
+  EXPORTACION_DATOS {
+    int id_exportacion PK
+    int id_usuario FK
+    varchar token_enlace
+    enum formato
+    datetime fecha_creacion
+    datetime fecha_expiracion
+    datetime fecha_descarga
+    varchar ip_descarga
+    enum estado
+  }
+  CATEGORIA {
+    int id_categoria PK
+    varchar nombre
+    varchar descripcion
+    enum estado
+  }
+  EVENTO {
+    int id_evento PK
+    int id_organizador FK
+    int id_categoria FK
+    varchar nombre
+    text descripcion
+    date fecha_inicio
+    date fecha_fin
+    time hora_inicio
+    time hora_fin
+    varchar locacion
+    enum estado
+    varchar motivo_cancelacion
+    datetime fecha_creacion
+  }
+  TIPO_ENTRADA {
+    int id_tipo PK
+    int id_evento FK
+    varchar nombre
+    decimal precio
+    int capacidad_total
+    int capacidad_disponible
+    int capacidad_reservada
+    datetime fecha_creacion
+  }
+  RESERVA {
+    int id_reserva PK
+    int id_tipo_entrada FK
+    int id_usuario FK
+    int cantidad
+    datetime expira_en
+    enum estado
+    datetime fecha_creacion
+  }
+  PEDIDO {
+    int id_pedido PK
+    int id_usuario FK
+    decimal total
+    decimal monto_donacion
+    decimal monto_pagado
+    enum estado
+    datetime fecha_compra
+    varchar idempotency_key
+    datetime fecha_confirmacion_pago
+  }
+  ITEM_PEDIDO {
+    int id_item PK
+    int id_pedido FK
+    int id_tipo_entrada FK
+    int cantidad
+    decimal precio_unitario
+    decimal subtotal
+  }
+  ENTRADA {
+    int id_entrada PK
+    int id_pedido FK
+    int id_tipo_entrada FK
+    varchar codigo_qr
+    varchar codigo_qr_anterior
+    enum estado
+    datetime fecha_emision
+    datetime fecha_revocacion
+    datetime timestamp_uso
+    varchar ip_validacion
+    int numero_reemision
+  }
+  DONACION {
+    int id_donacion PK
+    int id_pedido FK
+    int id_causa FK
+    decimal monto
+    int porcentaje
+    enum estado_conciliacion
+    datetime fecha
+    datetime timestamp_confirmacion
+    datetime fecha_acreditacion
+  }
+  CAUSA_SOCIAL {
+    int id_causa PK
+    varchar nombre
+    text descripcion
+    enum estado
+    datetime fecha_creacion
+    datetime fecha_desactivacion
+  }
+  NOTIFICACION {
+    int id_notificacion PK
+    int id_usuario FK
+    int id_pedido
+    enum tipo
+    enum canal
+    text contenido
+    enum estado
+    datetime fecha_envio
+    varchar event_id_idempotente
+    datetime fecha_intento_envio
+    int numero_reintentos
+  }
+  WEBHOOK_PAGO {
+    int id_webhook PK
+    int id_pedido FK
+    varchar firma_hmac
+    varchar id_clave_firma
+    varchar nonce
+    datetime timestamp_evento
+    datetime timestamp_procesamiento_local
+    enum estado
+    text payload_raw
+    boolean duplicado_detectado
+  }
+
+  USUARIO ||--o{ EVENTO : "organiza"
+  USUARIO ||--o{ CONSENTIMIENTO : "otorga"
+  USUARIO ||--o{ INTENTO_AUTENTICACION : "intenta_acceso"
+  USUARIO ||--o{ SESION : "inicia"
+  USUARIO ||--o| ELIMINACION_USUARIO : "solicita_eliminacion"
+  USUARIO ||--o{ EXPORTACION_DATOS : "exporta_datos"
+  USUARIO ||--o{ RESERVA : "genera"
+  USUARIO ||--o{ PEDIDO : "realiza"
+  USUARIO ||--o{ NOTIFICACION : "recibe"
+  
+  CONSENTIMIENTO ||--o{ AUDITORIA_CONSENTIMIENTO : "audita_cambios"
+  
+  CATEGORIA ||--o{ EVENTO : "clasifica"
+  EVENTO ||--|{ TIPO_ENTRADA : "define"
+  TIPO_ENTRADA ||--o{ RESERVA : "reserva"
+  TIPO_ENTRADA ||--o{ ITEM_PEDIDO : "incluido_en"
+  TIPO_ENTRADA ||--o{ ENTRADA : "corresponde_a"
+  
+  PEDIDO ||--|{ ITEM_PEDIDO : "contiene"
+  PEDIDO ||--|{ ENTRADA : "genera"
+  PEDIDO ||--o| DONACION : "origina"
+  PEDIDO ||--o{ NOTIFICACION : "dispara"
+  PEDIDO ||--o{ WEBHOOK_PAGO : "confirma"
+  
+  CAUSA_SOCIAL ||--o{ DONACION : "recibe"

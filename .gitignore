@@ -1,0 +1,18 @@
+# Obsidian
+.obsidian/workspace.json
+.obsidian/workspace
+.obsidian/cache
+
+# Make.md & Superstate
+.makemd/
+
+# Space state & databases
+.space/
+
+# Trash
+.trash/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini

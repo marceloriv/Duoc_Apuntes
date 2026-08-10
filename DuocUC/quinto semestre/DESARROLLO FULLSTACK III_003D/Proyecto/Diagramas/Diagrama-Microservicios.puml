@@ -1,0 +1,175 @@
+@startuml DiagramaMicroservicios
+left to right direction
+skinparam backgroundColor #F5F5F7
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam classBackgroundColor #ECE8F6
+skinparam classBorderColor #7E74A8
+skinparam ArrowColor #646B75
+skinparam defaultFontName "Segoe UI"
+
+class Usuario as "Usuario" <<actor>>
+class Comprador <<actor>>
+class Organizador <<actor>>
+
+Comprador --|> Usuario
+Organizador --|> Usuario
+
+package "Microservicio Usuario" as MSUsuario {
+  class ControladorUsuario {
+    +registrar(datos)
+    +login(credenciales)
+    +asignarRol(usuarioId, rol)
+    +aceptarTerminos(usuarioId, rol)
+  }
+
+  class ServicioUsuario {
+    +crearCuenta(datos)
+    +autenticar(credenciales)
+    +actualizarRol(usuarioId, rol)
+    +registrarAceptacionTerminos(usuarioId, rol)
+  }
+
+  class BaseDatosUsuario <<database>>
+}
+
+package "Microservicio Eventos" as MSEventos {
+  class ControladorEvento {
+    +listarEventos()
+    +obtenerDetalle(eventoId)
+    +crearEvento(solicitud)
+  }
+
+  class ServicioEvento {
+    +gestionarDetalles(evento)
+    +asignarCategorias(evento, categorias)
+    +definirLocacion(evento, locacion)
+    +definirCapacidad(evento, capacidad)
+  }
+
+  class BaseDatosEvento <<database>>
+}
+
+package "Microservicio Carrito de Compras" as MSCarrito {
+  class ControladorCarrito {
+    +seleccionarEntrada(usuarioId, eventoId, cantidad)
+    +obtenerCarrito(usuarioId)
+    +confirmarCompra(usuarioId)
+  }
+
+  class ServicioCarrito {
+    +validarLimiteEntradas(cantidad)
+    +calcularTotal(carrito)
+    +integrarDonacion(carrito, causa)
+  }
+
+  class ReglaLimiteEntradas {
+    +maximoEntradasPorCompra(): 4
+  }
+
+  class BaseDatosCarrito <<database>>
+}
+
+package "Microservicio Donaciones" as MSDonaciones {
+  class ControladorDonacion {
+    +calcularDonacion(totalCompra)
+    +asociarCausa(causaId)
+    +registrarDonacion(transaccionId)
+  }
+
+  class ServicioDonacion {
+    +obtenerPorcentajeDonacion(): 10
+    +calcularMonto(totalCompra)
+    +persistirDonacion(transaccionId, causa, monto)
+  }
+
+  class BaseDatosDonacion <<database>>
+}
+
+package "Microservicio Mensajeria" as MSMensajeria {
+  class ControladorMensajeria {
+    +enviarQR(compraId)
+    +enviarConfirmacion(compraId)
+    +enviarNotificacionDevolucion(compraId)
+    +enviarRecomendacionesOpcionales(usuarioId)
+  }
+
+  class ServicioMensajeria {
+    +generarQR(compra)
+    +construirMensajeConfirmacion(compra)
+    +construirMensajeDevolucion(compra)
+    +construirRecomendaciones(usuario)
+  }
+
+  class BaseDatosMensajeria <<database>>
+}
+
+' Relaciones internas
+ControladorUsuario --> ServicioUsuario
+ServicioUsuario --> BaseDatosUsuario
+
+ControladorEvento --> ServicioEvento
+ServicioEvento --> BaseDatosEvento
+
+ControladorCarrito --> ServicioCarrito
+ServicioCarrito --> ReglaLimiteEntradas
+ServicioCarrito --> BaseDatosCarrito
+
+ControladorDonacion --> ServicioDonacion
+ServicioDonacion --> BaseDatosDonacion
+
+ControladorMensajeria --> ServicioMensajeria
+ServicioMensajeria --> BaseDatosMensajeria
+
+' Integraciones entre microservicios
+ServicioCarrito ..> ServicioEvento : consulta disponibilidad/capacidad
+ServicioCarrito ..> ServicioDonacion : integra donacion (10%)
+ServicioCarrito ..> ServicioMensajeria : solicita QR y confirmacion
+ServicioDonacion ..> ServicioMensajeria : confirma donacion/causa
+
+' Actores
+Usuario --> ControladorUsuario : registro/login
+Comprador --> ControladorUsuario : acepta terminos (rol comprador)
+Organizador --> ControladorUsuario : acepta terminos (rol organizador)
+Usuario --> ControladorEvento : ver detalles de eventos
+Comprador --> ControladorCarrito : seleccionar entradas (max 4)
+
+note bottom of MSUsuario
+Incluye:
+- registro
+- login
+- gestion de roles
+- aceptacion de terminos por rol
+  (comprador y organizador)
+end note
+
+note bottom of MSEventos
+Gestiona:
+- detalles
+- categorias
+- locacion
+- capacidad
+end note
+
+note bottom of MSCarrito
+Reglas:
+- seleccion de entradas
+- limite de 4 entradas por compra
+- integracion con donaciones
+end note
+
+note bottom of MSDonaciones
+Regla de negocio:
+- 10% de la compra total se destina
+  a la causa seleccionada.
+end note
+
+note bottom of MSMensajeria
+Mensajes:
+- envio de QR
+- confirmaciones
+- devoluciones
+- recomendaciones opcionales
+end note
+
+@enduml

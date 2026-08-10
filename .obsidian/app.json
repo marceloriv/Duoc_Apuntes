@@ -1,0 +1,12 @@
+{
+  "pdfExportSettings": {
+    "pageSize": "Letter",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 80
+  },
+  "promptDelete": false,
+  "newFileLocation": "current",
+  "attachmentFolderPath": "./Adjuntos",
+  "alwaysUpdateLinks": true
+}

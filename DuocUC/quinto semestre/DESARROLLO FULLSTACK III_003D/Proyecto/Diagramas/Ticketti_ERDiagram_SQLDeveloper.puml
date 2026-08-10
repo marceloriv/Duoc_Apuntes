@@ -1,0 +1,348 @@
+@startuml Ticketti_DataModel_LikeSQL
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam classFontColor #000066
+skinparam classBorderColor #0066CC
+skinparam classBackgroundColor #ADD8E6
+skinparam classArrowColor #0066CC
+skinparam linetype ortho
+
+' ============================================================
+' CORE - USUARIO (Supertipo)
+' ============================================================
+
+class USUARIO {
+  --
+  # id_usuario: INT [PK]
+  --
+  * correo: VARCHAR(255) [UNIQUE]
+  * contrasena_hash: VARCHAR(255)
+  * nombre: VARCHAR(100)
+  * apellido: VARCHAR(100)
+  * estado: VARCHAR(20) [activo|bloqueado|suspendido|eliminado]
+  o fecha_registro: DATETIME
+  o fecha_ultimo_acceso: DATETIME
+}
+
+' ============================================================
+' SUBTIPOS DE USUARIO
+' ============================================================
+
+class ADMINISTRADOR {
+  --
+  # id_usuario: INT [PK, FK]
+  --
+  * nivel_permiso: VARCHAR(20) [super_admin|admin_plataforma]
+  * fecha_asignacion_rol: DATETIME
+}
+
+class ORGANIZADOR {
+  --
+  # id_usuario: INT [PK, FK]
+  --
+  * nombre_organizacion: VARCHAR(255)
+  o rut_organizacion: VARCHAR(20)
+  * cuenta_bancaria_validada: BOOLEAN
+  o fecha_validacion_cuenta: DATETIME
+  o total_eventos_creados: INT
+}
+
+class COMPRADOR {
+  --
+  # id_usuario: INT [PK, FK]
+  --
+  * documentacion_valida: BOOLEAN
+  o fecha_ultima_compra: DATETIME
+  o total_gastado: DECIMAL
+  o numero_compras: INT
+}
+
+ADMINISTRADOR --|> USUARIO
+ORGANIZADOR --|> USUARIO
+COMPRADOR --|> USUARIO
+
+' ============================================================
+' AUTENTICACIÓN Y SEGURIDAD
+' ============================================================
+
+class CONSENTIMIENTO {
+  --
+  # id_consentimiento: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * version_politicas_aceptada: VARCHAR(20)
+  * fecha_hora_aceptacion: DATETIME
+  * tipo_consentimiento: ENUM
+  * vigente: BOOLEAN
+  * fecha_ultima_actualizacion: DATETIME
+  o ip_origen: VARCHAR(45)
+}
+
+class INTENTO_AUTENTICACION {
+  --
+  # id_intento: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * correo: VARCHAR(255)
+  * ip_origen: VARCHAR(45)
+  * fecha_intento: DATETIME
+  * resultado: ENUM
+  o contador_fallos_cuenta: INT
+  o contador_fallos_ip: INT
+}
+
+class SESION {
+  --
+  # id_sesion: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * refresh_token_hash: VARCHAR(255)
+  * device_fingerprint: VARCHAR(255)
+  * ip_sesion: VARCHAR(45)
+  * fecha_creacion: DATETIME
+  * fecha_expiracion: DATETIME
+  o fecha_ultimo_uso: DATETIME
+  * activa: BOOLEAN
+  o user_agent: TEXT
+}
+
+class AUDITORIA_CONSENTIMIENTO {
+  --
+  # id_auditoria_consentimiento: INT [PK]
+  * id_consentimiento: INT [FK]
+  * id_usuario: INT [FK]
+  --
+  o valor_anterior: BOOLEAN
+  * valor_nuevo: BOOLEAN
+  * tipo_cambio: ENUM
+  * fecha_cambio: DATETIME
+  o razon_cambio: VARCHAR(255)
+  o ip_cambio: VARCHAR(45)
+}
+
+class ELIMINACION_USUARIO {
+  --
+  # id_eliminacion: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * fase: ENUM
+  * fecha_inicio_bloqueo: DATETIME
+  o fecha_inicio_retencion: DATETIME
+  * fecha_prevista_purga: DATETIME
+  * estado_purga: ENUM
+  o razon_eliminacion: VARCHAR(255)
+}
+
+class EXPORTACION_DATOS {
+  --
+  # id_exportacion: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * token_enlace: VARCHAR(255)
+  * formato: ENUM
+  * fecha_creacion: DATETIME
+  * fecha_expiracion: DATETIME
+  o fecha_descarga: DATETIME
+  o ip_descarga: VARCHAR(45)
+  * estado: ENUM
+}
+
+' ============================================================
+' EVENTOS
+' ============================================================
+
+class CATEGORIA {
+  --
+  # id_categoria: INT [PK]
+  --
+  * nombre: VARCHAR(100)
+  o descripcion: TEXT
+  * estado: ENUM
+}
+
+class EVENTO {
+  --
+  # id_evento: INT [PK]
+  * id_organizador: INT [FK]
+  * id_categoria: INT [FK]
+  --
+  * nombre: VARCHAR(255)
+  o descripcion: TEXT
+  * fecha_inicio: DATE
+  * fecha_fin: DATE
+  * hora_inicio: TIME
+  * hora_fin: TIME
+  * locacion: VARCHAR(255)
+  * estado: ENUM
+  o motivo_cancelacion: VARCHAR(255)
+  o fecha_creacion: DATETIME
+}
+
+class TIPO_ENTRADA {
+  --
+  # id_tipo: INT [PK]
+  * id_evento: INT [FK]
+  --
+  * nombre: VARCHAR(100)
+  * precio: DECIMAL(10,2)
+  * capacidad_total: INT
+  * capacidad_disponible: INT
+  * capacidad_reservada: INT
+  o fecha_creacion: DATETIME
+}
+
+class RESERVA {
+  --
+  # id_reserva: INT [PK]
+  * id_tipo_entrada: INT [FK]
+  * id_usuario: INT [FK]
+  --
+  * cantidad: INT
+  * expira_en: DATETIME
+  * estado: ENUM
+  o fecha_creacion: DATETIME
+}
+
+' ============================================================
+' COMPRA Y TRANSACCIONES
+' ============================================================
+
+class PEDIDO {
+  --
+  # id_pedido: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * total: DECIMAL(10,2)
+  * monto_donacion: DECIMAL(10,2)
+  o monto_pagado: DECIMAL(10,2)
+  * estado: ENUM
+  * fecha_compra: DATETIME
+  * idempotency_key: VARCHAR(255)
+  o fecha_confirmacion_pago: DATETIME
+}
+
+class ITEM_PEDIDO {
+  --
+  # id_item: INT [PK]
+  * id_pedido: INT [FK]
+  * id_tipo_entrada: INT [FK]
+  --
+  * cantidad: INT
+  * precio_unitario: DECIMAL(10,2)
+  * subtotal: DECIMAL(10,2)
+}
+
+class ENTRADA {
+  --
+  # id_entrada: INT [PK]
+  * id_pedido: INT [FK]
+  * id_tipo_entrada: INT [FK]
+  --
+  * codigo_qr: VARCHAR(255)
+  o codigo_qr_anterior: VARCHAR(255)
+  * estado: ENUM
+  * fecha_emision: DATETIME
+  o fecha_revocacion: DATETIME
+  o timestamp_uso: DATETIME
+  o ip_validacion: VARCHAR(45)
+  o numero_reemision: INT
+}
+
+' ============================================================
+' DONACIONES Y CAUSAS SOCIALES
+' ============================================================
+
+class CAUSA_SOCIAL {
+  --
+  # id_causa: INT [PK]
+  --
+  * nombre: VARCHAR(100)
+  o descripcion: TEXT
+  * estado: ENUM
+  o fecha_creacion: DATETIME
+  o fecha_desactivacion: DATETIME
+}
+
+class DONACION {
+  --
+  # id_donacion: INT [PK]
+  * id_pedido: INT [FK]
+  * id_causa: INT [FK]
+  --
+  * monto: DECIMAL(10,2)
+  * porcentaje: INT
+  * estado_conciliacion: ENUM
+  * fecha: DATETIME
+  o timestamp_confirmacion: DATETIME
+  o fecha_acreditacion: DATETIME
+}
+
+' ============================================================
+' NOTIFICACIONES Y WEBHOOKS
+' ============================================================
+
+class NOTIFICACION {
+  --
+  # id_notificacion: INT [PK]
+  * id_usuario: INT [FK]
+  o id_pedido: INT [FK]
+  --
+  * tipo: ENUM
+  * canal: ENUM
+  * contenido: TEXT
+  * estado: ENUM
+  * fecha_envio: DATETIME
+  * event_id_idempotente: VARCHAR(255)
+  o fecha_intento_envio: DATETIME
+  o numero_reintentos: INT
+}
+
+class WEBHOOK_PAGO {
+  --
+  # id_webhook: INT [PK]
+  * id_pedido: INT [FK]
+  --
+  * firma_hmac: VARCHAR(255)
+  * id_clave_firma: VARCHAR(255)
+  * nonce: VARCHAR(255)
+  * timestamp_evento: DATETIME
+  * timestamp_procesamiento_local: DATETIME
+  * estado: ENUM
+  * payload_raw: LONGTEXT
+  * duplicado_detectado: BOOLEAN
+}
+
+' ============================================================
+' RELACIONES
+' ============================================================
+
+USUARIO "1" --> "*" CONSENTIMIENTO
+USUARIO "1" --> "*" INTENTO_AUTENTICACION
+USUARIO "1" --> "*" SESION
+USUARIO "1" --> "0..1" ELIMINACION_USUARIO
+USUARIO "1" --> "*" EXPORTACION_DATOS
+
+CONSENTIMIENTO "1" --> "*" AUDITORIA_CONSENTIMIENTO
+
+CATEGORIA "1" --> "*" EVENTO
+EVENTO "1" --> "*" TIPO_ENTRADA
+ORGANIZADOR "1" --> "*" EVENTO
+
+TIPO_ENTRADA "1" --> "*" RESERVA
+RESERVA "*" --> "1" USUARIO
+
+TIPO_ENTRADA "1" --> "*" ITEM_PEDIDO
+PEDIDO "1" --> "*" ITEM_PEDIDO
+PEDIDO "1" --> "*" ENTRADA
+ENTRADA "*" --> "1" TIPO_ENTRADA
+
+COMPRADOR "1" --> "*" PEDIDO
+PEDIDO "1" --> "0..1" DONACION
+DONACION "*" --> "1" CAUSA_SOCIAL
+
+NOTIFICACION "*" --> "1" USUARIO
+NOTIFICACION "*" --> "0..1" PEDIDO
+
+WEBHOOK_PAGO "*" --> "1" PEDIDO
+
+@enduml

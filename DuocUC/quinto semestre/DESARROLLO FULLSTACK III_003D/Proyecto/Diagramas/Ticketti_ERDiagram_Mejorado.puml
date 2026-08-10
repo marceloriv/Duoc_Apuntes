@@ -1,0 +1,531 @@
+@startuml Ticketti_ERDiagram_Mejorado
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam classFontColor #000066
+skinparam classBorderColor #0066CC
+skinparam classBackgroundColor #ADD8E6
+skinparam classArrowColor #0066CC
+skinparam linetype ortho
+
+' ============================================================
+' USUARIO (Supertipo)
+' ============================================================
+
+class USUARIO {
+  --
+  # id_usuario: INT [PK]
+  --
+  * correo: VARCHAR(255) [UNIQUE]
+  * contrasena_hash: VARCHAR(255)
+  * nombre: VARCHAR(100)
+  * apellido: VARCHAR(100)
+  * estado: ENUM
+  o fecha_registro: DATETIME
+  o fecha_ultimo_acceso: DATETIME
+  o fecha_ultimo_cambio_estado: DATETIME
+  o razon_cambio_estado: VARCHAR(255)
+  o ip_registro: VARCHAR(45)
+  o intentos_fallidos_actual: INT
+  o fecha_proximo_intento_permitido: DATETIME
+  o usuario_que_cambio_rol: INT [FK]
+}
+
+' ============================================================
+' SUBTIPOS DE USUARIO
+' ============================================================
+
+class ADMINISTRADOR {
+  --
+  # id_usuario: INT [PK, FK]
+  --
+  * nivel_permiso: ENUM
+  * fecha_asignacion_rol: DATETIME
+}
+
+class ORGANIZADOR {
+  --
+  # id_usuario: INT [PK, FK]
+  --
+  * nombre_organizacion: VARCHAR(255)
+  o rut_organizacion: VARCHAR(20)
+  * cuenta_bancaria_validada: BOOLEAN
+  o fecha_validacion_cuenta: DATETIME
+  o total_eventos_creados: INT
+}
+
+class COMPRADOR {
+  --
+  # id_usuario: INT [PK, FK]
+  --
+  * documentacion_valida: BOOLEAN
+  o fecha_ultima_compra: DATETIME
+  o total_gastado: DECIMAL
+  o numero_compras: INT
+}
+
+ADMINISTRADOR --|> USUARIO
+ORGANIZADOR --|> USUARIO
+COMPRADOR --|> USUARIO
+
+' ============================================================
+' AUTENTICACIÓN Y SEGURIDAD
+' ============================================================
+
+class CONSENTIMIENTO {
+  --
+  # id_consentimiento: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * version_politicas_aceptada: VARCHAR(20)
+  * fecha_hora_aceptacion: DATETIME
+  * tipo_consentimiento: ENUM
+  * vigente: BOOLEAN
+  * fecha_ultima_actualizacion: DATETIME
+  o ip_origen: VARCHAR(45)
+}
+
+class INTENTO_AUTENTICACION {
+  --
+  # id_intento: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * correo: VARCHAR(255)
+  * ip_origen: VARCHAR(45) [INDEXED]
+  * fecha_intento: DATETIME
+  * resultado: ENUM
+  o contador_fallos_cuenta: INT
+  o contador_fallos_ip: INT
+}
+
+class SESION {
+  --
+  # id_sesion: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * refresh_token_hash: VARCHAR(255)
+  * device_fingerprint: VARCHAR(255)
+  * ip_sesion: VARCHAR(45)
+  * fecha_creacion: DATETIME
+  * fecha_expiracion: DATETIME
+  o fecha_ultimo_uso: DATETIME
+  * activa: BOOLEAN [INDEXED]
+  o user_agent: TEXT
+}
+
+class AUDITORIA_CONSENTIMIENTO {
+  --
+  # id_auditoria_consentimiento: INT [PK]
+  * id_consentimiento: INT [FK]
+  * id_usuario: INT [FK]
+  --
+  o valor_anterior: BOOLEAN
+  * valor_nuevo: BOOLEAN
+  * tipo_cambio: ENUM
+  * fecha_cambio: DATETIME [INDEXED]
+  o razon_cambio: VARCHAR(255)
+  o ip_cambio: VARCHAR(45)
+}
+
+class ELIMINACION_USUARIO {
+  --
+  # id_eliminacion: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * fase: ENUM
+  * fecha_inicio_bloqueo: DATETIME
+  o fecha_inicio_retencion: DATETIME
+  * fecha_prevista_purga: DATETIME
+  * estado_purga: ENUM
+  o razon_eliminacion: VARCHAR(255)
+}
+
+class EXPORTACION_DATOS {
+  --
+  # id_exportacion: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * token_enlace: VARCHAR(255)
+  * formato: ENUM
+  * fecha_creacion: DATETIME
+  * fecha_expiracion: DATETIME
+  o fecha_descarga: DATETIME
+  o ip_descarga: VARCHAR(45)
+  * estado: ENUM
+}
+
+class INTENTO_PAGO {
+  --
+  # id_intento_pago: INT [PK]
+  * id_pedido: INT [FK]
+  --
+  * idempotency_key: VARCHAR(255) [UNIQUE]
+  * timestamp_intento: DATETIME
+  o timestamp_respuesta: DATETIME
+  * estado_respuesta: ENUM
+  * payload_respuesta: LONGTEXT
+  o numero_intento: INT
+}
+
+' ============================================================
+' EVENTOS E INVENTARIO
+' ============================================================
+
+class CATEGORIA {
+  --
+  # id_categoria: INT [PK]
+  --
+  * nombre: VARCHAR(100) [UNIQUE]
+  o descripcion: TEXT
+  * estado: ENUM
+}
+
+class EVENTO {
+  --
+  # id_evento: INT [PK]
+  * id_organizador: INT [FK]
+  * id_categoria: INT [FK]
+  --
+  * nombre: VARCHAR(255)
+  o descripcion: TEXT
+  * fecha_inicio: DATE [INDEXED]
+  * fecha_fin: DATE
+  * hora_inicio: TIME
+  * hora_fin: TIME
+  * locacion: VARCHAR(255)
+  * estado: ENUM
+  o motivo_cancelacion: VARCHAR(255)
+  o fecha_creacion: DATETIME
+  o fecha_ultima_modificacion: DATETIME
+  o usuario_que_modifico: INT [FK]
+  o fecha_publicacion: DATETIME
+  o fecha_cancelacion: DATETIME
+  o es_cancelacion_por_admin: BOOLEAN
+}
+
+class TIPO_ENTRADA {
+  --
+  # id_tipo: INT [PK]
+  * id_evento: INT [FK]
+  --
+  * nombre: VARCHAR(100)
+  * precio: DECIMAL(10,2)
+  * capacidad_total: INT
+  * capacidad_disponible: INT [INDEXED]
+  * capacidad_reservada: INT
+  * version_capacidad: INT [DEFAULT=1] ⭐ OPTIMISTIC LOCKING
+  o fecha_creacion: DATETIME
+}
+
+class RESERVA {
+  --
+  # id_reserva: INT [PK]
+  * id_tipo_entrada: INT [FK]
+  * id_usuario: INT [FK]
+  --
+  * cantidad: INT
+  * expira_en: DATETIME [INDEXED]
+  * estado: ENUM [INDEXED]
+  o fecha_creacion: DATETIME
+}
+
+' ============================================================
+' COMPRA Y TRANSACCIONES
+' ============================================================
+
+class PEDIDO {
+  --
+  # id_pedido: INT [PK]
+  * id_usuario: INT [FK]
+  --
+  * total: DECIMAL(10,2)
+  * monto_donacion: DECIMAL(10,2)
+  o monto_pagado: DECIMAL(10,2)
+  * estado: ENUM [INDEXED]
+  * fecha_compra: DATETIME [INDEXED]
+  * idempotency_key: VARCHAR(255) [UNIQUE]
+  o fecha_confirmacion_pago: DATETIME
+  o ip_cliente: VARCHAR(45) ⭐ AUDITORÍA
+  o user_agent: VARCHAR(500) ⭐ AUDITORÍA
+  o ubicacion_geografica: VARCHAR(100)
+  o dispositivo_tipo: ENUM
+  o duracion_checkout: INT
+  o intentos_pago: INT
+}
+
+class ITEM_PEDIDO {
+  --
+  # id_item: INT [PK]
+  * id_pedido: INT [FK]
+  * id_tipo_entrada: INT [FK]
+  --
+  * cantidad: INT
+  * precio_unitario: DECIMAL(10,2)
+  * subtotal: DECIMAL(10,2)
+}
+
+class ENTRADA {
+  --
+  # id_entrada: INT [PK]
+  * id_pedido: INT [FK]
+  * id_tipo_entrada: INT [FK]
+  * id_usuario_propietario: INT [FK] ⭐ NUEVO
+  --
+  * codigo_qr: VARCHAR(255) [UNIQUE, INDEXED]
+  o codigo_qr_anterior: VARCHAR(255)
+  * estado: ENUM [INDEXED]
+  * fecha_emision: DATETIME
+  o fecha_revocacion: DATETIME
+  o timestamp_uso: DATETIME
+  o ip_validacion: VARCHAR(45)
+  o numero_reemision: INT
+  o secuencia_qr: INT ⭐ PARA REEMISIONES
+}
+
+class AUDITORIA_QR {
+  --
+  # id_auditoria_qr: INT [PK]
+  * id_entrada: INT [FK]
+  --
+  o codigo_qr_anterior: VARCHAR(255)
+  * codigo_qr_nuevo: VARCHAR(255)
+  * secuencia: INT
+  * motivo: ENUM
+  * timestamp_cambio: DATETIME
+  o usuario_que_cambio: INT [FK]
+}
+
+class DEVOLUCCION {
+  --
+  # id_devoluccion: INT [PK]
+  * id_pedido: INT [FK, UNIQUE]
+  * id_usuario: INT [FK]
+  --
+  * monto_solicitado: DECIMAL(10,2)
+  o monto_reembolsado: DECIMAL(10,2)
+  * porcentaje_reembolso: INT [DEFAULT=85]
+  * estado: ENUM [INDEXED]
+  o motivo_rechazo: VARCHAR(255)
+  * fecha_solicitud: DATETIME
+  o fecha_aprobacion: DATETIME
+  o fecha_procesamiento: DATETIME
+  o dias_previos_evento: INT [GENERATED]
+}
+
+' ============================================================
+' DONACIONES Y CAUSAS SOCIALES
+' ============================================================
+
+class CAUSA_SOCIAL {
+  --
+  # id_causa: INT [PK]
+  --
+  * nombre: VARCHAR(100) [UNIQUE]
+  o descripcion: TEXT
+  * estado: ENUM
+  o fecha_creacion: DATETIME
+  o fecha_desactivacion: DATETIME
+}
+
+class DONACION {
+  --
+  # id_donacion: INT [PK]
+  * id_pedido: INT [FK]
+  * id_causa: INT [FK]
+  --
+  * monto: DECIMAL(10,2)
+  * porcentaje: INT [DEFAULT=10, CHECK=10]
+  * estado_conciliacion: ENUM [INDEXED]
+  * fecha: DATETIME [INDEXED]
+  o timestamp_confirmacion: DATETIME
+  o fecha_acreditacion: DATETIME
+}
+
+' ============================================================
+' NOTIFICACIONES Y WEBHOOKS
+' ============================================================
+
+class NOTIFICACION {
+  --
+  # id_notificacion: INT [PK]
+  * id_usuario: INT [FK]
+  o id_pedido: INT [FK]
+  --
+  * tipo: ENUM
+  * canal: ENUM
+  * contenido: TEXT
+  * estado: ENUM [INDEXED]
+  * fecha_envio: DATETIME [INDEXED]
+  * event_id_idempotente: VARCHAR(255) [UNIQUE, INDEXED]
+  o fecha_intento_envio: DATETIME
+  o numero_reintentos: INT
+}
+
+class NOTIFICACION_FALLIDA {
+  --
+  # id_notificacion_fallida: INT [PK]
+  * id_notificacion: INT [FK] ⭐ DLQ
+  --
+  * codigo_error: VARCHAR(50)
+  * mensaje_error: TEXT
+  * timestamp_fallo: DATETIME [INDEXED]
+  o timestamp_ultimo_retry: DATETIME
+  o numero_retries: INT
+  * max_retries: INT [DEFAULT=5]
+  * estado_dlq: ENUM [INDEXED]
+}
+
+class WEBHOOK_PAGO {
+  --
+  # id_webhook: INT [PK]
+  * id_pedido: INT [FK]
+  --
+  * firma_hmac: VARCHAR(255)
+  * id_clave_firma: VARCHAR(255)
+  * nonce: VARCHAR(255) [UNIQUE, INDEXED] ⭐ ANTI-REPLAY
+  * timestamp_evento: DATETIME [UNIQUE, INDEXED] ⭐ ANTI-REPLAY
+  * timestamp_procesamiento_local: DATETIME
+  * estado: ENUM
+  * payload_raw: LONGTEXT
+  * duplicado_detectado: BOOLEAN
+}
+
+' ============================================================
+' EVENT SOURCING (INTEGRIDAD ASÍNCRONA)
+' ============================================================
+
+class EVENTO_DOMINIO {
+  --
+  # id_evento_dominio: INT [PK] ⭐ EVENT SOURCING
+  --
+  * agregado_id: INT
+  * tipo_agregado: ENUM
+  * tipo_evento: ENUM [INDEXED]
+  * payload: JSON
+  * version_eventos: INT
+  * timestamp_evento: DATETIME [INDEXED]
+  o timestamp_procesamiento: DATETIME
+  o id_consumidor_procesado: INT
+  * estado_procesamiento: ENUM [INDEXED]
+  o idempotency_key: VARCHAR(255) [UNIQUE]
+  o numero_retry: INT
+  o fecha_proximo_retry: DATETIME
+}
+
+' ============================================================
+' CONCILIACIÓN (RNF15)
+' ============================================================
+
+class CONCILIACION_ESTADO_PEDIDO {
+  --
+  # id_conciliacion: INT [PK] ⭐ RNF15 CONVERGENCIA
+  * id_pedido: INT [FK, INDEXED]
+  --
+  * timestamp_inicio: DATETIME [INDEXED]
+  * estado_ms_carrito: ENUM
+  * estado_ms_donaciones: ENUM
+  * estado_ms_inventario: ENUM
+  * estado_coherente: BOOLEAN [GENERATED, INDEXED]
+  * lag_segundos: INT [GENERATED]
+  o timestamp_resolucion: DATETIME
+  o acciones_tomadas: TEXT
+}
+
+' ============================================================
+' RELACIONES
+' ============================================================
+
+USUARIO "1" --> "*" CONSENTIMIENTO
+USUARIO "1" --> "*" INTENTO_AUTENTICACION
+USUARIO "1" --> "*" SESION
+USUARIO "1" --> "0..1" ELIMINACION_USUARIO
+USUARIO "1" --> "*" EXPORTACION_DATOS
+USUARIO "1" --> "*" RESERVA
+
+CONSENTIMIENTO "1" --> "*" AUDITORIA_CONSENTIMIENTO
+
+CATEGORIA "1" --> "*" EVENTO
+EVENTO "1" --> "*" TIPO_ENTRADA
+ORGANIZADOR "1" --> "*" EVENTO
+
+TIPO_ENTRADA "1" --> "*" RESERVA
+TIPO_ENTRADA "1" --> "*" ITEM_PEDIDO
+TIPO_ENTRADA "1" --> "*" ENTRADA
+
+PEDIDO "1" --> "*" ITEM_PEDIDO
+PEDIDO "1" --> "*" ENTRADA
+PEDIDO "1" --> "0..1" DONACION
+PEDIDO "1" --> "0..1" DEVOLUCCION
+PEDIDO "1" --> "*" NOTIFICACION
+PEDIDO "1" --> "*" WEBHOOK_PAGO
+PEDIDO "1" --> "*" INTENTO_PAGO
+
+COMPRADOR "1" --> "*" PEDIDO
+COMPRADOR "1" --> "*" ENTRADA : propietario
+
+DONACION "*" --> "1" CAUSA_SOCIAL
+
+NOTIFICACION "*" --> "*" NOTIFICACION_FALLIDA
+
+USUARIO "1" --> "*" AUDITORIA_QR
+ENTRADA "1" --> "*" AUDITORIA_QR
+
+USUARIO "1" --> "*" CONCILIACION_ESTADO_PEDIDO : monitorea
+PEDIDO "1" --> "*" CONCILIACION_ESTADO_PEDIDO : rastrear
+
+note right of TIPO_ENTRADA
+  ⭐ version_capacidad
+  --
+  Implementar Optimistic Locking
+  para evitar race conditions
+  en compras concurrentes (RNF01)
+end note
+
+note right of INTENTO_PAGO
+  ⭐ IDEMPOTENCIA (RF-6.2)
+  --
+  Garantiza que reintentos
+  retornan misma respuesta
+  sin duplicar transacción
+end note
+
+note right of DEVOLUCCION
+  ⭐ RF-3.4
+  --
+  Auditoría completa de
+  reembolsos del 85%
+end note
+
+note right of AUDITORIA_QR
+  ⭐ RF-5.1
+  --
+  Cadena de reemisiones
+  QR. Cada reemisión
+  invalida anterior
+end note
+
+note right of NOTIFICACION_FALLIDA
+  ⭐ DLQ (RNF14)
+  --
+  Dead Letter Queue para
+  reintentos controlados
+  y recuperación manual
+end note
+
+note right of EVENTO_DOMINIO
+  ⭐ EVENT SOURCING
+  --
+  RNF13: Integridad eventos
+  asíncronos entre microservicios
+  Garantiza idempotencia distribuida
+end note
+
+note right of CONCILIACION_ESTADO_PEDIDO
+  ⭐ RNF15 (≤60s convergencia)
+  --
+  Monitorea coherencia de estado
+  entre MSCarrito, MSDonaciones,
+  MSInventario
+  Dispara compensaciones si falla
+end note
+
+@enduml
