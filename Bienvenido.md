@@ -3,7 +3,7 @@ sticker: emoji//1f49a
 ---
 # Guía de Markdown (en Obsidian)
 
-> [!sumary] 
+> [!sumary]
 > Referencia rápida y avanzada para escribir mejor, más rápido y con más poder dentro de mi bóveda.
 >
 
@@ -11,28 +11,42 @@ sticker: emoji//1f49a
 
 ## Índice
 
-1. [Encabezados](#1-encabezados)
-2. [Énfasis de texto](#2-énfasis-de-texto)
-3. [Párrafos, saltos y líneas horizontales](#3-párrafos-saltos-y-líneas-horizontales)
-4. [Listas (no ordenadas, ordenadas, anidadas)](#4-listas)
-5. [Listas de tareas (checkbox)](#5-listas-de-tareas-checkbox)
-6. [Citas (blockquotes)](#6-citas-y-anidación)
-7. [Código inline y bloques + resaltado](#7-código-inline-y-bloques)
-8. [Tablas](#8-tablas)
-9. [Enlaces (externos e internos)](#9-enlaces-externos-e-internos)
-10. [Imágenes e incrustaciones](#10-imágenes-y-atributos)
-11. [Referencias, notas al pie y definiciones](#11-referencias-notas-al-pie-y-definiciones)
-12. [Callouts / Admoniciones](#12-callouts--admoniciones-obsidian)
-13. [Etiquetas (tags) y enlaces a bloques](#13-etiquetas-tags-y-enlaces-anclados)
-14. [Diagramas Mermaid](#14-diagramas-mermaid)
-15. [Tabla de contenido automática](#15-tablas-de-contenido-automáticas)
-16. [Front matter (YAML)](#16-front-matter-yaml)
-17. [Matemáticas (LaTeX)](#17-matemáticas-latex)
-18. [Escape de caracteres especiales](#18-escape-de-caracteres-especiales)
-19. [Comentarios y contenido colapsable](#19-comentarios-y-contenido-colapsable)
-20. [Incrustar notas / bloques / multimedia](#20-incrustar-otros-archivos--bloques-específicos)
-21. [Buenas prácticas](#21-buenas-prácticas-y-estilo)
-22. [Ejemplo integrado final](#22-ejemplo-completo-integrado)
+- [Guía de Markdown (en Obsidian)](#guía-de-markdown-en-obsidian)
+  - [Índice](#índice)
+  - [1. Encabezados](#1-encabezados)
+  - [2. Énfasis de texto](#2-énfasis-de-texto)
+  - [3. Párrafos, saltos y líneas horizontales](#3-párrafos-saltos-y-líneas-horizontales)
+  - [4. Listas](#4-listas)
+    - [No ordenadas](#no-ordenadas)
+    - [Ordenadas](#ordenadas)
+  - [5. Listas de tareas (checkbox)](#5-listas-de-tareas-checkbox)
+  - [6. Citas y anidación](#6-citas-y-anidación)
+  - [7. Código inline y bloques](#7-código-inline-y-bloques)
+    - [Ejemplo (cronometrar script)](#ejemplo-cronometrar-script)
+  - [8. Tablas](#8-tablas)
+  - [9. Enlaces externos e internos](#9-enlaces-externos-e-internos)
+  - [10. Imágenes y atributos](#10-imágenes-y-atributos)
+  - [11. Referencias, notas al pie y definiciones](#11-referencias-notas-al-pie-y-definiciones)
+    - [Enlaces por referencia](#enlaces-por-referencia)
+    - [Notas al pie](#notas-al-pie)
+    - [Definiciones (algunos parsers)](#definiciones-algunos-parsers)
+  - [12. Callouts / Admoniciones (Obsidian)](#12-callouts--admoniciones-obsidian)
+  - [13. Etiquetas (tags) y enlaces anclados](#13-etiquetas-tags-y-enlaces-anclados)
+  - [14. Diagramas Mermaid](#14-diagramas-mermaid)
+  - [15. Tablas de contenido automáticas](#15-tablas-de-contenido-automáticas)
+  - [16. Front matter (YAML)](#16-front-matter-yaml)
+  - [17. Matemáticas (LaTeX)](#17-matemáticas-latex)
+  - [18. Escape de caracteres especiales](#18-escape-de-caracteres-especiales)
+  - [19. Comentarios y contenido colapsable](#19-comentarios-y-contenido-colapsable)
+  - [20. Incrustar otros archivos / bloques específicos](#20-incrustar-otros-archivos--bloques-específicos)
+  - [21. Buenas prácticas y estilo](#21-buenas-prácticas-y-estilo)
+  - [22. Ejemplo completo integrado](#22-ejemplo-completo-integrado)
+  - [**Admonitions** o Callouts](#admonitions-o-callouts)
+    - [Informativo y Neutros](#informativo-y-neutros)
+    - [Positivos y de Éxito](#positivos-y-de-éxito)
+    - [Advertencias y Criticos](#advertencias-y-criticos)
+    - [Otros Estilos Comunes](#otros-estilos-comunes)
+  - [Próximos pasos sugeridos](#próximos-pasos-sugeridos)
 
 ---
 
@@ -46,7 +60,6 @@ sticker: emoji//1f49a
 ##### H5
 ###### H6
 ```
-
 
 No saltes de H2 a H5 sin lógica: ayuda a accesibilidad.
 
@@ -299,7 +312,6 @@ $$
 $$
 ```
 
-
 ## 18. Escape de caracteres especiales
 
 Escapa con barra invertida: `\* \_ \# \| \[ \] \(`.
@@ -406,7 +418,6 @@ Se utilizan para añadir contexto que no es vital para la tarea principal, pero 
 >[!todo] Tareas
 >Pendientes o pasos a seguir dentro de un proceso
 
-
 ### Positivos y de Éxito
 
 Ideales para resaltar soluciones, consejos o metas alcanzadas
@@ -414,7 +425,7 @@ Ideales para resaltar soluciones, consejos o metas alcanzadas
 >[!tip] Consejo
 >Sugerencia para hacer algo de forma más eficiente
 
->[!hint] Consejo 
+>[!hint] Consejo
 >Sugerencia para hacer algo de forma más eficiente
 
 >[!success] Éxito
@@ -423,7 +434,6 @@ Ideales para resaltar soluciones, consejos o metas alcanzadas
 >[!check] Éxito
 >Confirmaciones de que algo se ha completado correctamente
 
-
 ### Advertencias y Criticos
 
 Diseñados para captar la atención de inmediato y evitar errores del usuario.
@@ -431,19 +441,19 @@ Diseñados para captar la atención de inmediato y evitar errores del usuario.
 >[!warning] Advertencia
 >Avisos sobre posibles problemas si no se tiene cuidado
 
->[!caution] Precaución 
+>[!caution] Precaución
 >Similar a la advertencia, pero suele indicar un riesgo moderado
 
 >[!danger] Peligro
 >Errores critico, fallos del sistema o acciones irreversibles
 
->[!error] Peligro 
+>[!error] Peligro
 >Errores críticos, fallos del sistema o acciones irreversibles
 
-### Otros Estilos Comunes 
+### Otros Estilos Comunes
 
 >[!abstract] Resumen
->Una síntesis rápida del contenido 
+>Una síntesis rápida del contenido
 
 >[!summary] Resumen
 >Una síntesis rápida de contenido
@@ -454,17 +464,14 @@ Diseñados para captar la atención de inmediato y evitar errores del usuario.
 >[!example] Ejemplo
 >Casos prácticos para ilustrar un concepto
 
->[!question] Pregunta 
+>[!question] Pregunta
 >Dudas comunes o secciones de ayuda
 
 >[!help] Pregunta
 >Dudas comunes o secciones de ayuda
-
 
 ## Próximos pasos sugeridos
 
 - Crea una nota laboratorio para practicar
 - Documenta un proceso real con secciones claras
 - Explora plugins: Dataview, Templater, Advanced Tables, Calendar
-
-

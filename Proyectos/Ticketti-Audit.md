@@ -1,4 +1,4 @@
-Sí, puedo utilizar **Skills** especializadas. Los Skills son herramientas y conjuntos de instrucciones avanzadas que tengo integradas para realizar auditorías, optimizaciones y mejoras profundas en la calidad del proyecto. 
+Sí, puedo utilizar **Skills** especializadas. Los Skills son herramientas y conjuntos de instrucciones avanzadas que tengo integradas para realizar auditorías, optimizaciones y mejoras profundas en la calidad del proyecto.
 
 Tengo disponibles los siguientes Skills en tu entorno de trabajo:
 
@@ -12,19 +12,21 @@ Tengo disponibles los siguientes Skills en tu entorno de trabajo:
 ---
 
 ### ¿Cómo los usamos?
-Si me lo pides, puedo ejecutar cualquiera de ellos en las páginas del frontend (como la página de inicio, de eventos o de perfil de usuario) para buscar fallos y darte un reporte detallado junto con un plan de acción para solucionarlos. 
+
+Si me lo pides, puedo ejecutar cualquiera de ellos en las páginas del frontend (como la página de inicio, de eventos o de perfil de usuario) para buscar fallos y darte un reporte detallado junto con un plan de acción para solucionarlos.
 
 ¿Te gustaría que ejecutemos una **auditoría completa de calidad** (`web-quality-audit`) o alguna en particular sobre el frontend de Ticketti?****
-
 
 ---
 
 ## Audit results
 
 ### Critical issues (2 found)
+
 - **[Security]** Contraseñas en texto plano en Docker Compose. File: `ms-carrito/docker-compose.yml:6-7,31-32`
   - **Impact:** Las contraseñas de MySQL están expuestas en texto plano en el archivo docker-compose.yml, lo cual es un riesgo de seguridad significativo.
   - **Fix:** Usar variables de entorno o secrets de Docker para gestionar las contraseñas. Ejemplo:
+
     ```yaml
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -37,9 +39,11 @@ Si me lo pides, puedo ejecutar cualquiera de ellos en las páginas del frontend 
   - **Fix:** Usar variables de entorno para gestionar las credenciales de RabbitMQ.
 
 ### High priority (4 found)
+
 - **[SEO]** Idioma incorrecto en HTML. File: `Ticketti/index.html:2`
   - **Impact:** El atributo `lang="en"` indica inglés pero el sistema es en español (Chile), lo cual afecta SEO y accesibilidad.
   - **Fix:** Cambiar a `lang="es-CL"`:
+
     ```html
     <html lang="es-CL">
     ```
@@ -47,6 +51,7 @@ Si me lo pides, puedo ejecutar cualquiera de ellos en las páginas del frontend 
 - **[SEO]** Falta meta description. File: [Ticketti/index.html](cci:7://file:///c:/Users/Marcelo-HP/Desktop/Codigo/Proyectos/Ticketti/Microservicios/Ticketti/index.html:0:0-0:0)
   - **Impact:** Sin meta description, los motores de búsqueda no tienen contexto sobre el contenido de la página.
   - **Fix:** Agregar meta description:
+
     ```html
     <meta name="description" content="Ticketti - Compra entradas para eventos, conciertos y experiencias únicas en Chile.">
     ```
@@ -60,9 +65,11 @@ Si me lo pides, puedo ejecutar cualquiera de ellos en las páginas del frontend 
   - **Fix:** Mover el import a un `<link>` en el HTML o usar un bundler que combine los CSS.
 
 ### Medium priority (5 found)
+
 - **[SEO]** Falta meta tags para redes sociales. File: [Ticketti/index.html](cci:7://file:///c:/Users/Marcelo-HP/Desktop/Codigo/Proyectos/Ticketti/Microservicios/Ticketti/index.html:0:0-0:0)
   - **Impact:** Sin Open Graph tags, los enlaces compartidos no muestran preview rico.
   - **Fix:** Agregar meta tags Open Graph:
+
     ```html
     <meta property="og:title" content="Ticketti">
     <meta property="og:description" content="Compra entradas para eventos en Chile">
@@ -72,6 +79,7 @@ Si me lo pides, puedo ejecutar cualquiera de ellos en las páginas del frontend 
 - **[Performance]** Falta preconnect/preload para recursos críticos. File: [Ticketti/index.html](cci:7://file:///c:/Users/Marcelo-HP/Desktop/Codigo/Proyectos/Ticketti/Microservicios/Ticketti/index.html:0:0-0:0)
   - **Impact:** Sin preconnect, el navegador no establece conexiones tempranas a orígenes externos.
   - **Fix:** Agregar preconnect para orígenes externos:
+
     ```html
     <link rel="preconnect" href="http://localhost:8081">
     ```
@@ -89,6 +97,7 @@ Si me lo pides, puedo ejecutar cualquiera de ellos en las páginas del frontend 
   - **Fix:** Remover o usar un logger condicional para desarrollo únicamente.
 
 ### Low priority (2 found)
+
 - **[Best Practices]** Falta meta viewport optimizado. File: `Ticketti/index.html:6`
   - **Impact:** El viewport actual es básico pero funcional.
   - **Fix:** Considerar agregar `maximum-scale=1, user-scalable=no` para mejor UX móvil.
@@ -96,11 +105,13 @@ Si me lo pides, puedo ejecutar cualquiera de ellos en las páginas del frontend 
 - **[Accessibility]** Falta skip link para navegación por teclado. File: [Ticketti/index.html](cci:7://file:///c:/Users/Marcelo-HP/Desktop/Codigo/Proyectos/Ticketti/Microservicios/Ticketti/index.html:0:0-0:0)
   - **Impact:** Usuarios de teclado no pueden saltar directamente al contenido principal.
   - **Fix:** Agregar skip link:
+
     ```html
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     ```
 
 ### Summary
+
 - **Performance:** 4 issues (0 critical)
 - **Accessibility:** 2 issues (0 critical)
 - **SEO:** 3 issues (0 critical)
@@ -108,6 +119,7 @@ Si me lo pides, puedo ejecutar cualquiera de ellos en las páginas del frontend 
 - **Security:** 2 issues (2 critical)
 
 ### Recommended priority
+
 1. **Primero corregir las contraseñas en texto plano** - Es un riesgo de seguridad crítico que debe ser resuelto inmediatamente.
 2. **Corregir el idioma del HTML** - Cambiar `lang="en"` a `lang="es-CL"` para SEO y accesibilidad.
 3. **Agregar meta description y Open Graph tags** - Mejora significativa de SEO.
