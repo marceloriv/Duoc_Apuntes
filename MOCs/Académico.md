@@ -6,3 +6,6 @@
   - [[2026/quinto semestre/DevOps/Evaluacion 1/Evaluacion 1|DevOps]]
   - [[2026/quinto semestre/EVALUACION DE PROYECTOS DE SOFTWARE_003D/Proyecto/Evaluacion 1/Informe 1|Evaluación de Proyectos de Software]]
 - [[2026/sexto semestre/Cloud Native I/Semana 1/1|Sexto Semestre - Cloud Native I]]
+  - [[2026/sexto semestre/Cloud Native I/Semana 1/2|Cloud Native I - Notas semana 1]]
+  - [[2026/sexto semestre/Gestion de proyectos de Software/Semana 1/1|Gestión de Proyectos de Software]]
+  - [[2026/sexto semestre/Seguridad y calidad del Software/Semana 1/1|Seguridad y Calidad del Software]]
