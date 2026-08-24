@@ -21,6 +21,12 @@ LocalSend
 winget install -e --id LocalSend.LocalSend --source winget
 ```
 
+Opencode
+
+```powershell
+winget install SST.opencode
+```
+
 ## Git
 
 Configurar las credenciales GIT
