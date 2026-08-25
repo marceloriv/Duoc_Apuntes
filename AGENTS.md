@@ -1,60 +1,89 @@
-# AGENTS.md — Repository Instructions for AI Agents
+# AGENTS.md
 
-- **Context:** Obsidian vault + academic/developer study notes and code projects (Duoc UC, software engineering, security, cloud).
-- **Core Paradigm:** Hybrid structure (notes + code). Minimal boilerplate. Documentation-as-code.
+**Para el agente que trabaje en esta bóveda:**
 
----
+- Sin emojis en notas, commits ni output — salvo los que ya usa Obsidian en callouts/frontmatter (`sticker: emoji//...`) o los que pida el usuario puntualmente.
+- Esto es una bóveda Obsidian de apuntes académicos (Duoc UC), no un proyecto de software. No aplicar patrones de desarrollo genéricos (stack, tests, linters, deploy) salvo dentro de `Proyectos/`, donde se documentan proyectos de software reales que viven en otros repos.
+- Este archivo es la fuente de verdad para este repo. Claude Code no carga `AGENTS.md` solo — carga `CLAUDE.md`, así que este repo tiene un `CLAUDE.md` local que solo hace `@AGENTS.md` (import), para que este archivo se cargue automático sin duplicar contenido. El global del usuario (`~/.claude/CLAUDE.md`) sigue aplicando aparte y cubre estilo de respuesta (caveman), disciplina anti-sobreingeniería (ponytail), uso de codegraph y context-tools; no se repite acá.
 
-## 1. Directory Structure & Conventions
+## 0. Jerarquía de reglas
 
-- `2026/`: Active academic semester notes, lectures, labs.
-- `Proyectos/`: Code implementations, sandboxes, scripts (e.g., Ticketti).
-- `Recursos/`: Cheat sheets, manuals, reference materials, profiles.
-- `MOCs/`: Maps of Content (Obsidian index notes).
-- **Ignored Paths:** `.obsidian/`, `.makemd/`, `.space/`, `.trash/`, OS temp files (`.DS_Store`, `Thumbs.db`, `desktop.ini`).
+1. Seguridad y corrección — nunca se sacrifican por ninguna otra regla.
+2. Convenciones de la bóveda (estructura, frontmatter, estilo de notas) — se siguen salvo instrucción explícita en contrario.
+3. Minimalismo (Ponytail, ya activo por config global del usuario) — se aplica solo después de satisfacer 1 y 2.
 
----
+## 1. Resumen del proyecto
 
-## 2. Tech Stack & Environment
+Bóveda Obsidian personal de apuntes universitarios de Duoc UC (marceloriv). Contiene notas por semestre/asignatura, mapas de contenido (MOCs) y documentación de proyectos de software externos (ej. Ticketti, Cloud Native). Uso individual, sincronizada vía Git.
 
-- **Languages:** Python, JavaScript/TypeScript, SQL, Markdown.
-- **Runtime/Tools:** Node.js, Python 3.x, Git, PowerShell (Windows/Cross-platform).
-- **Documentation:** Markdown (Obsidian flavored, standard `[[WikiLink]]` syntax).
+## 2. Herramientas
 
----
+- Editor: Obsidian (plugins en `.obsidian/`, no versionados salvo config explícita).
+- Sincronización/backup: Git + LocalSend.
+- Formato de contenido: Markdown con extensiones de Obsidian (`[[wikilinks]]`, callouts `> [!tipo]`, embeds `![[nota]]`, Mermaid, frontmatter YAML).
 
-## 3. Build, Test & Validation Commands
+## 3. Estructura de la bóveda
 
-- **Check Git Status:** `git status`
-- **Run Tests / Scripts:** `pytest` or `python -m unittest` in respective project subdirectories.
+```text
+2026/                  # apuntes por año/semestre/asignatura (ej. "sexto semestre/Cloud Native I/Semana 1/1.md")
+MOCs/                  # mapas de contenido: Académico.md, Proyectos.md, Recursos.md — índices de enlaces, no contenido propio
+Proyectos/             # documentación de proyectos de software externos (código real vive en otro repo/carpeta)
+Recursos/              # material de apoyo no atado a una asignatura (cursos, referencias)
+Ticketti/              # notas/artefactos específicos del proyecto Ticketti
+.obsidian/, .space/, .makemd/, .codegraph/, .opencode/  # config de herramientas, no tocar salvo que se pida
+```
 
----
+## 4. Comandos
 
-## 4. Coding & Writing Standards
+```powershell
+# ver estado de la bóveda
+git status
+# ver historial reciente
+git log --oneline -20
+```
 
-- **Notes & Documentation:** Concise, technical, bullet-driven. Spanish for academic reflections/notes.
-- **Code Projects:** Ponytail/YAGNI principle (minimum code solving the problem). Reuse existing utils before writing new ones. Strict input validation at trust boundaries.
+No hay build/test/deploy — es contenido markdown, no código ejecutable (excepto snippets de ejemplo dentro de las notas mismas).
 
----
+## 5. Estilo de notas
 
-## 5. Git & Commit Rules (Strict Spanish)
+- Frontmatter YAML opcional al inicio (`sticker:`, `tags:`, etc.) — no inventar campos que Obsidian no usa.
+- Enlaces internos con `[[Nota]]` o `[[Nota#Sección]]`, nunca rutas relativas markdown (`[texto](../ruta.md)`) salvo enlace a archivo fuera de la bóveda.
+- Callouts (`> [!info]`, `> [!warning]`, `> [!tip]`, etc.) para contexto adicional, no para contenido central de la nota.
+- Jerarquía de encabezados lógica (no saltar de H2 a H4).
+- Ver `Bienvenido.md` como referencia completa de sintaxis Obsidian/Markdown usada en la bóveda.
 
-- **Commit Messages:** MUST be in Spanish following Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`).
-- **Format:** `<tipo>(<alcance>): <descripción en español>` (e.g., `docs(cloud): añadir resumen semana 1 cloud native`).
-- **Staging:** Stage only intended files. Never commit secrets, API keys, or Obsidian workspace states.
+## 6. Mapas de Contenido (MOCs)
 
----
+`MOCs/*.md` son índices, no contenido: solo enlaces `[[...]]` agrupados. Al agregar una nota nueva bajo `2026/` o `Proyectos/`, enlazarla desde el MOC correspondiente si aplica — no dejar notas huérfanas sin entrada en ningún MOC ni nota relacionada.
 
-## 6. Gotchas & Operational Pitfalls
+## 7. Proyectos (`Proyectos/`)
 
-- **Pathing:** Windows OS environment (`win32`, PowerShell). Always quote paths containing spaces.
-- **Vault Integrity:** Do not break Obsidian relative links or frontmatter metadata (`tags:`, `aliases:`).
-- **Scope Creep:** Do not auto-generate speculative notes or unrequested refactoring in adjacent directories.
+Estas notas documentan software real (arquitectura, decisiones, bitácoras de cambios) cuyo código vive en otro repo/carpeta (ej. rutas `file:///.../Desktop/Kari/...` referenciadas en las notas). Al editar estas notas:
 
----
+- No asumir que el código está en esta bóveda — no intentar `Read`/`Edit` sobre rutas de código ahí referenciadas salvo que el usuario lo pida explícitamente y la ruta exista.
+- Mantener las bitácoras (ej. `cambios.md`) como registro histórico: no reescribir entradas pasadas, solo añadir.
 
-## 7. AI Workflow & Safety Rules
+## 8. Seguridad
 
-- **Surgical Edits:** Touch only requested files. Preserve adjacent formatting.
-- **Verification:** Non-trivial logic requires an assertion or test check.
-- **Token Efficiency:** Keep context lean. Use grep/glob before reading large files.
+- No pegar credenciales, tokens ni claves reales en las notas, ni siquiera como "ejemplo" — si una nota documenta config de un proyecto externo, usar placeholders o confirmar con el usuario si el dato es sensible antes de commitear.
+- Si una nota ya contiene un secreto real, avisar al usuario antes de commitear/pushear en vez de commitear en silencio.
+
+## 9. Commits y PR
+
+Formato: Conventional Commits (`docs:`, `feat:`, `refactor:`, `chore:`), en español, ámbito en minúsculas según carpeta/tema (`docs(cloud):`, `docs(seguridad):`, `docs(mocs):`). Sin Gitmoji — no es la convención vigente en este repo (commits recientes lo abandonaron).
+
+Sujeto en imperativo, minúsculas tras los dos puntos, sin punto final. Rama no aplica (trabajo directo en `main`, bóveda personal) salvo que el usuario indique lo contrario.
+
+Nunca agregar trailers/firmas de autoría de agente/IA (`Co-Authored-By: <agente>`, "Generated with…", enlaces de sesión) salvo pedido explícito del usuario para ese commit puntual.
+
+## 10. Límites del agente
+
+**Siempre** (sin pedir permiso): crear/editar notas markdown, actualizar MOCs, crear commits locales.
+
+**Preguntar primero**: force-push, `git reset --hard`/`clean`, mover o borrar notas existentes en bloque, tocar config de `.obsidian/`/`.space/`/`.makemd/`.
+
+**Nunca sin aprobación explícita**: push a remoto, editar código fuente de proyectos externos referenciados desde `Proyectos/`.
+
+## 11. Mantenimiento
+
+Tratar como código. Añadir una sección cuando el agente falle repetidamente en algo concreto de esta bóveda, eliminar una cuando la convención cambie.
