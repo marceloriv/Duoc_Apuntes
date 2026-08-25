@@ -4,7 +4,7 @@
 
 - Sin emojis en notas, commits ni output — salvo los que ya usa Obsidian en callouts/frontmatter (`sticker: emoji//...`) o los que pida el usuario puntualmente.
 - Esto es una bóveda Obsidian de apuntes académicos (Duoc UC), no un proyecto de software. No aplicar patrones de desarrollo genéricos (stack, tests, linters, deploy) salvo dentro de `Proyectos/`, donde se documentan proyectos de software reales que viven en otros repos.
-- Este archivo es la fuente de verdad para este repo. Claude Code no carga `AGENTS.md` solo — carga `CLAUDE.md`, así que este repo tiene un `CLAUDE.md` local que solo hace `@AGENTS.md` (import), para que este archivo se cargue automático sin duplicar contenido. El global del usuario (`~/.claude/CLAUDE.md`) sigue aplicando aparte y cubre estilo de respuesta (caveman), disciplina anti-sobreingeniería (ponytail), uso de codegraph y context-tools; no se repite acá.
+- Este archivo es la fuente de verdad para este repo. Claude Code no lo carga solo (carga `CLAUDE.md`, no `AGENTS.md`) — decisión deliberada del usuario de no tener `CLAUDE.md` local, así que hay que leer/mencionar este archivo a mano cuando haga falta. No "arreglarlo" agregando un `CLAUDE.md` de import salvo que el usuario lo pida de nuevo explícitamente. El global del usuario (`~/.claude/CLAUDE.md`) sigue aplicando aparte y cubre estilo de respuesta (caveman), disciplina anti-sobreingeniería (ponytail), uso de codegraph y context-tools; no se repite acá.
 
 ## 0. Jerarquía de reglas
 
