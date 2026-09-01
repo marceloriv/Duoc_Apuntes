@@ -1,3 +1,5 @@
 # TODO
 
-- [ ] Arreglar los formatos Callouts que se presentan en las diferentes notas que no se logran visualizar en el github.
+- [x] Corregir callouts para que rendericen en GitHub (sexto semestre: Gestion de proyectos, Seguridad y Cloud Native)
+- [ ] Corregir callouts del resto de la bóveda (Recursos/, quinto semestre/, Proyectos/)
+- [ ] Bienvenido.md se deja como referencia de sintaxis Obsidian, no convertir
