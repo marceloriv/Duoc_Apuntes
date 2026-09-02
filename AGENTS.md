@@ -25,13 +25,19 @@ Bóveda Obsidian personal de apuntes universitarios de Duoc UC (marceloriv). Con
 ## 3. Estructura de la bóveda
 
 ```text
-2026/                  # apuntes por año/semestre/asignatura (ej. "sexto semestre/Cloud Native I/Semana 1/1.md")
+2026/                  # apuntes por año/semestre/asignatura
+  quinto semestre/     # CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES, DESARROLLO FULLSTACK III, DevOps, EVALUACION DE PROYECTOS DE SOFTWARE
+  sexto semestre/      # CIBERSEGURIDAD EN DESARROLLO, Cloud Native I, Gestion de proyectos de Software, Seguridad y calidad del Software
 MOCs/                  # mapas de contenido: Académico.md, Proyectos.md, Recursos.md — índices de enlaces, no contenido propio
 Proyectos/             # documentación de proyectos de software externos (código real vive en otro repo/carpeta)
-Recursos/              # material de apoyo no atado a una asignatura (cursos, referencias)
-Ticketti/              # notas/artefactos específicos del proyecto Ticketti
-.obsidian/, .space/, .makemd/, .codegraph/, .opencode/  # config de herramientas, no tocar salvo que se pida
+Recursos/              # material de apoyo no atado a una asignatura (CIT, Curso de Pirata Ético, opencode.md)
+.github/               # copilot-instructions.md + hooks/
+.vscode/               # settings.json, mcp.json
+.opencode/             # config de OpenCode
+.codegraph/            # índice de codegraph
 ```
+
+Archivos raíz: `AGENTS.md`, `Bienvenido.md`, `README.md`, `TODO.md`, `cambios.md`, `Despliegue.md`, `opencode.json`, `.gitignore`
 
 ## 4. Comandos
 
