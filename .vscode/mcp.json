@@ -1,0 +1,29 @@
+{
+  "servers": {
+    "codegraph": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "C:\\Users\\VI-Alumno\\AppData\\Roaming\\npm\\codegraph.CMD",
+        "serve",
+        "--mcp"
+      ]
+    },
+    "context-mode": {
+      "type": "stdio",
+      "command": "C:\\Users\\VI-Alumno\\AppData\\Local\\Programs\\tokless\\tokless.exe",
+      "args": [
+        "run-mcp",
+        "--context-mode",
+        "cmd",
+        "/c",
+        "C:\\Users\\VI-Alumno\\AppData\\Roaming\\npm\\context-mode.CMD"
+      ],
+      "env": {
+        "CONTEXT_MODE_PLATFORM": "copilot-vscode",
+        "CONTEXT_MODE_COPILOT_PLUGIN": "1"
+      }
+    }
+  }
+}
