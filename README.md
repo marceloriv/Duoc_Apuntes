@@ -39,6 +39,12 @@ Ponytail (plugin Antigravity)
 agy plugin install https://github.com/DietrichGebert/ponytail
 ```
 
+tokless
+
+```powershell
+irm https://raw.githubusercontent.com/HoangP8/tokless/main/scripts/install.ps1 | iex
+```
+
 ## Git
 
 Configurar las credenciales GIT
