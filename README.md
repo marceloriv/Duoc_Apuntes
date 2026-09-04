@@ -27,6 +27,18 @@ Opencode
 winget install SST.opencode
 ```
 
+Antigravity CLI
+
+```powershell
+irm https://antigravity.google/cli/install.ps1 | iex
+```
+
+Ponytail (plugin Antigravity)
+
+```powershell
+agy plugin install https://github.com/DietrichGebert/ponytail
+```
+
 ## Git
 
 Configurar las credenciales GIT
