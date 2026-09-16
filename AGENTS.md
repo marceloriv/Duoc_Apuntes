@@ -55,6 +55,7 @@ No hay build/test/deploy — es contenido markdown, no código ejecutable (excep
 - Frontmatter YAML opcional al inicio (`sticker:`, `tags:`, etc.) — no inventar campos que Obsidian no usa.
 - Enlaces internos con `[[Nota]]` o `[[Nota#Sección]]`, nunca rutas relativas markdown (`[texto](../ruta.md)`) salvo enlace a archivo fuera de la bóveda.
 - Callouts (`> [!info]`, `> [!warning]`, `> [!tip]`, etc.) para contexto adicional, no para contenido central de la nota.
+- Las notas `.md` se versionan y se visualizan también en GitHub: usar callouts cuyo tipo renderice bien en ambos entornos (`> [!note]`, `> [!tip]`, `> [!important]`, `> [!warning]`, `> [!caution]`). Evitar tipos solo de Obsidian (`info`, `danger`, `tips`, etc.) que GitHub muestra como texto literal.
 - Jerarquía de encabezados lógica (no saltar de H2 a H4).
 - Ver `Bienvenido.md` como referencia completa de sintaxis Obsidian/Markdown usada en la bóveda.
 
