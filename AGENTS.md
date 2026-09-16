@@ -28,12 +28,13 @@ Bóveda Obsidian personal de apuntes universitarios de Duoc UC (marceloriv). Con
 2026/                  # apuntes por año/semestre/asignatura
   quinto semestre/     # CIBERSEGURIDAD SISTEMA OPERATIVO Y REDES, DESARROLLO FULLSTACK III, DevOps, EVALUACION DE PROYECTOS DE SOFTWARE
   sexto semestre/      # CIBERSEGURIDAD EN DESARROLLO, Cloud Native I, Gestion de proyectos de Software, Seguridad y calidad del Software
+  Varios/              # apuntes sueltos sin asignatura asignada
 MOCs/                  # mapas de contenido: Académico.md, Proyectos.md, Recursos.md — índices de enlaces, no contenido propio
-Proyectos/             # documentación de proyectos de software externos (código real vive en otro repo/carpeta)
-Recursos/              # material de apoyo no atado a una asignatura (CIT, Curso de Pirata Ético, opencode.md)
+Proyectos/             # documentación de proyectos de software externos (código real vive en otro repo/carpeta): Ticketti.md, Ticketti-Audit.md
+Recursos/              # material de apoyo no atado a una asignatura (CIT, Curso de Pirata Ético, git/, opencode.md)
 .github/               # copilot-instructions.md + hooks/
 .vscode/               # settings.json, mcp.json
-.opencode/             # config de OpenCode
+.opencode/             # config de OpenCode + skills/ (ej. cloud-native) + package de plugins
 .codegraph/            # índice de codegraph
 ```
 
