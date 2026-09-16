@@ -10,3 +10,5 @@
   - [[2026/sexto semestre/Cloud Native I/Semana 1/1|Cloud Native I]]
   - [[2026/sexto semestre/Gestion de proyectos de Software/Semana 1/1|Gestión de Proyectos de Software]]
   - [[2026/sexto semestre/Seguridad y calidad del Software/Semana 1/1|Seguridad y Calidad del Software]]
+- Otros
+  - [[2026/Varios/1|Tareas de Visión por Computador]]
